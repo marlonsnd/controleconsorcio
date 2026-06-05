@@ -17,8 +17,6 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#F1F5F
   --sidebar-w:240px;--header-h:60px;--radius:12px;
   --shadow:0 2px 8px rgba(0,0,0,0.08);--shadow-md:0 4px 20px rgba(0,0,0,0.13);
 }
-
-/* ── AUTH ── */
 #page-auth{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1D4ED8 0%,#2563EB 55%,#0891B2 100%);padding:20px;}
 .auth-card{background:#fff;border-radius:20px;padding:40px;width:100%;max-width:440px;box-shadow:var(--shadow-md);}
 .auth-logo{text-align:center;margin-bottom:28px;}
@@ -28,8 +26,6 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#F1F5F
 .auth-tabs{display:flex;background:var(--bg);border-radius:10px;padding:4px;margin-bottom:24px;}
 .auth-tab{flex:1;padding:8px;text-align:center;font-size:13px;font-weight:600;border:none;background:none;cursor:pointer;border-radius:8px;color:var(--muted);transition:all .2s;}
 .auth-tab.active{background:#fff;color:var(--primary);box-shadow:var(--shadow);}
-
-/* ── FORMS ── */
 .form-group{margin-bottom:16px;}
 .form-label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
 .form-input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--text);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;}
@@ -37,8 +33,6 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#F1F5F
 .form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;}
 .form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
-
-/* ── BUTTONS ── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;}
 .btn:active{transform:translateY(1px);}
 .btn-primary{background:var(--primary);color:#fff;}
@@ -54,8 +48,6 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#F1F5F
 .btn-ghost:hover{color:var(--text);background:var(--bg);}
 .error-msg{color:var(--danger);font-size:12px;margin-top:8px;padding:8px 12px;background:var(--danger-light);border-radius:8px;display:none;}
 .error-msg.show{display:block;}
-
-/* ── APP SHELL ── */
 #app-shell{display:none;min-height:100vh;}
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);background:#fff;border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:transform .3s;}
 .sidebar-logo{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
@@ -79,8 +71,6 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#F1F5F
 .top-bar-title{font-size:17px;font-weight:700;color:var(--text);}
 .top-bar-actions{margin-left:auto;display:flex;gap:8px;}
 .page-content{padding:24px;flex:1;}
-
-/* ── DASHBOARD ── */
 .stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:24px;}
 .stat-card{background:#fff;border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);}
 .stat-card .stat-icon{font-size:22px;margin-bottom:10px;display:block;}
@@ -113,12 +103,8 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#F1F5F
 .empty-state .empty-icon{font-size:48px;margin-bottom:12px;}
 .empty-state h3{font-size:16px;color:var(--text);margin-bottom:6px;}
 .empty-state p{font-size:13px;margin-bottom:16px;}
-
-/* ── FORM SECTIONS ── */
 .form-section{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:20px;}
 .form-section-title{font-size:12px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);}
-
-/* ── DETAIL ── */
 .detail-header-card{background:linear-gradient(135deg,var(--primary) 0%,#0891B2 100%);border-radius:var(--radius);padding:24px;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
 .detail-header-icon{font-size:48px;line-height:1;}
 .detail-header-info{flex:1;min-width:200px;}
@@ -126,9 +112,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#F1F5F
 .detail-header-title{font-size:22px;font-weight:800;margin:4px 0;}
 .detail-header-sub{font-size:13px;opacity:.85;}
 .detail-header-stats{display:flex;gap:24px;flex-wrap:wrap;}
-.dhs{text-align:center;}
-.dhs .dv{font-size:20px;font-weight:800;}
-.dhs .dl{font-size:10px;opacity:.75;text-transform:uppercase;letter-spacing:.4px;}
+.dhs{text-align:center;}.dhs .dv{font-size:20px;font-weight:800;}.dhs .dl{font-size:10px;opacity:.75;text-transform:uppercase;letter-spacing:.4px;}
 .info-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
 .info-card{background:#fff;border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);}
 .info-card .ik{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
@@ -140,8 +124,6 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#F1F5F
 .chance-card.green{background:#F0FDF4;}.chance-card.yellow{background:#FFFBEB;}.chance-card.purple{background:#FAF5FF;}.chance-card.blue{background:#EFF6FF;}
 .chance-card .cv{font-size:28px;font-weight:900;color:var(--text);}
 .chance-card .cd{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4;}
-
-/* ── TABLE ── */
 .table-wrap{overflow-x:auto;}
 table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
 .data-table thead tr{background:var(--primary);color:#fff;}
@@ -155,16 +137,10 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
 .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
 .badge.sorteio{background:#D1FAE5;color:#065F46;}.badge.livre{background:#DBEAFE;color:#1E40AF;}
 .badge.fixo{background:#FEF9C3;color:#713F12;}.badge.cancelado{background:#FEE2E2;color:#991B1B;}
-
-/* ── CALCULATOR ── */
 .calc-wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
 .result-big{font-size:60px;font-weight:900;color:var(--primary);line-height:1;letter-spacing:-2px;}
-
-/* ── INFO BOXES ── */
 .info-box{background:#FFFBEB;border-left:4px solid #F59E0B;border-radius:8px;padding:12px 16px;font-size:12px;line-height:1.6;margin-bottom:16px;color:#78350F;}
 .tip-box{background:#F0FDF4;border-left:4px solid var(--success);border-radius:8px;padding:12px 16px;font-size:12px;line-height:1.6;margin-top:12px;color:#14532D;}
-
-/* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
 .modal-overlay.show{display:flex;}
 .modal{background:#fff;border-radius:16px;width:100%;max-width:600px;box-shadow:var(--shadow-md);max-height:90vh;overflow-y:auto;}
@@ -174,13 +150,9 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
 .modal-close:hover{background:var(--bg);}
 .modal-body{padding:20px 24px;}
 .modal-footer{padding:12px 24px 20px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border);}
-
-/* ── CONTEMPLACAO ROWS ── */
 .ct-row{display:grid;grid-template-columns:90px 1fr 100px 110px 32px;gap:8px;align-items:center;background:#F8FAFC;border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:6px;}
 .add-ct-btn{width:100%;padding:8px;border:1.5px dashed var(--border);border-radius:8px;background:none;color:var(--primary);font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;transition:all .15s;}
 .add-ct-btn:hover{background:var(--primary-light);border-color:var(--primary);}
-
-/* ── MAPA DE COTAS ── */
 .cota-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:14px;}
 .cota-legend-item{display:flex;align-items:center;gap:6px;}
 .cota-dot{width:13px;height:13px;border-radius:4px;display:inline-block;flex-shrink:0;}
@@ -191,13 +163,11 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
 .cota-item.ci-sua{background:var(--primary);border-color:var(--primary-dark);color:#fff;font-weight:900;}
 .cota-item.ci-sorteio{outline:2px solid #F59E0B;outline-offset:1px;}
 .cota-map-stats{font-size:11px;color:var(--muted);margin-top:10px;}
-
-/* ── MISC ── */
 .mono{font-family:ui-monospace,'Courier New',monospace;font-size:11px;}
 .mobile-menu-btn{display:none;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text);padding:4px;}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:99;}
 .sidebar-overlay.show{display:block;}
-
+@keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:900px){
   .sidebar{transform:translateX(-100%);}
   .sidebar.open{transform:translateX(0);box-shadow:4px 0 20px rgba(0,0,0,.15);}
@@ -279,21 +249,17 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
         Continuar com Google
       </button>
     </div>
-
-    <!-- ── Recuperação de senha ── -->
     <div id="form-forgot" style="display:none">
       <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Digite seu e-mail e enviaremos um link para redefinir sua senha.</p>
       <div class="form-group">
         <label class="form-label">E-mail</label>
         <input type="email" id="forgot-email" class="form-input" placeholder="seu@email.com"/>
       </div>
-      <div id="forgot-ok" class="error-msg" style="display:none;color:var(--success);background:var(--success-light);border-color:var(--success)"></div>
+      <div id="forgot-ok" style="display:none;color:var(--success);background:var(--success-light);border-radius:8px;padding:8px 12px;font-size:12px;margin-top:8px;"></div>
       <div id="forgot-err" class="error-msg"></div>
       <button class="btn btn-primary btn-full btn-lg" onclick="doForgotPassword()">Enviar link de recuperação</button>
       <button class="btn btn-ghost btn-full" style="margin-top:10px;font-size:13px;" onclick="switchTab('login')">← Voltar ao login</button>
     </div>
-
-    <!-- ── Nova senha (callback do e-mail) ── -->
     <div id="form-reset" style="display:none">
       <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Digite e confirme sua nova senha.</p>
       <div class="form-group">
@@ -320,20 +286,12 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
     </div>
     <nav class="sidebar-nav">
       <div class="nav-section-label">Principal</div>
-      <button class="nav-item active" id="nav-dashboard" onclick="goTo('dashboard')">
-        <span class="nav-icon">🏠</span> Dashboard
-      </button>
-      <button class="nav-item" id="nav-add" onclick="newConsorcio()">
-        <span class="nav-icon">➕</span> Adicionar Cota
-      </button>
+      <button class="nav-item active" id="nav-dashboard" onclick="goTo('dashboard')"><span class="nav-icon">🏠</span> Dashboard</button>
+      <button class="nav-item" id="nav-add" onclick="newConsorcio()"><span class="nav-icon">➕</span> Adicionar Cota</button>
       <div class="nav-section-label" style="margin-top:8px">Ferramentas</div>
-      <button class="nav-item" id="nav-calculator" onclick="goTo('calculator')">
-        <span class="nav-icon">🧮</span> Calculadora Loteria
-      </button>
+      <button class="nav-item" id="nav-calculator" onclick="goTo('calculator')"><span class="nav-icon">🧮</span> Calculadora Loteria</button>
       <div class="nav-section-label" style="margin-top:8px">Conta</div>
-      <button class="nav-item" id="nav-profile" onclick="goTo('profile')">
-        <span class="nav-icon">👤</span> Meu Perfil
-      </button>
+      <button class="nav-item" id="nav-profile" onclick="goTo('profile')"><span class="nav-icon">👤</span> Meu Perfil</button>
     </nav>
     <div class="sidebar-user">
       <div class="user-avatar" id="sbAvatar">M</div>
@@ -344,7 +302,6 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
       <button class="logout-btn" onclick="doLogout()" title="Sair">⏏</button>
     </div>
   </aside>
-
   <div class="main-content">
     <header class="top-bar">
       <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
@@ -352,7 +309,6 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
       <div class="top-bar-actions" id="topActions"></div>
     </header>
     <div class="page-content">
-
       <!-- DASHBOARD -->
       <div id="page-dashboard">
         <div class="stat-grid" id="statGrid"></div>
@@ -361,7 +317,6 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
         </div>
         <div class="consorcio-grid" id="consorcioGrid"></div>
       </div>
-
       <!-- ADD/EDIT CONSÓRCIO -->
       <div id="page-add-consorcio" style="display:none">
         <form onsubmit="saveConsorcio(event)" autocomplete="off">
@@ -419,7 +374,7 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
               </div>
               <div class="form-group">
                 <label class="form-label">Parcela Cheia (R$) <span style="font-size:10px;color:var(--muted)">preencha se for Meia Parcela</span></label>
-                <input type="number" id="f-parcela-cheia" class="form-input" placeholder="Ex.: 5494 (deixe 0 se não for meia parcela)" step="0.01"/>
+                <input type="number" id="f-parcela-cheia" class="form-input" placeholder="Ex.: 5494" step="0.01"/>
               </div>
               <div class="form-group">
                 <label class="form-label">Parcela Atual (nº)</label>
@@ -433,8 +388,7 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
                 <label class="form-label">Índice de Reajuste</label>
                 <select id="f-reajuste" class="form-input form-select">
                   <option value="">Não informado</option>
-                  <option>INCC</option><option>IPCA</option>
-                  <option>IGP-M</option><option>Selic</option><option>Fixo</option>
+                  <option>INCC</option><option>IPCA</option><option>IGP-M</option><option>Selic</option><option>Fixo</option>
                 </select>
               </div>
             </div>
@@ -473,12 +427,8 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
           </div>
         </form>
       </div>
-
       <!-- DETAIL -->
-      <div id="page-detail" style="display:none">
-        <div id="detailContent"></div>
-      </div>
-
+      <div id="page-detail" style="display:none"><div id="detailContent"></div></div>
       <!-- CALCULATOR -->
       <div id="page-calculator" style="display:none">
         <div class="calc-wrap">
@@ -517,28 +467,17 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
           </div>
         </div>
       </div>
-
       <!-- PROFILE -->
       <div id="page-profile" style="display:none">
         <div class="form-section" style="max-width:500px;">
           <div class="form-section-title">👤 Meu Perfil</div>
-          <div class="form-group">
-            <label class="form-label">Nome completo</label>
-            <input type="text" id="p-name" class="form-input"/>
-          </div>
-          <div class="form-group">
-            <label class="form-label">E-mail</label>
-            <input type="email" id="p-email" class="form-input" disabled style="background:#F8FAFC;color:var(--muted);"/>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Nova senha (deixe vazio para manter)</label>
-            <input type="password" id="p-pw" class="form-input" placeholder="Nova senha..."/>
-          </div>
+          <div class="form-group"><label class="form-label">Nome completo</label><input type="text" id="p-name" class="form-input"/></div>
+          <div class="form-group"><label class="form-label">E-mail</label><input type="email" id="p-email" class="form-input" disabled style="background:#F8FAFC;color:var(--muted);"/></div>
+          <div class="form-group"><label class="form-label">Nova senha (deixe vazio para manter)</label><input type="password" id="p-pw" class="form-input" placeholder="Nova senha..."/></div>
           <button class="btn btn-primary" onclick="saveProfile()">Salvar alterações</button>
           <div id="p-msg" style="margin-top:10px;font-size:13px;color:var(--success);display:none;">✅ Perfil atualizado!</div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
@@ -551,36 +490,36 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
       <button class="modal-close" onclick="closeModal('modalAsm')">✕</button>
     </div>
     <div class="modal-body">
+      <input type="hidden" id="asm-edit-id" value=""/>
       <div class="form-grid-2" style="margin-bottom:16px;">
+        <div class="form-group"><label class="form-label">Nº Assembleia *</label><input type="number" id="asm-num" class="form-input" placeholder="Ex.: 8"/></div>
+        <div class="form-group"><label class="form-label">Data *</label><input type="date" id="asm-data" class="form-input"/></div>
+        <div class="form-group"><label class="form-label">1º Prêmio Loteria Federal</label><input type="number" id="asm-loteria" class="form-input" placeholder="Ex.: 48545" oninput="autoCalcAsm()"/></div>
+        <div class="form-group"><label class="form-label">Nº Sorteado</label><input type="number" id="asm-sorteado" class="form-input" placeholder="Calculado automaticamente..."/></div>
         <div class="form-group">
-          <label class="form-label">Nº Assembleia *</label>
-          <input type="number" id="asm-num" class="form-input" placeholder="Ex.: 8"/>
+          <label class="form-label">Sua Classificação – Lance Fixo <span style="font-size:10px;color:var(--muted)">(posição nesta asm.)</span></label>
+          <input type="number" id="asm-class-fixo" class="form-input" placeholder="Ex.: 79"/>
         </div>
         <div class="form-group">
-          <label class="form-label">Data *</label>
-          <input type="date" id="asm-data" class="form-input"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">1º Prêmio Loteria Federal</label>
-          <input type="number" id="asm-loteria" class="form-input" placeholder="Ex.: 48545" oninput="autoCalcAsm()"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Nº Sorteado</label>
-          <input type="number" id="asm-sorteado" class="form-input" placeholder="Calculado automaticamente..."/>
+          <label class="form-label">Sua Classificação – Sorteio Ativo <span style="font-size:10px;color:var(--muted)">(posição nesta asm.)</span></label>
+          <input type="number" id="asm-class-sorteio" class="form-input" placeholder="Ex.: 141"/>
         </div>
       </div>
       <div style="font-size:12px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Contemplações</div>
       <div id="ctList"></div>
       <button type="button" class="add-ct-btn" onclick="addCtRow()">+ Adicionar contemplação</button>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modalAsm')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveAsm()">Salvar Assembleia</button>
+    <div class="modal-footer" style="justify-content:space-between;">
+      <button class="btn btn-danger" id="btnDeleteAsm" style="display:none;" onclick="deleteAsm()">🗑️ Excluir Assembleia</button>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-outline" onclick="closeModal('modalAsm')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveAsm()">Salvar Assembleia</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ══ MODAL: Confirmar Exclusão ══ -->
+<!-- ══ MODAL: Confirmar Exclusão Consórcio ══ -->
 <div class="modal-overlay" id="modalDel">
   <div class="modal" style="max-width:400px;">
     <div class="modal-header">
@@ -597,232 +536,163 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
   </div>
 </div>
 
-<!-- ══ LOADING OVERLAY ══ -->
+<!-- ══ LOADING ══ -->
 <div id="loadingOverlay" style="display:none;position:fixed;inset:0;background:rgba(255,255,255,.88);z-index:9999;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
   <div style="font-size:36px;animation:spin .8s linear infinite;">⏳</div>
   <div style="font-size:13px;color:var(--muted);font-weight:600;">Carregando...</div>
 </div>
 <div id="toast" style="display:none;position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;color:#fff;font-size:13px;font-weight:600;z-index:10000;box-shadow:0 4px 20px rgba(0,0,0,.2);max-width:320px;"></div>
 <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
 <script>
-// ══════════════════════════════════════════════════════
-// SUPABASE CLIENT
-// ══════════════════════════════════════════════════════
 const _sb = supabase.createClient(
   'https://amapukesrtqovytwixoq.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtYXB1a2VzcnRxb3Z5dHdpeG9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2MDk3MDIsImV4cCI6MjA5NjE4NTcwMn0.6-KLzLyytS5UghZVb0E9f8fOEqdnsyOIXIZsPUw9xAs'
 )
-
-// ══════════════════════════════════════════════════════
-// CONSTANTES
-// ══════════════════════════════════════════════════════
-const ADMIN_ICONS = {'Sicredi':'\u{1F7E2}','HS Cons\xf3rcio':'\u{1F7E3}','Banco do Brasil':'\u{1F7E1}','Porto Seguro':'\u{1F535}','Bradesco':'\u{1F534}','Caixa Econ\xf4mica':'\u{1F7E2}','Ita\xfa':'\u{1F7E0}','Santander':'\u{1F534}','Embracon':'\u{1F535}','Magalu Cons\xf3rcio':'\u{1F7E4}','Outra':'⚪'}
-const ADMIN_CLS   = {'Sicredi':'sicredi','Banco do Brasil':'bb','Bradesco':'bradesco','Porto Seguro':'porto','Caixa Econ\xf4mica':'caixa','HS Cons\xf3rcio':'hs'}
-const TYPE_ICONS  = {'Im\xf3vel':'\u{1F3E0}','Ve\xedculo':'\u{1F697}','Moto':'\u{1F3CD}️','Caminh\xe3o':'\u{1F69A}','Servi\xe7os':'\u{1F4BC}'}
-const MOD_LABEL   = {sorteio:'Sorteio Ativo',livre:'Lance Livre',fixo:'Lance Fixo',cancelado:'Cancelado'}
-
-// ══════════════════════════════════════════════════════
-// UTILITÁRIOS
-// ══════════════════════════════════════════════════════
-const fmtBRL  = v => (!v && v!==0) ? '—' : new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0}).format(v)
-const fmtBRL2 = v => (!v && v!==0) ? '—' : new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:2}).format(v)
-const fmtDate = s => { if(!s) return '—'; const [y,m,d]=s.split('-'); return d+'/'+m+'/'+y }
-const initials= n => n ? n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase() : '?'
-
+const ADMIN_ICONS={'Sicredi':'🟢','HS Consórcio':'🟣','Banco do Brasil':'🟡','Porto Seguro':'🔵','Bradesco':'🔴','Caixa Econômica':'🟢','Itaú':'🟠','Santander':'🔴','Embracon':'🔵','Magalu Consórcio':'🟤','Outra':'⚪'}
+const ADMIN_CLS={'Sicredi':'sicredi','Banco do Brasil':'bb','Bradesco':'bradesco','Porto Seguro':'porto','Caixa Econômica':'caixa','HS Consórcio':'hs'}
+const TYPE_ICONS={'Imóvel':'🏠','Veículo':'🚗','Moto':'🏍️','Caminhão':'🚚','Serviços':'💼'}
+const MOD_LABEL={sorteio:'Sorteio Ativo',livre:'Lance Livre',fixo:'Lance Fixo',cancelado:'Cancelado'}
+const fmtBRL=v=>(!v&&v!==0)?'—':new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0}).format(v)
+const fmtBRL2=v=>(!v&&v!==0)?'—':new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:2}).format(v)
+const fmtDate=s=>{if(!s)return '—';const[y,m,d]=s.split('-');return d+'/'+m+'/'+y}
+const initials=n=>n?n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase():'?'
 function formatCalcLines(prize,divisor){
-  if(!prize||!divisor) return null
+  if(!prize||!divisor)return null
   const pt0=n=>n.toLocaleString('pt-BR',{maximumFractionDigits:0})
   const pt3=n=>n.toLocaleString('pt-BR',{minimumFractionDigits:3,maximumFractionDigits:3})
-  const q=prize/divisor, qi=Math.floor(q), r=prize%divisor
-  const sorteado=r===0?divisor:r, frac=q-qi
-  return [pt0(prize)+' \xf7 '+pt0(divisor)+' = '+pt3(q), pt3(frac)+' \xd7 '+pt0(divisor)+' = '+sorteado]
+  const q=prize/divisor,qi=Math.floor(q),r=prize%divisor,s=r===0?divisor:r,f=q-qi
+  return[pt0(prize)+' ÷ '+pt0(divisor)+' = '+pt3(q),pt3(f)+' × '+pt0(divisor)+' = '+s]
 }
-
-// ══════════════════════════════════════════════════════
-// CACHE & MAPEAMENTO
-// ══════════════════════════════════════════════════════
 let _cache=null
-function invalidate(){ _cache=null }
-
+function invalidate(){_cache=null}
 function mapCons(c){
-  return {
-    id:c.id, administradora:c.administradora||'', tipo:c.tipo||'',
-    grupo:c.grupo||'', cota:c.cota||'',
-    creditoTotal:parseFloat(c.credito_total)||0, parcela:parseFloat(c.parcela)||0,
-    prazoTotal:c.prazo_total||0, parcelaAtual:c.parcela_atual||0,
-    divisor:c.divisor||900, reajuste:c.reajuste||'',
-    lanceFixo:parseFloat(c.lance_fixo)||0, status:c.status||'ativa', obs:c.obs||'',
-    meiaParcela:c.meia_parcela||false, parcelaCheia:parseFloat(c.parcela_cheia)||0,
-    assembleias:(c.assembleias||[]).sort((a,b)=>a.numero-b.numero).map(a=>({
-      id:a.id, numero:a.numero, data:a.data,
-      numeroSorteado:a.numero_sorteado, loteriaPrimeiroPremio:a.loteria_primeiro_premio,
-      contemplacoes:(a.contemplacoes||[]).map(ct=>({
-        id:ct.id, cota:ct.cota, modalidade:ct.modalidade,
-        percentual:parseFloat(ct.percentual)||0, valor:parseFloat(ct.valor)||0
-      }))
-    }))
+  return{
+    id:c.id,administradora:c.administradora||'',tipo:c.tipo||'',grupo:c.grupo||'',cota:c.cota||'',
+    creditoTotal:parseFloat(c.credito_total)||0,parcela:parseFloat(c.parcela)||0,
+    prazoTotal:c.prazo_total||0,parcelaAtual:c.parcela_atual||0,divisor:c.divisor||900,
+    reajuste:c.reajuste||'',lanceFixo:parseFloat(c.lance_fixo)||0,status:c.status||'ativa',obs:c.obs||'',
+    meiaParcela:c.meia_parcela||false,parcelaCheia:parseFloat(c.parcela_cheia)||0,
+    assembleias:(c.assembleias||[]).sort((a,b)=>a.numero-b.numero).map(a=>({id:a.id,numero:a.numero,data:a.data,
+      numeroSorteado:a.numero_sorteado,loteriaPrimeiroPremio:a.loteria_primeiro_premio,
+      classificacaoFixo:a.classificacao_fixo||null,classificacaoSorteio:a.classificacao_sorteio||null,
+      contemplacoes:(a.contemplacoes||[]).map(ct=>({id:ct.id,cota:ct.cota,modalidade:ct.modalidade,
+        percentual:parseFloat(ct.percentual)||0,valor:parseFloat(ct.valor)||0}))}))
   }
 }
-
 async function fetchConsorcios(){
-  if(_cache) return _cache
-  const {data,error}=await _sb.from('consorcios')
-    .select('*, assembleias(*, contemplacoes(*))')
-    .order('created_at',{ascending:true})
-  if(error) throw error
-  _cache=(data||[]).map(mapCons)
-  return _cache
+  if(_cache)return _cache
+  const{data,error}=await _sb.from('consorcios').select('*, assembleias(*, contemplacoes(*))').order('created_at',{ascending:true})
+  if(error)throw error
+  _cache=(data||[]).map(mapCons);return _cache
 }
-
-// ══════════════════════════════════════════════════════
-// LOADING & TOAST
-// ══════════════════════════════════════════════════════
-function showLoading(){ document.getElementById('loadingOverlay').style.display='flex' }
-function hideLoading(){ document.getElementById('loadingOverlay').style.display='none' }
+function showLoading(){document.getElementById('loadingOverlay').style.display='flex'}
+function hideLoading(){document.getElementById('loadingOverlay').style.display='none'}
 function showToast(msg,type='error'){
   const t=document.getElementById('toast')
-  t.textContent=msg; t.style.background=type==='success'?'var(--success)':'var(--danger)'
-  t.style.display='block'; setTimeout(()=>t.style.display='none',3500)
+  t.textContent=msg;t.style.background=type==='success'?'var(--success)':'var(--danger)'
+  t.style.display='block';setTimeout(()=>t.style.display='none',3500)
 }
-
-// ══════════════════════════════════════════════════════
-// ESTADO GLOBAL
-// ══════════════════════════════════════════════════════
-let CU=null,CPage='dashboard',CConsId=null,CEditId=null,CAsmId=null
-
-// ══════════════════════════════════════════════════════
-// AUTH
-// ══════════════════════════════════════════════════════
+let CU=null,CPage='dashboard',CConsId=null,CEditId=null,CAsmId=null,CAsmEditId=null
+// ── Auth ──
 function switchTab(t){
   document.querySelectorAll('.auth-tab').forEach((el,i)=>el.classList.toggle('active',(t==='login'&&i===0)||(t==='register'&&i===1)))
-  document.getElementById('form-login').style.display    =t==='login'    ?'block':'none'
-  document.getElementById('form-register').style.display =t==='register' ?'block':'none'
-  document.getElementById('form-forgot').style.display   =t==='forgot'   ?'block':'none'
-  document.getElementById('form-reset').style.display    =t==='reset'    ?'block':'none'
+  document.getElementById('form-login').style.display    =t==='login'?'block':'none'
+  document.getElementById('form-register').style.display =t==='register'?'block':'none'
+  document.getElementById('form-forgot').style.display   =t==='forgot'?'block':'none'
+  document.getElementById('form-reset').style.display    =t==='reset'?'block':'none'
 }
-
 async function doLogin(){
   const email=document.getElementById('login-email').value.trim().toLowerCase()
-  const pw   =document.getElementById('login-password').value
-  const errEl=document.getElementById('login-err')
-  errEl.classList.remove('show')
-  if(!email||!pw){ errEl.textContent='Preencha e-mail e senha.'; errEl.classList.add('show'); return }
-  showLoading()
-  const {error}=await _sb.auth.signInWithPassword({email,password:pw})
-  hideLoading()
-  if(error){ errEl.textContent='E-mail ou senha incorretos.'; errEl.classList.add('show') }
+  const pw=document.getElementById('login-password').value
+  const errEl=document.getElementById('login-err');errEl.classList.remove('show')
+  if(!email||!pw){errEl.textContent='Preencha e-mail e senha.';errEl.classList.add('show');return}
+  showLoading();const{error}=await _sb.auth.signInWithPassword({email,password:pw});hideLoading()
+  if(error){errEl.textContent='E-mail ou senha incorretos.';errEl.classList.add('show')}
 }
-
 async function doRegister(){
-  const name =document.getElementById('reg-name').value.trim()
+  const name=document.getElementById('reg-name').value.trim()
   const email=document.getElementById('reg-email').value.trim().toLowerCase()
-  const pw   =document.getElementById('reg-password').value
-  const err  =document.getElementById('reg-err')
-  err.classList.remove('show')
-  if(!name||!email||!pw){ err.textContent='Preencha todos os campos.'; err.classList.add('show'); return }
-  if(pw.length<6){ err.textContent='Senha deve ter pelo menos 6 caracteres.'; err.classList.add('show'); return }
-  showLoading()
-  const {error}=await _sb.auth.signUp({email,password:pw,options:{data:{name}}})
-  hideLoading()
-  if(error){ err.textContent=error.message; err.classList.add('show'); return }
+  const pw=document.getElementById('reg-password').value
+  const err=document.getElementById('reg-err');err.classList.remove('show')
+  if(!name||!email||!pw){err.textContent='Preencha todos os campos.';err.classList.add('show');return}
+  if(pw.length<6){err.textContent='Senha deve ter pelo menos 6 caracteres.';err.classList.add('show');return}
+  showLoading();const{error}=await _sb.auth.signUp({email,password:pw,options:{data:{name}}});hideLoading()
+  if(error){err.textContent=error.message;err.classList.add('show');return}
   showToast('Conta criada! Verifique seu e-mail se solicitado.','success')
 }
-
-async function doLoginGoogle(){
-  const {error}=await _sb.auth.signInWithOAuth({
-    provider:'google',
-    options:{ redirectTo:'https://www.controleconsorcio.com.br' }
-  })
-  if(error) showToast('Erro ao entrar com Google: '+error.message)
-}
-
 async function doForgotPassword(){
   const email=document.getElementById('forgot-email').value.trim().toLowerCase()
-  const errEl=document.getElementById('forgot-err')
-  const okEl =document.getElementById('forgot-ok')
-  errEl.classList.remove('show'); okEl.style.display='none'
-  if(!email){ errEl.textContent='Digite seu e-mail.'; errEl.classList.add('show'); return }
+  const errEl=document.getElementById('forgot-err'),okEl=document.getElementById('forgot-ok')
+  errEl.classList.remove('show');okEl.style.display='none'
+  if(!email){errEl.textContent='Digite seu e-mail.';errEl.classList.add('show');return}
   showLoading()
-  const {error}=await _sb.auth.resetPasswordForEmail(email,{
-    redirectTo:'https://www.controleconsorcio.com.br'
-  })
+  const{error}=await _sb.auth.resetPasswordForEmail(email,{redirectTo:'https://www.controleconsorcio.com.br'})
   hideLoading()
-  if(error){ errEl.textContent=error.message; errEl.classList.add('show'); return }
-  okEl.textContent='✅ Link enviado! Verifique sua caixa de entrada.'
-  okEl.style.display='block'
+  if(error){errEl.textContent=error.message;errEl.classList.add('show');return}
+  okEl.textContent='✅ Link enviado! Verifique sua caixa de entrada.';okEl.style.display='block'
 }
-
 async function doResetPassword(){
-  const pw  =document.getElementById('reset-pw').value
-  const pw2 =document.getElementById('reset-pw2').value
-  const errEl=document.getElementById('reset-err')
-  errEl.classList.remove('show')
-  if(pw.length<6){ errEl.textContent='Senha deve ter pelo menos 6 caracteres.'; errEl.classList.add('show'); return }
-  if(pw!==pw2){ errEl.textContent='As senhas não coincidem.'; errEl.classList.add('show'); return }
-  showLoading()
-  const {error}=await _sb.auth.updateUser({password:pw})
-  hideLoading()
-  if(error){ errEl.textContent=error.message; errEl.classList.add('show'); return }
+  const pw=document.getElementById('reset-pw').value
+  const pw2=document.getElementById('reset-pw2').value
+  const errEl=document.getElementById('reset-err');errEl.classList.remove('show')
+  if(pw.length<6){errEl.textContent='Senha deve ter pelo menos 6 caracteres.';errEl.classList.add('show');return}
+  if(pw!==pw2){errEl.textContent='As senhas não coincidem.';errEl.classList.add('show');return}
+  showLoading();const{error}=await _sb.auth.updateUser({password:pw});hideLoading()
+  if(error){errEl.textContent=error.message;errEl.classList.add('show');return}
   showToast('Senha alterada com sucesso! Faça login novamente.','success')
-  await _sb.auth.signOut()
-  switchTab('login')
+  await _sb.auth.signOut();switchTab('login')
 }
-
+async function doLoginGoogle(){
+  const{error}=await _sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://www.controleconsorcio.com.br'}})
+  if(error)showToast('Erro ao entrar com Google: '+error.message)
+}
 async function doLogout(){
-  await _sb.auth.signOut(); CU=null; invalidate()
+  await _sb.auth.signOut();CU=null;invalidate()
   document.getElementById('app-shell').style.display='none'
   document.getElementById('page-auth').style.display='flex'
 }
-
 function showApp(user){
   CU={id:user.id,email:user.email,name:user.user_metadata?.name||user.email.split('@')[0]}
-  document.getElementById('page-auth').style.display ='none'
-  document.getElementById('app-shell').style.display ='block'
-  document.getElementById('sbName').textContent  =CU.name
-  document.getElementById('sbEmail').textContent =CU.email
+  document.getElementById('page-auth').style.display='none'
+  document.getElementById('app-shell').style.display='block'
+  document.getElementById('sbName').textContent=CU.name
+  document.getElementById('sbEmail').textContent=CU.email
   document.getElementById('sbAvatar').textContent=initials(CU.name)
   goTo('dashboard')
 }
-
-// ══════════════════════════════════════════════════════
-// ROUTER
-// ══════════════════════════════════════════════════════
+// ── Router ──
 const PAGES=['dashboard','add-consorcio','detail','calculator','profile']
-
 async function goTo(page,id){
   PAGES.forEach(p=>document.getElementById('page-'+p).style.display='none')
   document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'))
-  CPage=page; if(id) CConsId=id
+  CPage=page;if(id)CConsId=id
   document.getElementById('page-'+page).style.display=''
-  const titles={dashboard:'Dashboard','add-consorcio':(CEditId?'Editar':'Adicionar')+' Cons\xf3rcio',detail:'Detalhe do Cons\xf3rcio',calculator:'Calculadora Loteria Federal',profile:'Meu Perfil'}
+  const titles={dashboard:'Dashboard','add-consorcio':(CEditId?'Editar':'Adicionar')+' Consórcio',detail:'Detalhe do Consórcio',calculator:'Calculadora Loteria Federal',profile:'Meu Perfil'}
   document.getElementById('topTitle').textContent=titles[page]||page
   const navMap={dashboard:'nav-dashboard','add-consorcio':'nav-add',calculator:'nav-calculator',profile:'nav-profile'}
-  if(navMap[page]) document.getElementById(navMap[page]).classList.add('active')
-  const ta=document.getElementById('topActions'); ta.innerHTML=''
+  if(navMap[page])document.getElementById(navMap[page]).classList.add('active')
+  const ta=document.getElementById('topActions');ta.innerHTML=''
   if(page==='dashboard')
     ta.innerHTML='<button class="btn btn-primary btn-sm" onclick="newConsorcio()">➕ Adicionar Cota</button>'
   else if(page==='detail'&&CConsId)
-    ta.innerHTML='<button class="btn btn-outline btn-sm" onclick="editCons(\''+CConsId+'\')">✏️ Editar</button> <button class="btn btn-outline btn-sm" onclick="delCons(\''+CConsId+'\')">\u{1F5D1}️ Excluir</button> <button class="btn btn-primary btn-sm" onclick="openAsm(\''+CConsId+'\')">➕ Assembleia</button>'
+    ta.innerHTML='<button class="btn btn-outline btn-sm" onclick="editCons(\'' +CConsId+ '\')">✏️ Editar</button> <button class="btn btn-outline btn-sm" onclick="delCons(\'' +CConsId+ '\')">🗑️ Excluir</button> <button class="btn btn-primary btn-sm" onclick="openAsm(\'' +CConsId+ '\')" >➕ Assembleia</button>'
   else if(page==='add-consorcio')
     ta.innerHTML='<button class="btn btn-outline btn-sm" onclick="goTo(\'dashboard\')">← Voltar</button>'
-  closeSidebar(); showLoading()
+  closeSidebar();showLoading()
   try{
-    if(page==='dashboard')          await renderDash()
-    else if(page==='detail')        await renderDetail()
-    else if(page==='add-consorcio') await renderAddForm()
-    else if(page==='profile')             renderProfile()
-  }catch(e){ showToast('Erro ao carregar: '+e.message) }
-  finally{ hideLoading() }
+    if(page==='dashboard')await renderDash()
+    else if(page==='detail')await renderDetail()
+    else if(page==='add-consorcio')await renderAddForm()
+    else if(page==='profile')renderProfile()
+  }catch(e){showToast('Erro ao carregar: '+e.message)}
+  finally{hideLoading()}
   window.scrollTo(0,0)
 }
-
-function newConsorcio(){ CEditId=null; goTo('add-consorcio') }
-function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('show') }
-function closeSidebar()  { document.getElementById('sidebar').classList.remove('open');  document.getElementById('sidebarOverlay').classList.remove('show') }
-
-// ══════════════════════════════════════════════════════
-// DASHBOARD
-// ══════════════════════════════════════════════════════
+function newConsorcio(){CEditId=null;goTo('add-consorcio')}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('show')}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('show')}
+// ── Dashboard ──
 async function renderDash(){
   const cs=await fetchConsorcios()
   const total=cs.length,ativas=cs.filter(c=>c.status==='ativa').length,cont=cs.filter(c=>c.status==='contemplada').length
@@ -838,7 +708,7 @@ async function renderDash(){
   `
   const grid=document.getElementById('consorcioGrid')
   if(!cs.length){
-    grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🏦</div><h3>Nenhum consórcio cadastrado</h3><p>Adicione sua primeira cota para começar a acompanhar seu progresso.</p><button class="btn btn-primary btn-lg" onclick="newConsorcio()">➕ Adicionar minha primeira cota</button></div>'
+    grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🏦</div><h3>Nenhum consórcio cadastrado</h3><p>Adicione sua primeira cota para começar.</p><button class="btn btn-primary btn-lg" onclick="newConsorcio()">➕ Adicionar minha primeira cota</button></div>'
     return
   }
   grid.innerHTML=cs.map(c=>{
@@ -864,17 +734,11 @@ async function renderDash(){
       +'<div style="font-size:12px;color:var(--muted);">Ver →</div></div></div>'
   }).join('')
 }
-
-// ══════════════════════════════════════════════════════
-// DETALHE DO CONSÓRCIO
-// ══════════════════════════════════════════════════════
+// ── Detalhe ──
 async function renderDetail(){
-  const cs=await fetchConsorcios()
-  const c=cs.find(x=>x.id===CConsId)
-  if(!c){ goTo('dashboard'); return }
-  const asms=c.assembleias||[]
-  const icon=ADMIN_ICONS[c.administradora]||'🏦'
-  const div=c.divisor||1
+  const cs=await fetchConsorcios();const c=cs.find(x=>x.id===CConsId)
+  if(!c){goTo('dashboard');return}
+  const asms=c.assembleias||[],icon=ADMIN_ICONS[c.administradora]||'🏦',div=c.divisor||1
   const credLiq=c.lanceFixo?c.creditoTotal*(1-c.lanceFixo/100):c.creditoTotal
   const livres=asms.flatMap(a=>a.contemplacoes.filter(x=>x.modalidade==='livre'&&x.percentual>0).map(x=>x.percentual))
   const lMin=livres.length?Math.min(...livres).toFixed(2)+'%':'—'
@@ -886,16 +750,15 @@ async function renderDetail(){
   const pctPagoC=c.creditoTotal>0?((totalPagoC/c.creditoTotal)*100).toFixed(1):0
   const allCont=new Set(asms.flatMap(a=>a.contemplacoes.filter(x=>x.modalidade!=='cancelado').map(x=>parseInt(x.cota))).filter(n=>!isNaN(n)))
   const lastAsm=asms.length?asms[asms.length-1]:null
-  // ── Novas métricas ──
-  const primeiraAsm   = asms.length?asms[0]:null
-  const data1aAsm     = primeiraAsm ? fmtDate(primeiraAsm.data) : '—'
-  const parcelasRest  = Math.max(0,(c.prazoTotal||0)-(c.parcelaAtual||0))
-  const parcelaCalc   = (c.meiaParcela && c.parcelaCheia>0) ? c.parcelaCheia : (c.parcela||0)
-  const saldoDevedor  = parcelaCalc * parcelasRest
-  let previsaoEnc = '—'
+  const primeiraAsm=asms.length?asms[0]:null
+  const data1aAsm=primeiraAsm?fmtDate(primeiraAsm.data):'—'
+  const parcelasRest=Math.max(0,(c.prazoTotal||0)-(c.parcelaAtual||0))
+  const parcelaCalc=(c.meiaParcela&&c.parcelaCheia>0)?c.parcelaCheia:(c.parcela||0)
+  const saldoDevedor=parcelaCalc*parcelasRest
+  let previsaoEnc='—'
   if(primeiraAsm&&primeiraAsm.data&&c.prazoTotal){
-    const [py,pm,pd]=primeiraAsm.data.split('-').map(Number)
-    const df=new Date(py, pm-1+(c.prazoTotal-1), pd)
+    const[py,pm,pd]=primeiraAsm.data.split('-').map(Number)
+    const df=new Date(py,pm-1+(c.prazoTotal-1),pd)
     const meses=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez']
     previsaoEnc=meses[df.getMonth()]+'/'+df.getFullYear()
   }
@@ -921,8 +784,19 @@ async function renderDetail(){
         const first=ci===0,rs=a.contemplacoes.length
         const _cl=formatCalcLines(a.loteriaPrimeiroPremio,c.divisor)
         const calcHtml=_cl?'<span style="line-height:1.7;white-space:nowrap;">'+_cl[0]+'<br>'+_cl[1]+'</span>':'—'
-        tblHtml+='<tr class="'+(alt?'row-alt':'')+(first?' asm-sep':'')+'\">'
-        if(first) tblHtml+='<td rowspan="'+rs+'"><strong>'+a.numero+'</strong></td><td rowspan="'+rs+'">'+fmtDate(a.data)+'</td><td rowspan="'+rs+'"><strong>'+String(a.numeroSorteado||'—').padStart(3,'0')+'</strong></td><td rowspan="'+rs+'" class="mono">'+(a.loteriaPrimeiroPremio?String(a.loteriaPrimeiroPremio).padStart(5,'0'):'—')+'</td><td rowspan="'+rs+'" class="mono" style="font-size:11px">'+calcHtml+'</td>'
+        const rowClick='onclick="openAsm(\''+c.id+'\',\''+a.id+'\')" style="cursor:pointer;" title="Clique para editar esta assembleia"'
+        tblHtml+='<tr '+rowClick+' class="'+(alt?'row-alt':'')+(first?' asm-sep':'')+'">'
+        const cid='cls-'+a.numero
+        const classHtml=(a.classificacaoFixo||a.classificacaoSorteio)
+          ?'<div style="margin-top:8px;padding-top:6px;border-top:1px dashed #E2E8F0;">'
+            +'<button onclick="event.stopPropagation();var p=document.getElementById(\''+cid+'\');var i=document.getElementById(\''+cid+'-i\');if(p.style.display===\'none\'){p.style.display=\'flex\';i.textContent=\'▴\'}else{p.style.display=\'none\';i.textContent=\'▾\'}" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;padding:0;font-size:10px;color:var(--muted);font-weight:600;">'
+            +'Sua Classificação <span id="'+cid+'-i" style="font-size:9px;">▾</span></button>'
+            +'<div id="'+cid+'" style="display:none;gap:12px;margin-top:6px;">'
+            +(a.classificacaoFixo?'<div style="text-align:center;"><strong style="color:var(--warning);font-size:16px;display:block;line-height:1.1;">'+a.classificacaoFixo+'º</strong><span style="color:var(--muted);font-size:9px;white-space:nowrap;">Lance Fixo</span></div>':'')
+            +(a.classificacaoSorteio?'<div style="text-align:center;"><strong style="color:var(--primary);font-size:16px;display:block;line-height:1.1;">'+a.classificacaoSorteio+'º</strong><span style="color:var(--muted);font-size:9px;white-space:nowrap;">Sorteio Ativo</span></div>':'')
+            +'</div></div>'
+          :''
+        if(first) tblHtml+='<td rowspan="'+rs+'" style="vertical-align:top;white-space:nowrap;"><strong>'+a.numero+'</strong>'+classHtml+'</td><td rowspan="'+rs+'">'+fmtDate(a.data)+'</td><td rowspan="'+rs+'"><strong>'+String(a.numeroSorteado||'—').padStart(3,'0')+'</strong></td><td rowspan="'+rs+'" class="mono">'+(a.loteriaPrimeiroPremio?String(a.loteriaPrimeiroPremio).padStart(5,'0'):'—')+'</td><td rowspan="'+rs+'" class="mono" style="font-size:11px">'+calcHtml+'</td>'
         tblHtml+='<td>'+ct.cota+'</td><td><span class="badge '+(ct.modalidade||'sorteio')+'">'+(MOD_LABEL[ct.modalidade]||ct.modalidade)+'</span></td><td>'+(ct.percentual?ct.percentual+'%':'0%')+'</td><td class="mono">'+(ct.valor>0?fmtBRL2(ct.valor):'—')+'</td></tr>'
       })
     })
@@ -967,14 +841,14 @@ async function renderDetail(){
     </div>
     <div class="form-section" style="margin-bottom:20px;">
       <div class="form-section-title">🎯 Probabilidades Estimadas</div>
-      <div class="info-box"><strong>Como funciona este grupo:</strong> a cada assembleia a Loteria Federal define <strong>2 contemplações por sorteio</strong>: a cota sorteada diretamente (<em>sorteio</em>) e a cota imediatamente adjacente (<em>lance fixo</em>). Ambas são determinadas pelo mesmo número — não há lance competitivo. Como você não participa de lances livres, sua chance real é <strong>2 cotas por assembleia</strong> num pool de <strong>${activeCotas}</strong> cotas ativas (${div} total − ${allCont.size} já contempladas).</div>
+      <div class="info-box"><strong>Como funciona este grupo:</strong> a cada assembleia a Loteria Federal define <strong>2 contemplações por sorteio</strong>: a cota sorteada diretamente (<em>sorteio</em>) e a cota imediatamente adjacente (<em>lance fixo</em>). Ambas determinadas pelo mesmo número. Sua chance real é <strong>2 cotas por assembleia</strong> num pool de <strong>${activeCotas}</strong> cotas ativas (${div} total − ${allCont.size} contempladas).</div>
       <div class="chances-grid">
         <div class="chance-card green"><div class="cv">${fmt2(pctSorteio)}%</div><div class="cd">Sorteio (Loteria Federal)<br><small>1 ÷ ${activeCotas} cotas ativas</small></div></div>
         <div class="chance-card yellow"><div class="cv">${fmt2(pctFixo)}%</div><div class="cd">Lance Fixo (cota adjacente)<br><small>tb. determinado pelo sorteio</small></div></div>
-        <div class="chance-card purple"><div class="cv">${fmt2(pctReal)}%</div><div class="cd">Sua chance real / mês<br><small>2 ÷ ${activeCotas} (sorteio + fixo)</small></div></div>
+        <div class="chance-card purple"><div class="cv">${fmt2(pctReal)}%</div><div class="cd">Sua chance real / mês<br><small>2 ÷ ${activeCotas}</small></div></div>
         <div class="chance-card blue"><div class="cv">~${fmt1(pct12)}%</div><div class="cd">Estimativa 12 meses<br><small>12 × ${fmt2(pctReal)}%</small></div></div>
       </div>
-      <div class="tip-box"><strong>Resumo:</strong> ${fmt2(pctSorteio)}% (sorteio) + ${fmt2(pctFixo)}% (fixo) = <strong>${fmt2(pctReal)}%/mês</strong>. Em 12 assembleias: <strong>~${fmt1(pct12)}%</strong>. ${avgLivresPerAsm>0?'Oportunidade: ~'+fmt1(avgLivresPerAsm)+' lances livres/asm. neste grupo ('+lMin+' a '+lMax+'). Participar aumentaria suas chances.':''}</div>
+      <div class="tip-box"><strong>Resumo:</strong> ${fmt2(pctSorteio)}% + ${fmt2(pctFixo)}% = <strong>${fmt2(pctReal)}%/mês</strong> → <strong>~${fmt1(pct12)}%</strong> em 12 assembleias. ${avgLivresPerAsm>0?'Oportunidade: ~'+fmt1(avgLivresPerAsm)+' lances livres/asm. ('+lMin+' a '+lMax+').':''}</div>
     </div>
     <div class="form-section">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
@@ -985,73 +859,65 @@ async function renderDetail(){
     </div>
     <div class="form-section">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-        <div class="form-section-title" style="margin-bottom:0">🗂️ Mapa de Cotas do Grupo (0001–${String(totalCotas).padStart(4,'0')})</div>
+        <div class="form-section-title" style="margin-bottom:0">🗂️ Mapa de Cotas (0001–${String(totalCotas).padStart(4,'0')})</div>
         <button class="btn btn-outline btn-sm" id="btnToggleMapa" onclick="toggleCotaMap()">Ver todas as cotas ▾</button>
       </div>
       ${mapaLegenda}
       <div id="cotaMapContainer" style="display:none;">
         <div class="cota-grid" id="cotaMapGrid"></div>
-        <div class="cota-map-stats">Total: ${totalCotas} cotas · Contempladas: ${allCont.size} · Sua cota: <strong>${String(suaCotaNum).padStart(4,'0')}</strong> (azul)</div>
+        <div class="cota-map-stats">Total: ${totalCotas} · Contempladas: ${allCont.size} · Sua cota: <strong>${String(suaCotaNum).padStart(4,'0')}</strong></div>
       </div>
     </div>
   `
   window._cotaMapData={total:totalCotas,suaCota:suaCotaNum,contempladas:allCont,ultimoSorteado:ultimoSort,cotaDetails:cotaDetailsMap,rendered:false}
 }
-
-// ══════════════════════════════════════════════════════
-// MAPA DE COTAS
-// ══════════════════════════════════════════════════════
+// ── Mapa de Cotas ──
 function toggleCotaMap(){
   const container=document.getElementById('cotaMapContainer'),btn=document.getElementById('btnToggleMapa')
-  if(!container||!btn) return
+  if(!container||!btn)return
   if(container.style.display==='none'){
-    container.style.display='block'; btn.textContent='Fechar mapa ▴'
-    if(!window._cotaMapData.rendered){ renderCotaGrid(); window._cotaMapData.rendered=true }
-  } else { container.style.display='none'; btn.textContent='Ver todas as cotas ▾' }
+    container.style.display='block';btn.textContent='Fechar mapa ▴'
+    if(!window._cotaMapData.rendered){renderCotaGrid();window._cotaMapData.rendered=true}
+  }else{container.style.display='none';btn.textContent='Ver todas as cotas ▾'}
 }
-
 function buildCotaTooltip(i){
-  const {suaCota,contempladas,cotaDetails,ultimoSorteado}=window._cotaMapData
+  const{suaCota,contempladas,cotaDetails,ultimoSorteado}=window._cotaMapData
   const p4=n=>String(n).padStart(4,'0'),p3=n=>String(n).padStart(3,'0')
   const lines=['Cota '+p4(i)]
-  if(i===suaCota){ lines.push('','⭐ SUA COTA') }
+  if(i===suaCota){lines.push('','⭐ SUA COTA')}
   else if(contempladas.has(i)){
-    const d=cotaDetails.get(i); lines.push('','✅ CONTEMPLADA')
+    const d=cotaDetails.get(i);lines.push('','✅ CONTEMPLADA')
     if(d){
       lines.push('─────────────────────','Assembleia nº '+d.assembleia+' ('+fmtDate(d.data)+')')
       lines.push('Modalidade: '+(MOD_LABEL[d.modalidade]||d.modalidade))
-      if(d.percentual>0) lines.push('% Lance: '+d.percentual+'%')
-      if(d.valor>0)      lines.push('Valor Lance: '+fmtBRL2(d.valor))
+      if(d.percentual>0)lines.push('% Lance: '+d.percentual+'%')
+      if(d.valor>0)lines.push('Valor Lance: '+fmtBRL2(d.valor))
       lines.push('─────────────────────','Nº Sorteado: '+(d.sorteado!=null?p3(d.sorteado):'—'))
-      if(d.loteria) lines.push('Loteria 1º Prêmio: '+String(d.loteria).padStart(5,'0'))
+      if(d.loteria)lines.push('Loteria 1º Prêmio: '+String(d.loteria).padStart(5,'0'))
     }
-  } else { lines.push('','Ativa — concorrendo') }
-  if(ultimoSorteado&&i===ultimoSorteado&&i!==suaCota) lines.push('','🟡 Último nº sorteado')
+  }else{lines.push('','Ativa — concorrendo')}
+  if(ultimoSorteado&&i===ultimoSorteado&&i!==suaCota)lines.push('','🟡 Último nº sorteado')
   return lines.join('\n')
 }
-
 function renderCotaGrid(){
   const grid=document.getElementById('cotaMapGrid')
-  if(!grid||!window._cotaMapData) return
-  const {total,suaCota,contempladas,ultimoSorteado}=window._cotaMapData
+  if(!grid||!window._cotaMapData)return
+  const{total,suaCota,contempladas,ultimoSorteado}=window._cotaMapData
   const frag=document.createDocumentFragment()
   for(let i=1;i<=total;i++){
     const el=document.createElement('div')
-    el.className='cota-item'; el.textContent=String(i).padStart(4,'0')
-    if(i===suaCota) el.classList.add('ci-sua')
-    else if(contempladas.has(i)) el.classList.add('ci-contemplada')
-    if(ultimoSorteado&&i===ultimoSorteado) el.classList.add('ci-sorteio')
-    el.title=buildCotaTooltip(i); frag.appendChild(el)
+    el.className='cota-item';el.textContent=String(i).padStart(4,'0')
+    if(i===suaCota)el.classList.add('ci-sua')
+    else if(contempladas.has(i))el.classList.add('ci-contemplada')
+    if(ultimoSorteado&&i===ultimoSorteado)el.classList.add('ci-sorteio')
+    el.title=buildCotaTooltip(i);frag.appendChild(el)
   }
   grid.appendChild(frag)
 }
-
-// ══════════════════════════════════════════════════════
-// FORMULÁRIO ADD/EDIT
-// ══════════════════════════════════════════════════════
+// ── Add/Edit Form ──
 async function renderAddForm(){
   if(CEditId){
-    const cs=await fetchConsorcios(); const c=cs.find(x=>x.id===CEditId)
+    const cs=await fetchConsorcios();const c=cs.find(x=>x.id===CEditId)
     if(c){
       document.getElementById('f-id').value=CEditId
       document.getElementById('f-admin').value=c.administradora||''
@@ -1071,13 +937,12 @@ async function renderAddForm(){
       document.getElementById('f-parcela-cheia').value=c.parcelaCheia||''
       document.getElementById('saveCBtn').textContent='Salvar Alterações'
     }
-  } else {
+  }else{
     document.querySelector('#page-add-consorcio form').reset()
     document.getElementById('f-id').value=''
     document.getElementById('saveCBtn').textContent='Salvar Consórcio'
   }
 }
-
 async function saveConsorcio(e){
   e.preventDefault()
   const editId=document.getElementById('f-id').value
@@ -1101,88 +966,103 @@ async function saveConsorcio(e){
   showLoading()
   try{
     if(editId){
-      const {error}=await _sb.from('consorcios').update(payload).eq('id',editId)
-      if(error) throw error
-      invalidate(); CEditId=null; CConsId=editId; await goTo('detail',editId)
-    } else {
-      const {data:created,error}=await _sb.from('consorcios').insert({...payload,user_id:CU.id}).select().single()
-      if(error) throw error
-      invalidate(); CEditId=null; CConsId=created.id; await goTo('detail',created.id)
+      const{error}=await _sb.from('consorcios').update(payload).eq('id',editId)
+      if(error)throw error
+      invalidate();CEditId=null;CConsId=editId;await goTo('detail',editId)
+    }else{
+      const{data:created,error}=await _sb.from('consorcios').insert({...payload,user_id:CU.id}).select().single()
+      if(error)throw error
+      invalidate();CEditId=null;CConsId=created.id;await goTo('detail',created.id)
     }
-  }catch(e){ showToast('Erro ao salvar: '+e.message) }
-  finally{ hideLoading() }
+  }catch(e){showToast('Erro ao salvar: '+e.message)}
+  finally{hideLoading()}
 }
-
-function editCons(id){ CEditId=id; goTo('add-consorcio') }
-
+function editCons(id){CEditId=id;goTo('add-consorcio')}
 function delCons(id){
   document.getElementById('delConfirmBtn').onclick=async()=>{
-    closeModal('modalDel'); showLoading()
+    closeModal('modalDel');showLoading()
     try{
-      const {error}=await _sb.from('consorcios').delete().eq('id',id)
-      if(error) throw error
-      invalidate(); await goTo('dashboard')
-    }catch(e){ showToast('Erro ao excluir: '+e.message) }
-    finally{ hideLoading() }
+      const{error}=await _sb.from('consorcios').delete().eq('id',id)
+      if(error)throw error
+      invalidate();await goTo('dashboard')
+    }catch(e){showToast('Erro ao excluir: '+e.message)}
+    finally{hideLoading()}
   }
   document.getElementById('modalDel').classList.add('show')
 }
 
-// ══════════════════════════════════════════════════════
-// ASSEMBLEIAS
-// ══════════════════════════════════════════════════════
-async function openAsm(consId){
-  CAsmId=consId
-  const cs=await fetchConsorcios(); const c=cs.find(x=>x.id===consId)
-  document.getElementById('asm-num').value    =c&&c.assembleias?c.assembleias.length+1:1
-  document.getElementById('asm-data').value   =''
-  document.getElementById('asm-sorteado').value=''
-  document.getElementById('asm-loteria').value =''
-  document.getElementById('ctList').innerHTML  =''
-  ctCnt=0; addCtRow()
+// ── Assembleias ──
+async function openAsm(consId, editId){
+  CAsmId=consId; CAsmEditId=editId||null
+  const cs=await fetchConsorcios();const c=cs.find(x=>x.id===consId)
+  document.getElementById('asm-edit-id').value=CAsmEditId||''
+  document.getElementById('btnDeleteAsm').style.display=CAsmEditId?'inline-flex':'none'
+  document.querySelector('#modalAsm .modal-title').textContent=CAsmEditId?'✏️ Editar Assembleia':'📋 Registrar Assembleia'
+  if(CAsmEditId){
+    const a=c&&c.assembleias?c.assembleias.find(x=>x.id===CAsmEditId):null
+    document.getElementById('asm-num').value=a?a.numero:''
+    document.getElementById('asm-data').value=a?a.data:''
+    document.getElementById('asm-sorteado').value=a&&a.numeroSorteado!=null?a.numeroSorteado:''
+    document.getElementById('asm-loteria').value=a&&a.loteriaPrimeiroPremio!=null?a.loteriaPrimeiroPremio:''
+    document.getElementById('asm-class-fixo').value=a&&a.classificacaoFixo!=null?a.classificacaoFixo:''
+    document.getElementById('asm-class-sorteio').value=a&&a.classificacaoSorteio!=null?a.classificacaoSorteio:''
+    document.getElementById('ctList').innerHTML=''; ctCnt=0
+    if(a&&a.contemplacoes&&a.contemplacoes.length){
+      a.contemplacoes.forEach(ct=>addCtRow(ct))
+    } else { addCtRow() }
+  } else {
+    document.getElementById('asm-num').value=c&&c.assembleias?c.assembleias.length+1:1
+    document.getElementById('asm-data').value=''
+    document.getElementById('asm-sorteado').value=''
+    document.getElementById('asm-loteria').value=''
+    document.getElementById('asm-class-fixo').value=''
+    document.getElementById('asm-class-sorteio').value=''
+    document.getElementById('ctList').innerHTML=''; ctCnt=0; addCtRow()
+  }
   document.getElementById('modalAsm').classList.add('show')
 }
-
 let ctCnt=0
-function addCtRow(){
-  ctCnt++; const id=ctCnt
+function addCtRow(ct){
+  ctCnt++;const id=ctCnt
   const row=document.createElement('div')
-  row.id='ct-row-'+id; row.className='ct-row'
+  row.id='ct-row-'+id;row.className='ct-row'
   row.innerHTML=`
-    <input type="number" class="form-input ct-field" id="ct-num-${id}" placeholder="Nº cota" style="flex:0 0 90px;"/>
+    <input type="hidden" id="ct-id-${id}" value="${ct?.id||''}"/>
+    <input type="number" class="form-input ct-field" id="ct-num-${id}" placeholder="Nº cota" style="flex:0 0 90px;" value="${ct?.cota||''}"/>
     <select class="form-input form-select ct-field" id="ct-mod-${id}" style="flex:1;">
-      <option value="sorteio">Sorteio Ativo</option>
-      <option value="livre">Lance Livre</option>
-      <option value="fixo">Lance Fixo</option>
-      <option value="cancelado">Cancelado</option>
+      <option value="sorteio"${(!ct||ct.modalidade==='sorteio')?' selected':''}>Sorteio Ativo</option>
+      <option value="livre"${ct?.modalidade==='livre'?' selected':''}>Lance Livre</option>
+      <option value="fixo"${ct?.modalidade==='fixo'?' selected':''}>Lance Fixo</option>
+      <option value="cancelado"${ct?.modalidade==='cancelado'?' selected':''}>Cancelado</option>
     </select>
-    <input type="number" class="form-input ct-field" id="ct-pct-${id}" placeholder="% lance" step="0.001" style="flex:0 0 100px;"/>
-    <input type="number" class="form-input ct-field" id="ct-val-${id}" placeholder="R$ valor" step="0.01" style="flex:0 0 120px;"/>
+    <input type="number" class="form-input ct-field" id="ct-pct-${id}" placeholder="% lance" step="0.001" style="flex:0 0 100px;" value="${ct?.percentual||''}"/>
+    <input type="number" class="form-input ct-field" id="ct-val-${id}" placeholder="R$ valor" step="0.01" style="flex:0 0 120px;" value="${ct?.valor||''}"/>
     <button type="button" class="btn btn-danger btn-sm" onclick="document.getElementById('ct-row-${id}').remove()">✕</button>
   `
   document.getElementById('ctList').appendChild(row)
 }
-
 function autoCalcAsm(){
   const prize=parseInt(document.getElementById('asm-loteria').value)||0
   const c=_cache?_cache.find(x=>x.id===CAsmId):null
   const div=c?(c.divisor||900):900
-  if(prize>0&&div>0){ const r=prize%div; document.getElementById('asm-sorteado').value=r===0?div:r }
+  if(prize>0&&div>0){const r=prize%div;document.getElementById('asm-sorteado').value=r===0?div:r}
 }
-
 async function saveAsm(){
-  const numVal  =parseInt(document.getElementById('asm-num').value)||0
-  const dataVal =document.getElementById('asm-data').value
+  const editId=document.getElementById('asm-edit-id').value
+  const numVal=parseInt(document.getElementById('asm-num').value)||0
+  const dataVal=document.getElementById('asm-data').value
   const sorteado=parseInt(document.getElementById('asm-sorteado').value)||null
-  const loteria =parseInt(document.getElementById('asm-loteria').value)||null
-  if(!numVal||!dataVal){ alert('Preencha número e data da assembleia.'); return }
+  const loteria=parseInt(document.getElementById('asm-loteria').value)||null
+  const classFixo=parseInt(document.getElementById('asm-class-fixo').value)||null
+  const classSorteio=parseInt(document.getElementById('asm-class-sorteio').value)||null
+  if(!numVal||!dataVal){alert('Preencha número e data da assembleia.');return}
   const contemplacoes=[]
   for(let r=1;r<=ctCnt;r++){
-    const row=document.getElementById('ct-row-'+r)
-    if(!row) continue
+    const row=document.getElementById('ct-row-'+r);if(!row)continue
     const cotaEl=document.getElementById('ct-num-'+r)
     if(cotaEl&&cotaEl.value){
       contemplacoes.push({
+        id:(document.getElementById('ct-id-'+r)||{}).value||null,
         cota:cotaEl.value.trim(),
         modalidade:(document.getElementById('ct-mod-'+r)||{}).value||'sorteio',
         percentual:parseFloat((document.getElementById('ct-pct-'+r)||{}).value)||0,
@@ -1190,35 +1070,51 @@ async function saveAsm(){
       })
     }
   }
-  closeModal('modalAsm'); showLoading()
+  closeModal('modalAsm');showLoading()
   try{
-    const {data:asm,error:e1}=await _sb.from('assembleias').insert({
-      consorcio_id:CAsmId, numero:numVal, data:dataVal,
-      numero_sorteado:sorteado, loteria_primeiro_premio:loteria
-    }).select().single()
-    if(e1) throw e1
-    if(contemplacoes.length){
-      const {error:e2}=await _sb.from('contemplacoes').insert(
-        contemplacoes.map(ct=>({assembleia_id:asm.id,cota:ct.cota,modalidade:ct.modalidade,percentual:ct.percentual,valor:ct.valor}))
-      )
-      if(e2) throw e2
+    const asmPayload={consorcio_id:CAsmId,numero:numVal,data:dataVal,
+      numero_sorteado:sorteado,loteria_primeiro_premio:loteria,
+      classificacao_fixo:classFixo,classificacao_sorteio:classSorteio}
+    let asmId=editId
+    if(editId){
+      const{error:eu}=await _sb.from('assembleias').update(asmPayload).eq('id',editId)
+      if(eu)throw eu
+      await _sb.from('contemplacoes').delete().eq('assembleia_id',editId)
+    } else {
+      const{data:asm,error:ei}=await _sb.from('assembleias').insert(asmPayload).select().single()
+      if(ei)throw ei
+      asmId=asm.id
+      const c=_cache?_cache.find(x=>x.id===CAsmId):null
+      await _sb.from('consorcios').update({parcela_atual:(c?.parcelaAtual||0)+1}).eq('id',CAsmId)
     }
-    const c=_cache?_cache.find(x=>x.id===CAsmId):null
-    await _sb.from('consorcios').update({parcela_atual:(c?.parcelaAtual||0)+1}).eq('id',CAsmId)
-    invalidate(); CConsId=CAsmId; await goTo('detail',CAsmId)
-  }catch(e){ showToast('Erro ao salvar assembleia: '+e.message) }
-  finally{ hideLoading() }
+    if(contemplacoes.length){
+      const{error:ec}=await _sb.from('contemplacoes').insert(
+        contemplacoes.map(ct=>({assembleia_id:asmId,cota:ct.cota,modalidade:ct.modalidade,percentual:ct.percentual,valor:ct.valor}))
+      )
+      if(ec)throw ec
+    }
+    invalidate();CConsId=CAsmId;await goTo('detail',CAsmId)
+  }catch(e){showToast('Erro ao salvar assembleia: '+e.message)}
+  finally{hideLoading()}
 }
-
-function closeModal(id){ document.getElementById(id).classList.remove('show') }
-
-// ══════════════════════════════════════════════════════
-// CALCULADORA
-// ══════════════════════════════════════════════════════
+async function deleteAsm(){
+  const editId=document.getElementById('asm-edit-id').value
+  if(!editId||!confirm('Excluir esta assembleia? Os dados serão perdidos.'))return
+  closeModal('modalAsm');showLoading()
+  try{
+    await _sb.from('contemplacoes').delete().eq('assembleia_id',editId)
+    const{error}=await _sb.from('assembleias').delete().eq('id',editId)
+    if(error)throw error
+    invalidate();CConsId=CAsmId;await goTo('detail',CAsmId)
+  }catch(e){showToast('Erro ao excluir assembleia: '+e.message)}
+  finally{hideLoading()}
+}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+// ── Calculadora ──
 function doCalc(){
   const prize=parseInt(document.getElementById('calc-prize').value)||0
-  const div  =parseInt(document.getElementById('calc-div').value)||900
-  if(!prize){ document.getElementById('calcNum').textContent='—'; document.getElementById('calcSteps').innerHTML=''; return }
+  const div=parseInt(document.getElementById('calc-div').value)||900
+  if(!prize){document.getElementById('calcNum').textContent='—';document.getElementById('calcSteps').innerHTML='';return}
   const q=Math.floor(prize/div),r=prize%div,sorteado=r===0?div:r
   const lines=formatCalcLines(prize,div)
   document.getElementById('calcNum').textContent=String(sorteado).padStart(3,'0')
@@ -1234,43 +1130,79 @@ function doCalc(){
       </div>`
     :''
 }
-
-// ══════════════════════════════════════════════════════
-// PERFIL
-// ══════════════════════════════════════════════════════
+// ── Perfil ──
 function renderProfile(){
-  if(!CU) return
-  document.getElementById('p-name').value =CU.name||''
+  if(!CU)return
+  document.getElementById('p-name').value=CU.name||''
   document.getElementById('p-email').value=CU.email||''
-  document.getElementById('p-pw').value   =''
+  document.getElementById('p-pw').value=''
   document.getElementById('p-msg').style.display='none'
 }
-
 async function saveProfile(){
   const name=document.getElementById('p-name').value.trim()
-  const pw  =document.getElementById('p-pw').value
-  if(!name){ alert('Nome não pode ficar vazio.'); return }
+  const pw=document.getElementById('p-pw').value
+  if(!name){alert('Nome não pode ficar vazio.');return}
   showLoading()
   try{
-    const {error:e1}=await _sb.from('profiles').update({name}).eq('id',CU.id)
-    if(e1) throw e1
+    const{error:e1}=await _sb.from('profiles').update({name}).eq('id',CU.id)
+    if(e1)throw e1
     const upd={data:{name}}
-    if(pw.length>=6) upd.password=pw
-    const {error:e2}=await _sb.auth.updateUser(upd)
-    if(e2) throw e2
+    if(pw.length>=6)upd.password=pw
+    const{error:e2}=await _sb.auth.updateUser(upd)
+    if(e2)throw e2
     CU.name=name
-    document.getElementById('sbName').textContent  =CU.name
+    document.getElementById('sbName').textContent=CU.name
     document.getElementById('sbAvatar').textContent=initials(CU.name)
-    document.getElementById('p-msg').style.display ='block'
+    document.getElementById('p-msg').style.display='block'
     showToast('Perfil atualizado!','success')
-  }catch(e){ showToast('Erro ao salvar perfil: '+e.message) }
-  finally{ hideLoading() }
+  }catch(e){showToast('Erro ao salvar perfil: '+e.message)}
+  finally{hideLoading()}
 }
-
-// ══════════════════════════════════════════════════════
-// INIT — escuta mudanças de sessão do Supabase Auth
-// ══════════════════════════════════════════════════════
-_sb.auth.onAuthStateChange((event, session) => {
+// ── Mapa de Cotas ──
+function toggleCotaMap(){
+  const container=document.getElementById('cotaMapContainer'),btn=document.getElementById('btnToggleMapa')
+  if(!container||!btn)return
+  if(container.style.display==='none'){
+    container.style.display='block';btn.textContent='Fechar mapa ▴'
+    if(!window._cotaMapData.rendered){renderCotaGrid();window._cotaMapData.rendered=true}
+  }else{container.style.display='none';btn.textContent='Ver todas as cotas ▾'}
+}
+function buildCotaTooltip(i){
+  const{suaCota,contempladas,cotaDetails,ultimoSorteado}=window._cotaMapData
+  const p4=n=>String(n).padStart(4,'0'),p3=n=>String(n).padStart(3,'0')
+  const lines=['Cota '+p4(i)]
+  if(i===suaCota){lines.push('','⭐ SUA COTA')}
+  else if(contempladas.has(i)){
+    const d=cotaDetails.get(i);lines.push('','✅ CONTEMPLADA')
+    if(d){
+      lines.push('─────────────────────','Assembleia nº '+d.assembleia+' ('+fmtDate(d.data)+')')
+      lines.push('Modalidade: '+(MOD_LABEL[d.modalidade]||d.modalidade))
+      if(d.percentual>0)lines.push('% Lance: '+d.percentual+'%')
+      if(d.valor>0)lines.push('Valor Lance: '+fmtBRL2(d.valor))
+      lines.push('─────────────────────','Nº Sorteado: '+(d.sorteado!=null?p3(d.sorteado):'—'))
+      if(d.loteria)lines.push('Loteria 1º Prêmio: '+String(d.loteria).padStart(5,'0'))
+    }
+  }else{lines.push('','Ativa — concorrendo')}
+  if(ultimoSorteado&&i===ultimoSorteado&&i!==suaCota)lines.push('','🟡 Último nº sorteado')
+  return lines.join('\n')
+}
+function renderCotaGrid(){
+  const grid=document.getElementById('cotaMapGrid')
+  if(!grid||!window._cotaMapData)return
+  const{total,suaCota,contempladas,ultimoSorteado}=window._cotaMapData
+  const frag=document.createDocumentFragment()
+  for(let i=1;i<=total;i++){
+    const el=document.createElement('div')
+    el.className='cota-item';el.textContent=String(i).padStart(4,'0')
+    if(i===suaCota)el.classList.add('ci-sua')
+    else if(contempladas.has(i))el.classList.add('ci-contemplada')
+    if(ultimoSorteado&&i===ultimoSorteado)el.classList.add('ci-sorteio')
+    el.title=buildCotaTooltip(i);frag.appendChild(el)
+  }
+  grid.appendChild(frag)
+}
+// ── Auth State ──
+_sb.auth.onAuthStateChange((event,session)=>{
   if(event==='PASSWORD_RECOVERY'){
     document.getElementById('app-shell').style.display='none'
     document.getElementById('page-auth').style.display='flex'
@@ -1278,10 +1210,10 @@ _sb.auth.onAuthStateChange((event, session) => {
     document.querySelectorAll('.auth-tab').forEach(el=>el.classList.remove('active'))
     return
   }
-  if(session && session.user){
-    if(!CU || CU.id !== session.user.id){ invalidate(); showApp(session.user) }
-  } else {
-    CU=null; invalidate()
+  if(session&&session.user){
+    if(!CU||CU.id!==session.user.id){invalidate();showApp(session.user)}
+  }else{
+    CU=null;invalidate()
     document.getElementById('app-shell').style.display='none'
     document.getElementById('page-auth').style.display='flex'
   }
