@@ -874,6 +874,18 @@ async function renderDetail(){
   const pctPagoC=c.creditoTotal>0?((totalPagoC/c.creditoTotal)*100).toFixed(1):0
   const allCont=new Set(asms.flatMap(a=>a.contemplacoes.filter(x=>x.modalidade!=='cancelado').map(x=>parseInt(x.cota))).filter(n=>!isNaN(n)))
   const lastAsm=asms.length?asms[asms.length-1]:null
+  // ── Novas métricas ──
+  const primeiraAsm   = asms.length?asms[0]:null
+  const data1aAsm     = primeiraAsm ? fmtDate(primeiraAsm.data) : '—'
+  const parcelasRest  = Math.max(0,(c.prazoTotal||0)-(c.parcelaAtual||0))
+  const saldoDevedor  = (c.parcela||0)*parcelasRest
+  let previsaoEnc = '—'
+  if(primeiraAsm&&primeiraAsm.data&&c.prazoTotal){
+    const [py,pm,pd]=primeiraAsm.data.split('-').map(Number)
+    const df=new Date(py, pm-1+(c.prazoTotal-1), pd)
+    const meses=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez']
+    previsaoEnc=meses[df.getMonth()]+'/'+df.getFullYear()
+  }
   const activeCotas=Math.max(1,div-allCont.size)
   const pctSorteio=(1/activeCotas*100),pctFixo=(1/activeCotas*100),pctReal=(2/activeCotas*100)
   const pct12=Math.min(100,pctReal*12)
@@ -936,6 +948,9 @@ async function renderDetail(){
       <div class="info-card"><div class="ik">Cotas Contempladas</div><div class="iv orange">${allCont.size}</div><div class="is">Neste histórico</div></div>
       <div class="info-card"><div class="ik">Lances Livres (mín/máx)</div><div class="iv" style="font-size:14px">${lMin} / ${lMax}</div><div class="is">Média: ${lAvg}</div></div>
       <div class="info-card"><div class="ik">Último Sorteado</div><div class="iv">${lastAsm?String(lastAsm.numeroSorteado||'—').padStart(3,'0'):'—'}</div><div class="is">${lastAsm?'Asm. '+lastAsm.numero:'—'}</div></div>
+      <div class="info-card"><div class="ik">Data 1ª Assembleia</div><div class="iv" style="font-size:16px">${data1aAsm}</div><div class="is">${primeiraAsm?'Asm. nº '+primeiraAsm.numero:'Nenhuma registrada'}</div></div>
+      <div class="info-card" style="border-left:3px solid var(--danger)"><div class="ik">Saldo Devedor</div><div class="iv" style="color:var(--danger);font-size:18px">${fmtBRL(saldoDevedor)}</div><div class="is">${parcelasRest} parcela${parcelasRest!==1?'s':''} restante${parcelasRest!==1?'s':''}</div></div>
+      <div class="info-card" style="border-left:3px solid var(--success)"><div class="ik">Previsão de Encerramento</div><div class="iv" style="color:var(--success);font-size:18px">${previsaoEnc}</div><div class="is">${parcelasRest} meses restantes</div></div>
     </div>
     <div class="form-section" style="margin-bottom:20px;">
       <div class="form-section-title">🎯 Probabilidades Estimadas</div>
