@@ -762,13 +762,11 @@ async function renderDetail(){
   }))
   let tblHtml=''
   if(asms.length){
-    tblHtml='<div class="table-wrap"><table class="data-table"><thead><tr><th>Asm.</th><th>Data</th><th>Nº Sorteado</th><th>Loteria (1º prêmio)</th><th>Cálculo (resumo)</th><th>Cota</th><th>Modalidade</th><th>% Lance</th><th>Valor Lance</th></tr></thead><tbody>'
+    tblHtml='<div class="table-wrap"><table class="data-table"><thead><tr><th>Asm.</th><th>Data</th><th>Nº Sorteado</th><th>Loteria (1º prêmio)</th><th>Cota</th><th>Modalidade</th><th>% Lance</th><th>Valor Lance</th></tr></thead><tbody>'
     asms.forEach((a,ai)=>{
       const alt=ai%2!==0
       a.contemplacoes.forEach((ct,ci)=>{
         const first=ci===0,rs=a.contemplacoes.length
-        const _cl=formatCalcLines(a.loteriaPrimeiroPremio,c.divisor)
-        const calcHtml=_cl?'<span style="line-height:1.7;white-space:nowrap;">'+_cl[0]+'<br>'+_cl[1]+'</span>':'—'
         const rowClick='onclick="openAsm(\''+c.id+'\',\''+a.id+'\')" style="cursor:pointer;" title="Clique para editar esta assembleia"'
         tblHtml+='<tr '+rowClick+' class="'+(alt?'row-alt':'')+(first?' asm-sep':'')+'">'
         const cid='cls-'+a.numero
@@ -781,7 +779,7 @@ async function renderDetail(){
             +(a.classificacaoSorteio?'<div style="text-align:center;"><strong style="color:var(--primary);font-size:16px;display:block;line-height:1.1;">'+a.classificacaoSorteio+'º</strong><span style="color:var(--muted);font-size:9px;white-space:nowrap;">Sorteio Ativo</span></div>':'')
             +'</div></div>'
           :''
-        if(first) tblHtml+='<td rowspan="'+rs+'" style="vertical-align:top;white-space:nowrap;"><strong>'+a.numero+'</strong>'+classHtml+'</td><td rowspan="'+rs+'">'+fmtDate(a.data)+'</td><td rowspan="'+rs+'"><strong>'+String(a.numeroSorteado||'—').padStart(3,'0')+'</strong></td><td rowspan="'+rs+'" class="mono">'+(a.loteriaPrimeiroPremio?String(a.loteriaPrimeiroPremio).padStart(5,'0'):'—')+'</td><td rowspan="'+rs+'" class="mono" style="font-size:11px">'+calcHtml+'</td>'
+        if(first) tblHtml+='<td rowspan="'+rs+'" style="vertical-align:top;white-space:nowrap;"><strong>'+a.numero+'</strong>'+classHtml+'</td><td rowspan="'+rs+'">'+fmtDate(a.data)+'</td><td rowspan="'+rs+'"><strong>'+String(a.numeroSorteado||'—').padStart(3,'0')+'</strong></td><td rowspan="'+rs+'" class="mono">'+(a.loteriaPrimeiroPremio?String(a.loteriaPrimeiroPremio).padStart(5,'0'):'—')+'</td>'
         tblHtml+='<td>'+ct.cota+'</td><td><span class="badge '+(ct.modalidade||'sorteio')+'">'+(MOD_LABEL[ct.modalidade]||ct.modalidade)+'</span></td><td>'+(ct.percentual?ct.percentual+'%':'0%')+'</td><td class="mono">'+(ct.valor>0?fmtBRL2(ct.valor):'—')+'</td></tr>'
       })
     })
