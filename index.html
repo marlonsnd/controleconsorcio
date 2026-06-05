@@ -433,37 +433,22 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
       <div id="page-calculator" style="display:none">
         <div class="calc-wrap">
           <div class="form-section">
-            <div class="form-section-title">🎰 Entrada</div>
+            <div class="form-section-title">🎰 Dados</div>
             <div class="form-group">
               <label class="form-label">1º Prêmio da Loteria Federal</label>
-              <input type="number" id="calc-prize" class="form-input" placeholder="Ex.: 48545" style="font-size:20px;padding:14px;font-weight:700;"/>
+              <input type="number" id="calc-prize" class="form-input" placeholder="Ex.: 48545" style="font-size:20px;padding:14px;font-weight:700;" oninput="doCalc()"/>
             </div>
             <div class="form-group">
-              <label class="form-label">Divisor do Grupo</label>
-              <input type="number" id="calc-div" class="form-input" value="900"/>
-            </div>
-            <div style="display:flex;gap:10px;">
-              <button class="btn btn-primary btn-lg" onclick="doCalc()" style="flex:1">Calcular</button>
-              <button class="btn btn-outline" onclick="document.getElementById('calc-prize').value='48545';doCalc()">Exemplo</button>
-            </div>
-            <div style="margin-top:14px;background:#F8FAFC;border:1px solid var(--border);border-radius:10px;padding:12px;font-size:12px;color:var(--muted);line-height:1.6;">
-              <strong>Fórmula:</strong> Nº sorteado = 1º prêmio <strong>mod</strong> divisor.<br>
-              Se o resto for <span class="mono">0</span>, considera-se o próprio divisor.
+              <label class="form-label">Total de Cotas do Grupo</label>
+              <input type="number" id="calc-div" class="form-input" value="900" oninput="doCalc()"/>
             </div>
           </div>
           <div class="form-section">
-            <div class="form-section-title">📊 Resultado</div>
-            <div style="text-align:center;padding:16px 0 20px;">
-              <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Número Sorteado</div>
+            <div class="form-section-title">🏆 Cota Sorteada</div>
+            <div style="text-align:center;padding:24px 0;">
+              <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Cota contemplada</div>
               <div class="result-big" id="calcNum">—</div>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-              <div class="info-card"><div class="ik">1º Prêmio</div><div class="iv" style="font-size:16px" id="cPrize">—</div></div>
-              <div class="info-card"><div class="ik">Divisor</div><div class="iv" style="font-size:16px" id="cDiv">—</div></div>
-              <div class="info-card"><div class="ik">Quociente</div><div class="iv" style="font-size:16px" id="cQ">—</div></div>
-              <div class="info-card"><div class="ik">Resto</div><div class="iv" style="font-size:16px" id="cResto">—</div></div>
-            </div>
-            <div id="calcSteps" style="margin-top:14px;"></div>
           </div>
         </div>
       </div>
@@ -1114,21 +1099,9 @@ function closeModal(id){document.getElementById(id).classList.remove('show')}
 function doCalc(){
   const prize=parseInt(document.getElementById('calc-prize').value)||0
   const div=parseInt(document.getElementById('calc-div').value)||900
-  if(!prize){document.getElementById('calcNum').textContent='—';document.getElementById('calcSteps').innerHTML='';return}
-  const q=Math.floor(prize/div),r=prize%div,sorteado=r===0?div:r
-  const lines=formatCalcLines(prize,div)
+  if(!prize){document.getElementById('calcNum').textContent='—';return}
+  const r=prize%div,sorteado=r===0?div:r
   document.getElementById('calcNum').textContent=String(sorteado).padStart(3,'0')
-  document.getElementById('cPrize').textContent=String(prize).padStart(5,'0')
-  document.getElementById('cDiv').textContent=div
-  document.getElementById('cQ').textContent=q
-  document.getElementById('cResto').textContent=r===0?div+' (resto 0 → usa divisor)':r
-  document.getElementById('calcSteps').innerHTML=lines
-    ?`<div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:14px 16px;font-size:13px;">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:10px;">Cálculo (resumo)</div>
-        <div class="mono" style="font-size:15px;line-height:2;white-space:nowrap;">${lines[0]}<br>${lines[1]}</div>
-        <div style="margin-top:10px;font-size:12px;color:var(--muted);line-height:1.6;">${r===0?'Quando o resto é 0, usa-se o próprio divisor como nº sorteado.':''}</div>
-      </div>`
-    :''
 }
 // ── Perfil ──
 function renderProfile(){
