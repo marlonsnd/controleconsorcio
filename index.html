@@ -214,6 +214,7 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
   .ct-row{grid-template-columns:1fr 1fr;gap:6px;}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -240,9 +241,6 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
       </div>
       <div id="login-err" class="error-msg">E-mail ou senha incorretos.</div>
       <button class="btn btn-primary btn-full btn-lg" style="margin-top:4px" onclick="doLogin()">Entrar</button>
-      <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted);">
-        💡 Conta demo: <strong>demo@controleconsorcio.com.br</strong> / <strong>123456</strong>
-      </div>
     </div>
     <div id="form-register" style="display:none">
       <div class="form-group">
@@ -268,8 +266,8 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-      <div class="logo-mark">CP</div>
-      <div class="brand">Consórcio<span>Painel</span></div>
+      <div class="logo-mark">CC</div>
+      <div class="brand">Controle <span>Consórcio</span></div>
     </div>
     <nav class="sidebar-nav">
       <div class="nav-section-label">Principal</div>
@@ -539,202 +537,213 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
   </div>
 </div>
 
+<!-- ══ LOADING OVERLAY ══ -->
+<div id="loadingOverlay" style="display:none;position:fixed;inset:0;background:rgba(255,255,255,.88);z-index:9999;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
+  <div style="font-size:36px;animation:spin .8s linear infinite;">⏳</div>
+  <div style="font-size:13px;color:var(--muted);font-weight:600;">Carregando...</div>
+</div>
+<div id="toast" style="display:none;position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;color:#fff;font-size:13px;font-weight:600;z-index:10000;box-shadow:0 4px 20px rgba(0,0,0,.2);max-width:320px;"></div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 <script>
+// ══════════════════════════════════════════════════════
+// SUPABASE CLIENT
+// ══════════════════════════════════════════════════════
+const _sb = supabase.createClient(
+  'https://amapukesrtqovytwixoq.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtYXB1a2VzcnRxb3Z5dHdpeG9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2MDk3MDIsImV4cCI6MjA5NjE4NTcwMn0.6-KLzLyytS5UghZVb0E9f8fOEqdnsyOIXIZsPUw9xAs'
+)
+
 // ══════════════════════════════════════════════════════
 // CONSTANTES
 // ══════════════════════════════════════════════════════
-const ADMIN_ICONS = {'Sicredi':'🟢','HS Consórcio':'🟣','Banco do Brasil':'🟡','Porto Seguro':'🔵','Bradesco':'🔴','Caixa Econômica':'🟢','Itaú':'🟠','Santander':'🔴','Embracon':'🔵','Magalu Consórcio':'🟤','Outra':'⚪'};
-const ADMIN_CLS   = {'Sicredi':'sicredi','Banco do Brasil':'bb','Bradesco':'bradesco','Porto Seguro':'porto','Caixa Econômica':'caixa','HS Consórcio':'hs'};
-const TYPE_ICONS  = {'Imóvel':'🏠','Veículo':'🚗','Moto':'🏍️','Caminhão':'🚚','Serviços':'💼'};
-const MOD_LABEL   = {sorteio:'Sorteio Ativo',livre:'Lance Livre',fixo:'Lance Fixo',cancelado:'Cancelado'};
+const ADMIN_ICONS = {'Sicredi':'\u{1F7E2}','HS Cons\xf3rcio':'\u{1F7E3}','Banco do Brasil':'\u{1F7E1}','Porto Seguro':'\u{1F535}','Bradesco':'\u{1F534}','Caixa Econ\xf4mica':'\u{1F7E2}','Ita\xfa':'\u{1F7E0}','Santander':'\u{1F534}','Embracon':'\u{1F535}','Magalu Cons\xf3rcio':'\u{1F7E4}','Outra':'⚪'}
+const ADMIN_CLS   = {'Sicredi':'sicredi','Banco do Brasil':'bb','Bradesco':'bradesco','Porto Seguro':'porto','Caixa Econ\xf4mica':'caixa','HS Cons\xf3rcio':'hs'}
+const TYPE_ICONS  = {'Im\xf3vel':'\u{1F3E0}','Ve\xedculo':'\u{1F697}','Moto':'\u{1F3CD}️','Caminh\xe3o':'\u{1F69A}','Servi\xe7os':'\u{1F4BC}'}
+const MOD_LABEL   = {sorteio:'Sorteio Ativo',livre:'Lance Livre',fixo:'Lance Fixo',cancelado:'Cancelado'}
 
 // ══════════════════════════════════════════════════════
 // UTILITÁRIOS
 // ══════════════════════════════════════════════════════
-const fmtBRL  = v => (!v && v!==0) ? '—' : new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0}).format(v);
-const fmtBRL2 = v => (!v && v!==0) ? '—' : new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:2}).format(v);
-const fmtDate = s => { if(!s) return '—'; const [y,m,d]=s.split('-'); return d+'/'+m+'/'+y; };
-const uid     = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7);
-const initials= n => n ? n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase() : '?';
-// Formata o cálculo do sorteio em dois passos legíveis, ex.:
-//   22.283 ÷ 900 = 24,759
-//   0,759 × 900 = 683
-function formatCalcLines(prize, divisor){
-  if(!prize || !divisor) return null;
-  const pt0 = n => n.toLocaleString('pt-BR',{maximumFractionDigits:0});
-  const pt3 = n => n.toLocaleString('pt-BR',{minimumFractionDigits:3,maximumFractionDigits:3});
-  const quotient  = prize / divisor;
-  const qInt      = Math.floor(quotient);
-  const remainder = prize % divisor;
-  const sorteado  = remainder===0 ? divisor : remainder;
-  const frac      = quotient - qInt;
-  return [
-    pt0(prize) + ' ÷ ' + pt0(divisor) + ' = ' + pt3(quotient),
-    pt3(frac)  + ' × ' + pt0(divisor) + ' = ' + sorteado
-  ];
+const fmtBRL  = v => (!v && v!==0) ? '—' : new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0}).format(v)
+const fmtBRL2 = v => (!v && v!==0) ? '—' : new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:2}).format(v)
+const fmtDate = s => { if(!s) return '—'; const [y,m,d]=s.split('-'); return d+'/'+m+'/'+y }
+const initials= n => n ? n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase() : '?'
+
+function formatCalcLines(prize,divisor){
+  if(!prize||!divisor) return null
+  const pt0=n=>n.toLocaleString('pt-BR',{maximumFractionDigits:0})
+  const pt3=n=>n.toLocaleString('pt-BR',{minimumFractionDigits:3,maximumFractionDigits:3})
+  const q=prize/divisor, qi=Math.floor(q), r=prize%divisor
+  const sorteado=r===0?divisor:r, frac=q-qi
+  return [pt0(prize)+' \xf7 '+pt0(divisor)+' = '+pt3(q), pt3(frac)+' \xd7 '+pt0(divisor)+' = '+sorteado]
 }
 
 // ══════════════════════════════════════════════════════
-// STORAGE
+// CACHE & MAPEAMENTO
 // ══════════════════════════════════════════════════════
-const DB = {
-  users    : ()    => { try { return JSON.parse(localStorage.getItem('cc_users')||'[]'); } catch(e){ return []; } },
-  saveUsers: arr   => localStorage.setItem('cc_users', JSON.stringify(arr)),
-  consorcios:(uid) => { try { const a=JSON.parse(localStorage.getItem('cc_cons')||'{}'); return a[uid]||[]; } catch(e){ return []; } },
-  saveCons :(uid,arr) => { const a=JSON.parse(localStorage.getItem('cc_cons')||'{}'); a[uid]=arr; localStorage.setItem('cc_cons',JSON.stringify(a)); },
-  me       : ()    => { try { return JSON.parse(sessionStorage.getItem('cc_me')||'null'); } catch(e){ return null; } },
-  setMe    : u     => sessionStorage.setItem('cc_me', JSON.stringify(u)),
-  clearMe  : ()    => sessionStorage.removeItem('cc_me')
-};
+let _cache=null
+function invalidate(){ _cache=null }
+
+function mapCons(c){
+  return {
+    id:c.id, administradora:c.administradora||'', tipo:c.tipo||'',
+    grupo:c.grupo||'', cota:c.cota||'',
+    creditoTotal:parseFloat(c.credito_total)||0, parcela:parseFloat(c.parcela)||0,
+    prazoTotal:c.prazo_total||0, parcelaAtual:c.parcela_atual||0,
+    divisor:c.divisor||900, reajuste:c.reajuste||'',
+    lanceFixo:parseFloat(c.lance_fixo)||0, status:c.status||'ativa', obs:c.obs||'',
+    assembleias:(c.assembleias||[]).sort((a,b)=>a.numero-b.numero).map(a=>({
+      id:a.id, numero:a.numero, data:a.data,
+      numeroSorteado:a.numero_sorteado, loteriaPrimeiroPremio:a.loteria_primeiro_premio,
+      contemplacoes:(a.contemplacoes||[]).map(ct=>({
+        id:ct.id, cota:ct.cota, modalidade:ct.modalidade,
+        percentual:parseFloat(ct.percentual)||0, valor:parseFloat(ct.valor)||0
+      }))
+    }))
+  }
+}
+
+async function fetchConsorcios(){
+  if(_cache) return _cache
+  const {data,error}=await _sb.from('consorcios')
+    .select('*, assembleias(*, contemplacoes(*))')
+    .order('created_at',{ascending:true})
+  if(error) throw error
+  _cache=(data||[]).map(mapCons)
+  return _cache
+}
 
 // ══════════════════════════════════════════════════════
-// DADOS DE DEMONSTRAÇÃO
+// LOADING & TOAST
 // ══════════════════════════════════════════════════════
-function seedDemo(){
-  const users = DB.users();
-  if(users.find(u => u.email === 'demo@controleconsorcio.com.br')) return;
-  users.push({id:'demo',name:'Marlon (Demo)',email:'demo@controleconsorcio.com.br',password:'123456',createdAt:'2025-11-01'});
-  DB.saveUsers(users);
-  const demo = [{
-    id:'c001',userId:'demo',administradora:'Sicredi',tipo:'Imóvel',grupo:'070120',cota:'0033',
-    creditoTotal:800000,parcela:2747,prazoTotal:180,parcelaAtual:7,divisor:900,
-    reajuste:'INCC',lanceFixo:20,status:'ativa',obs:'Cota de investimento — aguardando contemplação',
-    createdAt:'2025-11-01',
-    assembleias:[
-      {id:'a1',numero:1,data:'2025-11-04',numeroSorteado:683,loteriaPrimeiroPremio:22283,
-       contemplacoes:[{cota:'680',modalidade:'sorteio',percentual:0,valor:0},{cota:'468',modalidade:'livre',percentual:67.20,valor:0},{cota:'533',modalidade:'livre',percentual:68.22,valor:0},{cota:'688',modalidade:'fixo',percentual:20,valor:0}]},
-      {id:'a2',numero:2,data:'2025-12-02',numeroSorteado:653,loteriaPrimeiroPremio:46553,
-       contemplacoes:[{cota:'653',modalidade:'sorteio',percentual:0,valor:0},{cota:'516',modalidade:'cancelado',percentual:0,valor:0},{cota:'480',modalidade:'livre',percentual:70.061,valor:0},{cota:'655',modalidade:'fixo',percentual:20,valor:0}]},
-      {id:'a3',numero:3,data:'2026-01-06',numeroSorteado:21,loteriaPrimeiroPremio:42321,
-       contemplacoes:[{cota:'21',modalidade:'sorteio',percentual:0,valor:0},{cota:'38',modalidade:'cancelado',percentual:0,valor:0},{cota:'366',modalidade:'livre',percentual:72.156,valor:0},{cota:'517',modalidade:'livre',percentual:70,valor:0},{cota:'558',modalidade:'livre',percentual:70,valor:0},{cota:'692',modalidade:'livre',percentual:70.061,valor:0},{cota:'20',modalidade:'fixo',percentual:20,valor:0}]},
-      {id:'a4',numero:4,data:'2026-02-03',numeroSorteado:219,loteriaPrimeiroPremio:35319,
-       contemplacoes:[{cota:'219',modalidade:'sorteio',percentual:0,valor:0},{cota:'211',modalidade:'cancelado',percentual:0,valor:0},{cota:'712',modalidade:'livre',percentual:70,valor:0},{cota:'709',modalidade:'livre',percentual:70,valor:0},{cota:'827',modalidade:'livre',percentual:70,valor:0},{cota:'838',modalidade:'livre',percentual:70.829,valor:0},{cota:'221',modalidade:'fixo',percentual:20,valor:0}]},
-      {id:'a5',numero:5,data:'2026-03-05',numeroSorteado:425,loteriaPrimeiroPremio:22925,
-       contemplacoes:[{cota:'426',modalidade:'fixo',percentual:20,valor:111807.05},{cota:'538',modalidade:'livre',percentual:70.9821,valor:370528.86},{cota:'607',modalidade:'livre',percentual:68,valor:397421.81},{cota:'679',modalidade:'livre',percentual:70.1,valor:454585.13},{cota:'897',modalidade:'livre',percentual:67.9358,valor:486125.30},{cota:'425',modalidade:'sorteio',percentual:0,valor:0}]},
-      {id:'a6',numero:6,data:'2026-04-02',numeroSorteado:52,loteriaPrimeiroPremio:15352,
-       contemplacoes:[{cota:'54',modalidade:'fixo',percentual:20,valor:89445.64},{cota:'213',modalidade:'livre',percentual:71,valor:635064.07},{cota:'612',modalidade:'livre',percentual:72,valor:511560.26},{cota:'659',modalidade:'livre',percentual:70.99,valor:634974.62},{cota:'813',modalidade:'livre',percentual:73,valor:585589.81},{cota:'52',modalidade:'sorteio',percentual:0,valor:0}]},
-      {id:'a7',numero:7,data:'2026-05-04',numeroSorteado:845,loteriaPrimeiroPremio:48545,
-       contemplacoes:[{cota:'848',modalidade:'fixo',percentual:20,valor:178891.28},{cota:'469',modalidade:'livre',percentual:71,valor:635064.07},{cota:'880',modalidade:'livre',percentual:71,valor:635064.07},{cota:'78',modalidade:'livre',percentual:71,valor:404853.35},{cota:'289',modalidade:'livre',percentual:72.3,valor:331414.04},{cota:'453',modalidade:'livre',percentual:71,valor:381038.45},{cota:'462',modalidade:'livre',percentual:70.9001,valor:609369.52},{cota:'738',modalidade:'livre',percentual:72,valor:559587.47},{cota:'799',modalidade:'livre',percentual:71.5,valor:655493.87},{cota:'845',modalidade:'sorteio',percentual:0,valor:0}]}
-    ]
-  }];
-  DB.saveCons('demo', demo);
+function showLoading(){ document.getElementById('loadingOverlay').style.display='flex' }
+function hideLoading(){ document.getElementById('loadingOverlay').style.display='none' }
+function showToast(msg,type='error'){
+  const t=document.getElementById('toast')
+  t.textContent=msg; t.style.background=type==='success'?'var(--success)':'var(--danger)'
+  t.style.display='block'; setTimeout(()=>t.style.display='none',3500)
 }
 
 // ══════════════════════════════════════════════════════
 // ESTADO GLOBAL
 // ══════════════════════════════════════════════════════
-let CU=null, CPage='dashboard', CConsId=null, CEditId=null, CAsmId=null;
+let CU=null,CPage='dashboard',CConsId=null,CEditId=null,CAsmId=null
 
 // ══════════════════════════════════════════════════════
 // AUTH
 // ══════════════════════════════════════════════════════
 function switchTab(t){
-  document.querySelectorAll('.auth-tab').forEach((el,i) => el.classList.toggle('active', (t==='login'&&i===0)||(t==='register'&&i===1)));
-  document.getElementById('form-login').style.display    = t==='login'    ? 'block' : 'none';
-  document.getElementById('form-register').style.display = t==='register' ? 'block' : 'none';
+  document.querySelectorAll('.auth-tab').forEach((el,i)=>el.classList.toggle('active',(t==='login'&&i===0)||(t==='register'&&i===1)))
+  document.getElementById('form-login').style.display    =t==='login'?'block':'none'
+  document.getElementById('form-register').style.display =t==='register'?'block':'none'
 }
 
-function doLogin(){
-  const email = document.getElementById('login-email').value.trim().toLowerCase();
-  const pw    = document.getElementById('login-password').value;
-  const user  = DB.users().find(u => u.email===email && u.password===pw);
-  if(!user){ document.getElementById('login-err').classList.add('show'); return; }
-  document.getElementById('login-err').classList.remove('show');
-  CU = user; DB.setMe(user); showApp();
+async function doLogin(){
+  const email=document.getElementById('login-email').value.trim().toLowerCase()
+  const pw   =document.getElementById('login-password').value
+  const errEl=document.getElementById('login-err')
+  errEl.classList.remove('show')
+  if(!email||!pw){ errEl.textContent='Preencha e-mail e senha.'; errEl.classList.add('show'); return }
+  showLoading()
+  const {error}=await _sb.auth.signInWithPassword({email,password:pw})
+  hideLoading()
+  if(error){ errEl.textContent='E-mail ou senha incorretos.'; errEl.classList.add('show') }
 }
 
-function doRegister(){
-  const name  = document.getElementById('reg-name').value.trim();
-  const email = document.getElementById('reg-email').value.trim().toLowerCase();
-  const pw    = document.getElementById('reg-password').value;
-  const err   = document.getElementById('reg-err');
-  if(!name||!email||!pw){ err.textContent='Preencha todos os campos.'; err.classList.add('show'); return; }
-  if(pw.length<6){ err.textContent='Senha deve ter pelo menos 6 caracteres.'; err.classList.add('show'); return; }
-  const users = DB.users();
-  if(users.find(u=>u.email===email)){ err.textContent='E-mail já cadastrado.'; err.classList.add('show'); return; }
-  err.classList.remove('show');
-  const u = {id:uid(),name,email,password:pw,createdAt:new Date().toISOString().slice(0,10)};
-  users.push(u); DB.saveUsers(users);
-  CU=u; DB.setMe(u); showApp();
+async function doRegister(){
+  const name =document.getElementById('reg-name').value.trim()
+  const email=document.getElementById('reg-email').value.trim().toLowerCase()
+  const pw   =document.getElementById('reg-password').value
+  const err  =document.getElementById('reg-err')
+  err.classList.remove('show')
+  if(!name||!email||!pw){ err.textContent='Preencha todos os campos.'; err.classList.add('show'); return }
+  if(pw.length<6){ err.textContent='Senha deve ter pelo menos 6 caracteres.'; err.classList.add('show'); return }
+  showLoading()
+  const {error}=await _sb.auth.signUp({email,password:pw,options:{data:{name}}})
+  hideLoading()
+  if(error){ err.textContent=error.message; err.classList.add('show'); return }
+  showToast('Conta criada! Verifique seu e-mail se solicitado.','success')
 }
 
-function doLogout(){
-  CU=null; DB.clearMe();
-  document.getElementById('app-shell').style.display='none';
-  document.getElementById('page-auth').style.display='flex';
+async function doLogout(){
+  await _sb.auth.signOut(); CU=null; invalidate()
+  document.getElementById('app-shell').style.display='none'
+  document.getElementById('page-auth').style.display='flex'
 }
 
-function showApp(){
-  document.getElementById('page-auth').style.display='none';
-  document.getElementById('app-shell').style.display='block';
-  document.getElementById('sbName').textContent   = CU.name;
-  document.getElementById('sbEmail').textContent  = CU.email;
-  document.getElementById('sbAvatar').textContent = initials(CU.name);
-  goTo('dashboard');
+function showApp(user){
+  CU={id:user.id,email:user.email,name:user.user_metadata?.name||user.email.split('@')[0]}
+  document.getElementById('page-auth').style.display ='none'
+  document.getElementById('app-shell').style.display ='block'
+  document.getElementById('sbName').textContent  =CU.name
+  document.getElementById('sbEmail').textContent =CU.email
+  document.getElementById('sbAvatar').textContent=initials(CU.name)
+  goTo('dashboard')
 }
 
 // ══════════════════════════════════════════════════════
 // ROUTER
 // ══════════════════════════════════════════════════════
-const PAGES=['dashboard','add-consorcio','detail','calculator','profile'];
+const PAGES=['dashboard','add-consorcio','detail','calculator','profile']
 
-function goTo(page, id){
-  PAGES.forEach(p => { document.getElementById('page-'+p).style.display='none'; });
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  CPage=page;
-  if(id) CConsId=id;
-  document.getElementById('page-'+page).style.display='';
-  const titles = {dashboard:'Dashboard','add-consorcio':(CEditId?'Editar':'Adicionar')+' Consórcio',detail:'Detalhe do Consórcio',calculator:'Calculadora Loteria Federal',profile:'Meu Perfil'};
-  document.getElementById('topTitle').textContent = titles[page]||page;
-  const navMap = {dashboard:'nav-dashboard','add-consorcio':'nav-add',calculator:'nav-calculator',profile:'nav-profile'};
-  if(navMap[page]) document.getElementById(navMap[page]).classList.add('active');
-  const ta = document.getElementById('topActions');
-  ta.innerHTML='';
+async function goTo(page,id){
+  PAGES.forEach(p=>document.getElementById('page-'+p).style.display='none')
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'))
+  CPage=page; if(id) CConsId=id
+  document.getElementById('page-'+page).style.display=''
+  const titles={dashboard:'Dashboard','add-consorcio':(CEditId?'Editar':'Adicionar')+' Cons\xf3rcio',detail:'Detalhe do Cons\xf3rcio',calculator:'Calculadora Loteria Federal',profile:'Meu Perfil'}
+  document.getElementById('topTitle').textContent=titles[page]||page
+  const navMap={dashboard:'nav-dashboard','add-consorcio':'nav-add',calculator:'nav-calculator',profile:'nav-profile'}
+  if(navMap[page]) document.getElementById(navMap[page]).classList.add('active')
+  const ta=document.getElementById('topActions'); ta.innerHTML=''
   if(page==='dashboard')
-    ta.innerHTML='<button class="btn btn-primary btn-sm" onclick="newConsorcio()">➕ Adicionar Cota</button>';
-  else if(page==='detail' && CConsId)
-    ta.innerHTML='<button class="btn btn-outline btn-sm" onclick="editCons(\''+CConsId+'\')">✏️ Editar</button> <button class="btn btn-outline btn-sm" onclick="delCons(\''+CConsId+'\')">🗑️ Excluir</button> <button class="btn btn-primary btn-sm" onclick="openAsm(\''+CConsId+'\')">➕ Assembleia</button>';
+    ta.innerHTML='<button class="btn btn-primary btn-sm" onclick="newConsorcio()">➕ Adicionar Cota</button>'
+  else if(page==='detail'&&CConsId)
+    ta.innerHTML='<button class="btn btn-outline btn-sm" onclick="editCons(\''+CConsId+'\')">✏️ Editar</button> <button class="btn btn-outline btn-sm" onclick="delCons(\''+CConsId+'\')">\u{1F5D1}️ Excluir</button> <button class="btn btn-primary btn-sm" onclick="openAsm(\''+CConsId+'\')">➕ Assembleia</button>'
   else if(page==='add-consorcio')
-    ta.innerHTML='<button class="btn btn-outline btn-sm" onclick="goTo(\'dashboard\')">← Voltar</button>';
-  closeSidebar();
-  if(page==='dashboard')    renderDash();
-  else if(page==='detail')  renderDetail();
-  else if(page==='add-consorcio') renderAddForm();
-  else if(page==='profile') renderProfile();
-  window.scrollTo(0,0);
+    ta.innerHTML='<button class="btn btn-outline btn-sm" onclick="goTo(\'dashboard\')">← Voltar</button>'
+  closeSidebar(); showLoading()
+  try{
+    if(page==='dashboard')          await renderDash()
+    else if(page==='detail')        await renderDetail()
+    else if(page==='add-consorcio') await renderAddForm()
+    else if(page==='profile')             renderProfile()
+  }catch(e){ showToast('Erro ao carregar: '+e.message) }
+  finally{ hideLoading() }
+  window.scrollTo(0,0)
 }
 
-function newConsorcio(){ CEditId=null; goTo('add-consorcio'); }
-function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('show'); }
-function closeSidebar()  { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('show'); }
+function newConsorcio(){ CEditId=null; goTo('add-consorcio') }
+function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('show') }
+function closeSidebar()  { document.getElementById('sidebar').classList.remove('open');  document.getElementById('sidebarOverlay').classList.remove('show') }
 
 // ══════════════════════════════════════════════════════
 // DASHBOARD
 // ══════════════════════════════════════════════════════
-function renderDash(){
-  const cs = DB.consorcios(CU.id);
-  const total=cs.length, ativas=cs.filter(c=>c.status==='ativa').length, cont=cs.filter(c=>c.status==='contemplada').length;
-  const totalCred  = cs.reduce((s,c)=>s+(c.creditoTotal||0),0);
-  const totalPago  = cs.reduce((s,c)=>s+((c.parcela||0)*(c.parcelaAtual||0)),0);
-  const pctInvest  = totalCred>0 ? Math.round((totalPago/totalCred)*100) : 0;
+async function renderDash(){
+  const cs=await fetchConsorcios()
+  const total=cs.length,ativas=cs.filter(c=>c.status==='ativa').length,cont=cs.filter(c=>c.status==='contemplada').length
+  const totalCred=cs.reduce((s,c)=>s+(c.creditoTotal||0),0)
+  const totalPago=cs.reduce((s,c)=>s+((c.parcela||0)*(c.parcelaAtual||0)),0)
+  const pctInvest=totalCred>0?Math.round((totalPago/totalCred)*100):0
   document.getElementById('statGrid').innerHTML=`
     <div class="stat-card"><span class="stat-icon">📊</span><div class="stat-label">Total de Cotas</div><div class="stat-value">${total}</div><div class="stat-sub">${ativas} ativa${ativas!==1?'s':''} · ${cont} contemplada${cont!==1?'s':''}</div></div>
     <div class="stat-card"><span class="stat-icon">✅</span><div class="stat-label">Ativas</div><div class="stat-value" style="color:var(--success)">${ativas}</div><div class="stat-sub">Participando de sorteios</div></div>
     <div class="stat-card"><span class="stat-icon">🎉</span><div class="stat-label">Contempladas</div><div class="stat-value" style="color:var(--primary)">${cont}</div><div class="stat-sub">Crédito liberado</div></div>
     <div class="stat-card"><span class="stat-icon">💰</span><div class="stat-label">Crédito Total</div><div class="stat-value" style="font-size:20px">${fmtBRL(totalCred)}</div><div class="stat-sub">Soma de todas as cotas</div></div>
     <div class="stat-card"><span class="stat-icon">📤</span><div class="stat-label">Total Pago</div><div class="stat-value" style="font-size:20px;color:var(--warning)">${fmtBRL(totalPago)}</div><div class="stat-sub">${pctInvest}% do crédito total investido</div></div>
-  `;
-  const grid = document.getElementById('consorcioGrid');
+  `
+  const grid=document.getElementById('consorcioGrid')
   if(!cs.length){
-    grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🏦</div><h3>Nenhum consórcio cadastrado</h3><p>Adicione sua primeira cota para começar a acompanhar seu progresso.</p><button class="btn btn-primary btn-lg" onclick="newConsorcio()">➕ Adicionar minha primeira cota</button></div>';
-    return;
+    grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🏦</div><h3>Nenhum consórcio cadastrado</h3><p>Adicione sua primeira cota para começar a acompanhar seu progresso.</p><button class="btn btn-primary btn-lg" onclick="newConsorcio()">➕ Adicionar minha primeira cota</button></div>'
+    return
   }
   grid.innerHTML=cs.map(c=>{
-    const acls=ADMIN_CLS[c.administradora]||'default', icon=ADMIN_ICONS[c.administradora]||'🏦';
-    const prazo=c.prazoTotal||1, atual=c.parcelaAtual||0, pct=Math.min(100,Math.round((atual/prazo)*100));
-    const stCls=c.status==='ativa'?'ativa':c.status==='contemplada'?'contemplada':'cancelada';
-    const stLbl=c.status==='ativa'?'✅ Ativa':c.status==='contemplada'?'🎉 Contemplada':'❌ Cancelada';
-    const last=c.assembleias&&c.assembleias.length?c.assembleias[c.assembleias.length-1]:null;
+    const acls=ADMIN_CLS[c.administradora]||'default',icon=ADMIN_ICONS[c.administradora]||'🏦'
+    const prazo=c.prazoTotal||1,atual=c.parcelaAtual||0,pct=Math.min(100,Math.round((atual/prazo)*100))
+    const stCls=c.status==='ativa'?'ativa':c.status==='contemplada'?'contemplada':'cancelada'
+    const stLbl=c.status==='ativa'?'✅ Ativa':c.status==='contemplada'?'🎉 Contemplada':'❌ Cancelada'
+    const last=c.assembleias&&c.assembleias.length?c.assembleias[c.assembleias.length-1]:null
     return '<div class="consorcio-card" onclick="goTo(\'detail\',\''+c.id+'\')">'
       +'<div class="consorcio-card-header"><div class="admin-badge '+acls+'">'+icon+'</div>'
       +'<div class="consorcio-card-info"><div class="consorcio-admin">'+c.administradora+'</div>'
@@ -749,102 +758,69 @@ function renderDash(){
       +'<div class="consorcio-card-footer"><div class="progress-wrap">'
       +'<div class="progress-label"><span>Progresso</span><span>'+atual+'/'+prazo+' meses ('+pct+'%)</span></div>'
       +'<div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div></div>'
-      +'<div style="font-size:12px;color:var(--muted);">Ver →</div></div></div>';
-  }).join('');
+      +'<div style="font-size:12px;color:var(--muted);">Ver →</div></div></div>'
+  }).join('')
 }
 
 // ══════════════════════════════════════════════════════
 // DETALHE DO CONSÓRCIO
 // ══════════════════════════════════════════════════════
-function renderDetail(){
-  const cs = DB.consorcios(CU.id);
-  const c  = cs.find(x=>x.id===CConsId);
-  if(!c){ goTo('dashboard'); return; }
-  const asms = c.assembleias||[];
-  const icon = ADMIN_ICONS[c.administradora]||'🏦';
-  const div  = c.divisor||1;
-  const credLiq = c.lanceFixo ? c.creditoTotal*(1-c.lanceFixo/100) : c.creditoTotal;
-  // ── Probabilidades dinâmicas ──
-  // Pool real = cotas que ainda NÃO foram contempladas (calculado depois que allCont estiver pronto)
-  // Calculado abaixo, após allCont ser definido.
-  const livres = asms.flatMap(a=>a.contemplacoes.filter(x=>x.modalidade==='livre'&&x.percentual>0).map(x=>x.percentual));
-  const lMin = livres.length ? Math.min(...livres).toFixed(2)+'%' : '—';
-  const lMax = livres.length ? Math.max(...livres).toFixed(2)+'%' : '—';
-  const lAvg = livres.length ? (livres.reduce((s,v)=>s+v,0)/livres.length).toFixed(2)+'%' : '—';
-  const prazo=c.prazoTotal||1, atual=c.parcelaAtual||0;
-  const pctProg=Math.min(100,Math.round((atual/prazo)*100));
-  const totalPagoC = (c.parcela||0)*(c.parcelaAtual||0);
-  const pctPagoC   = c.creditoTotal>0 ? ((totalPagoC/c.creditoTotal)*100).toFixed(1) : 0;
-  const allCont    = new Set(asms.flatMap(a=>a.contemplacoes.filter(x=>x.modalidade!=='cancelado').map(x=>parseInt(x.cota))).filter(n=>!isNaN(n)));
-  const lastAsm    = asms.length ? asms[asms.length-1] : null;
-
-  // ── Probabilidades dinâmicas (pool real de cotas ativas) ──
-  const activeCotas = Math.max(1, div - allCont.size); // cotas que ainda concorrem
-  //
-  // Mecânica deste grupo:
-  //   • Sorteio  → 1 cota sorteada diretamente pela Loteria Federal
-  //   • Lance Fixo → cota imediatamente adjacente à sorteada (também determinada pelo sorteio, não é lance competitivo)
-  //   • Lance Livre → lances competitivos (usuário pode ou não participar)
-  //
-  // Chance real do participante que NÃO dá lance livre = sorteio + fixo = 2 cotas / assembleia
-  const pctSorteio  = (1 / activeCotas * 100);          // chance só pelo sorteio
-  const pctFixo     = (1 / activeCotas * 100);          // chance pelo fixo (adjacente = idem ao sorteio)
-  const pctReal     = (2 / activeCotas * 100);          // chance real: sorteio + fixo
-  const pct12       = Math.min(100, pctReal * 12);      // 12 assembleias × chance mensal
-  // Lance livre: informativo (quantos livres por assembleia no histórico)
-  const qtLivresTotal = asms.reduce((s,a)=>s+a.contemplacoes.filter(x=>x.modalidade==='livre').length,0);
-  const avgLivresPerAsm = asms.length > 0 ? (qtLivresTotal / asms.length) : 0;
-  // Helpers de formatação
-  const fmt2 = v => v.toFixed(2);
-  const fmt1 = v => v.toFixed(1);
-
-  document.getElementById('topTitle').textContent = c.administradora+' – Cota '+c.cota;
-
-  // ── Monta mapa detalhes ──
-  const cotaDetailsMap = new Map();
-  asms.forEach(a=>{
-    a.contemplacoes.forEach(ct=>{
-      const n=parseInt(ct.cota);
-      if(!isNaN(n)&&ct.modalidade!=='cancelado'){
-        cotaDetailsMap.set(n,{assembleia:a.numero,data:a.data,modalidade:ct.modalidade,percentual:ct.percentual,valor:ct.valor,sorteado:a.numeroSorteado,loteria:a.loteriaPrimeiroPremio});
-      }
-    });
-  });
-
-  // ── Histórico (tabela) ──
-  let tblHtml = '';
+async function renderDetail(){
+  const cs=await fetchConsorcios()
+  const c=cs.find(x=>x.id===CConsId)
+  if(!c){ goTo('dashboard'); return }
+  const asms=c.assembleias||[]
+  const icon=ADMIN_ICONS[c.administradora]||'🏦'
+  const div=c.divisor||1
+  const credLiq=c.lanceFixo?c.creditoTotal*(1-c.lanceFixo/100):c.creditoTotal
+  const livres=asms.flatMap(a=>a.contemplacoes.filter(x=>x.modalidade==='livre'&&x.percentual>0).map(x=>x.percentual))
+  const lMin=livres.length?Math.min(...livres).toFixed(2)+'%':'—'
+  const lMax=livres.length?Math.max(...livres).toFixed(2)+'%':'—'
+  const lAvg=livres.length?(livres.reduce((s,v)=>s+v,0)/livres.length).toFixed(2)+'%':'—'
+  const prazo=c.prazoTotal||1,atual=c.parcelaAtual||0
+  const pctProg=Math.min(100,Math.round((atual/prazo)*100))
+  const totalPagoC=(c.parcela||0)*(c.parcelaAtual||0)
+  const pctPagoC=c.creditoTotal>0?((totalPagoC/c.creditoTotal)*100).toFixed(1):0
+  const allCont=new Set(asms.flatMap(a=>a.contemplacoes.filter(x=>x.modalidade!=='cancelado').map(x=>parseInt(x.cota))).filter(n=>!isNaN(n)))
+  const lastAsm=asms.length?asms[asms.length-1]:null
+  const activeCotas=Math.max(1,div-allCont.size)
+  const pctSorteio=(1/activeCotas*100),pctFixo=(1/activeCotas*100),pctReal=(2/activeCotas*100)
+  const pct12=Math.min(100,pctReal*12)
+  const qtLivresTotal=asms.reduce((s,a)=>s+a.contemplacoes.filter(x=>x.modalidade==='livre').length,0)
+  const avgLivresPerAsm=asms.length>0?(qtLivresTotal/asms.length):0
+  const fmt2=v=>v.toFixed(2),fmt1=v=>v.toFixed(1)
+  document.getElementById('topTitle').textContent=c.administradora+' – Cota '+c.cota
+  const cotaDetailsMap=new Map()
+  asms.forEach(a=>a.contemplacoes.forEach(ct=>{
+    const n=parseInt(ct.cota)
+    if(!isNaN(n)&&ct.modalidade!=='cancelado')
+      cotaDetailsMap.set(n,{assembleia:a.numero,data:a.data,modalidade:ct.modalidade,percentual:ct.percentual,valor:ct.valor,sorteado:a.numeroSorteado,loteria:a.loteriaPrimeiroPremio})
+  }))
+  let tblHtml=''
   if(asms.length){
-    tblHtml='<div class="table-wrap"><table class="data-table"><thead><tr><th>Asm.</th><th>Data</th><th>Nº Sorteado</th><th>Loteria (1º prêmio)</th><th>Cálculo (resumo)</th><th>Cota</th><th>Modalidade</th><th>% Lance</th><th>Valor Lance</th></tr></thead><tbody>';
+    tblHtml='<div class="table-wrap"><table class="data-table"><thead><tr><th>Asm.</th><th>Data</th><th>Nº Sorteado</th><th>Loteria (1º prêmio)</th><th>Cálculo (resumo)</th><th>Cota</th><th>Modalidade</th><th>% Lance</th><th>Valor Lance</th></tr></thead><tbody>'
     asms.forEach((a,ai)=>{
-      const alt=ai%2!==0;
+      const alt=ai%2!==0
       a.contemplacoes.forEach((ct,ci)=>{
-        const first=ci===0, rs=a.contemplacoes.length;
-        const _cl=formatCalcLines(a.loteriaPrimeiroPremio,c.divisor);
-        const calcHtml=_cl
-          ? '<span style="line-height:1.7;white-space:nowrap;">'+_cl[0]+'<br>'+_cl[1]+'</span>'
-          : '—';
-        tblHtml+='<tr class="'+(alt?'row-alt':'')+(first?' asm-sep':'')+'\">';
-        if(first) tblHtml+='<td rowspan="'+rs+'"><strong>'+a.numero+'</strong></td><td rowspan="'+rs+'">'+fmtDate(a.data)+'</td><td rowspan="'+rs+'"><strong>'+String(a.numeroSorteado||'—').padStart(3,'0')+'</strong></td><td rowspan="'+rs+'" class="mono">'+(a.loteriaPrimeiroPremio?String(a.loteriaPrimeiroPremio).padStart(5,'0'):'—')+'</td><td rowspan="'+rs+'" class="mono" style="font-size:11px">'+calcHtml+'</td>';
-        tblHtml+='<td>'+ct.cota+'</td><td><span class="badge '+(ct.modalidade||'sorteio')+'">'+(MOD_LABEL[ct.modalidade]||ct.modalidade)+'</span></td><td>'+(ct.percentual?ct.percentual+'%':'0%')+'</td><td class="mono">'+(ct.valor>0?fmtBRL2(ct.valor):'—')+'</td></tr>';
-      });
-    });
-    tblHtml+='</tbody></table></div>';
+        const first=ci===0,rs=a.contemplacoes.length
+        const _cl=formatCalcLines(a.loteriaPrimeiroPremio,c.divisor)
+        const calcHtml=_cl?'<span style="line-height:1.7;white-space:nowrap;">'+_cl[0]+'<br>'+_cl[1]+'</span>':'—'
+        tblHtml+='<tr class="'+(alt?'row-alt':'')+(first?' asm-sep':'')+'\">'
+        if(first) tblHtml+='<td rowspan="'+rs+'"><strong>'+a.numero+'</strong></td><td rowspan="'+rs+'">'+fmtDate(a.data)+'</td><td rowspan="'+rs+'"><strong>'+String(a.numeroSorteado||'—').padStart(3,'0')+'</strong></td><td rowspan="'+rs+'" class="mono">'+(a.loteriaPrimeiroPremio?String(a.loteriaPrimeiroPremio).padStart(5,'0'):'—')+'</td><td rowspan="'+rs+'" class="mono" style="font-size:11px">'+calcHtml+'</td>'
+        tblHtml+='<td>'+ct.cota+'</td><td><span class="badge '+(ct.modalidade||'sorteio')+'">'+(MOD_LABEL[ct.modalidade]||ct.modalidade)+'</span></td><td>'+(ct.percentual?ct.percentual+'%':'0%')+'</td><td class="mono">'+(ct.valor>0?fmtBRL2(ct.valor):'—')+'</td></tr>'
+      })
+    })
+    tblHtml+='</tbody></table></div>'
   } else {
-    tblHtml='<div style="text-align:center;padding:40px;color:var(--muted);"><div style="font-size:36px;margin-bottom:8px;">📋</div><p>Nenhuma assembleia registrada ainda.</p><button class="btn btn-primary" style="margin-top:12px;" onclick="openAsm(\''+c.id+'\')">Registrar primeira assembleia</button></div>';
+    tblHtml='<div style="text-align:center;padding:40px;color:var(--muted);"><div style="font-size:36px;margin-bottom:8px;">📋</div><p>Nenhuma assembleia registrada ainda.</p><button class="btn btn-primary" style="margin-top:12px;" onclick="openAsm(\''+c.id+'\')">Registrar primeira assembleia</button></div>'
   }
-
-  // ── Mapa de Cotas (legenda) ──
-  const totalCotas   = c.divisor||900;
-  const suaCotaNum   = parseInt(c.cota);
-  const ultimoSort   = lastAsm ? lastAsm.numeroSorteado : null;
-  const mapaLegenda  =
-    '<div class="cota-legend">'
+  const totalCotas=c.divisor||900,suaCotaNum=parseInt(c.cota),ultimoSort=lastAsm?lastAsm.numeroSorteado:null
+  const mapaLegenda='<div class="cota-legend">'
     +'<div class="cota-legend-item"><div class="cota-dot" style="background:var(--primary);"></div> Sua cota ('+String(suaCotaNum).padStart(4,'0')+')</div>'
     +'<div class="cota-legend-item"><div class="cota-dot" style="background:#FEE2E2;border:1px solid #FECACA;"></div> Contemplada ('+allCont.size+')</div>'
     +(ultimoSort?'<div class="cota-legend-item"><div class="cota-dot" style="background:#fff;border:2px solid #F59E0B;"></div> Último sorteado ('+String(ultimoSort).padStart(3,'0')+')</div>':'')
     +'<div class="cota-legend-item"><div class="cota-dot" style="background:#fff;border:1px solid var(--border);"></div> Ativa / Concorrendo</div>'
-    +'</div>';
-
+    +'</div>'
   document.getElementById('detailContent').innerHTML=`
     <div class="detail-header-card">
       <div class="detail-header-icon">${icon}</div>
@@ -859,7 +835,6 @@ function renderDetail(){
         <div class="dhs"><div class="dv">${pctProg}%</div><div class="dl">Progresso</div></div>
       </div>
     </div>
-
     <div class="info-grid-4">
       <div class="info-card"><div class="ik">Crédito Total</div><div class="iv green">${fmtBRL(c.creditoTotal)}</div><div class="is">Valor da carta</div></div>
       <div class="info-card"><div class="ik">Crédito Líquido</div><div class="iv blue">${fmtBRL(credLiq)}</div><div class="is">${c.lanceFixo?'Após lance fixo de '+c.lanceFixo+'%':'Sem lance fixo'}</div></div>
@@ -871,42 +846,17 @@ function renderDetail(){
       <div class="info-card"><div class="ik">Lances Livres (mín/máx)</div><div class="iv" style="font-size:14px">${lMin} / ${lMax}</div><div class="is">Média: ${lAvg}</div></div>
       <div class="info-card"><div class="ik">Último Sorteado</div><div class="iv">${lastAsm?String(lastAsm.numeroSorteado||'—').padStart(3,'0'):'—'}</div><div class="is">${lastAsm?'Asm. '+lastAsm.numero:'—'}</div></div>
     </div>
-
     <div class="form-section" style="margin-bottom:20px;">
       <div class="form-section-title">🎯 Probabilidades Estimadas</div>
-      <div class="info-box">
-        <strong>Como funciona este grupo:</strong> a cada assembleia a Loteria Federal define <strong>2 contemplações por sorteio</strong>:
-        a cota sorteada diretamente (<em>sorteio</em>) e a cota imediatamente adjacente (<em>lance fixo</em>).
-        Ambas são determinadas pelo mesmo número — não há lance competitivo nessas modalidades.
-        Como você não participa de lances livres, sua chance real é <strong>2 cotas por assembleia</strong> num pool de
-        <strong>${activeCotas}</strong> cotas ativas (${div} total − ${allCont.size} já contempladas).
-      </div>
+      <div class="info-box"><strong>Como funciona este grupo:</strong> a cada assembleia a Loteria Federal define <strong>2 contemplações por sorteio</strong>: a cota sorteada diretamente (<em>sorteio</em>) e a cota imediatamente adjacente (<em>lance fixo</em>). Ambas são determinadas pelo mesmo número — não há lance competitivo. Como você não participa de lances livres, sua chance real é <strong>2 cotas por assembleia</strong> num pool de <strong>${activeCotas}</strong> cotas ativas (${div} total − ${allCont.size} já contempladas).</div>
       <div class="chances-grid">
-        <div class="chance-card green">
-          <div class="cv">${fmt2(pctSorteio)}%</div>
-          <div class="cd">Sorteio (Loteria Federal)<br><small>1 ÷ ${activeCotas} cotas ativas</small></div>
-        </div>
-        <div class="chance-card yellow">
-          <div class="cv">${fmt2(pctFixo)}%</div>
-          <div class="cd">Lance Fixo (cota adjacente)<br><small>tb. determinado pelo sorteio</small></div>
-        </div>
-        <div class="chance-card purple">
-          <div class="cv">${fmt2(pctReal)}%</div>
-          <div class="cd">Sua chance real / mês<br><small>2 ÷ ${activeCotas} (sorteio + fixo)</small></div>
-        </div>
-        <div class="chance-card blue">
-          <div class="cv">~${fmt1(pct12)}%</div>
-          <div class="cd">Estimativa 12 meses<br><small>12 × ${fmt2(pctReal)}%</small></div>
-        </div>
+        <div class="chance-card green"><div class="cv">${fmt2(pctSorteio)}%</div><div class="cd">Sorteio (Loteria Federal)<br><small>1 ÷ ${activeCotas} cotas ativas</small></div></div>
+        <div class="chance-card yellow"><div class="cv">${fmt2(pctFixo)}%</div><div class="cd">Lance Fixo (cota adjacente)<br><small>tb. determinado pelo sorteio</small></div></div>
+        <div class="chance-card purple"><div class="cv">${fmt2(pctReal)}%</div><div class="cd">Sua chance real / mês<br><small>2 ÷ ${activeCotas} (sorteio + fixo)</small></div></div>
+        <div class="chance-card blue"><div class="cv">~${fmt1(pct12)}%</div><div class="cd">Estimativa 12 meses<br><small>12 × ${fmt2(pctReal)}%</small></div></div>
       </div>
-      <div class="tip-box">
-        <strong>Resumo:</strong>
-        ${fmt2(pctSorteio)}% (sorteio) + ${fmt2(pctFixo)}% (fixo) = <strong>${fmt2(pctReal)}%/mês</strong>.
-        Em 12 assembleias: 12 × ${fmt2(pctReal)}% = <strong>~${fmt1(pct12)}%</strong>.
-        ${avgLivresPerAsm>0?'<br><em>Oportunidade:</em> neste grupo saíram ~'+fmt1(avgLivresPerAsm)+' lances livres/assembleia (mín '+lMin+', máx '+lMax+'). Participar de lances livres aumentaria significativamente suas chances.':''}
-      </div>
+      <div class="tip-box"><strong>Resumo:</strong> ${fmt2(pctSorteio)}% (sorteio) + ${fmt2(pctFixo)}% (fixo) = <strong>${fmt2(pctReal)}%/mês</strong>. Em 12 assembleias: <strong>~${fmt1(pct12)}%</strong>. ${avgLivresPerAsm>0?'Oportunidade: ~'+fmt1(avgLivresPerAsm)+' lances livres/asm. neste grupo ('+lMin+' a '+lMax+'). Participar aumentaria suas chances.':''}</div>
     </div>
-
     <div class="form-section">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
         <div class="form-section-title" style="margin-bottom:0">📌 Histórico de Assembleias</div>
@@ -914,7 +864,6 @@ function renderDetail(){
       </div>
       ${tblHtml}
     </div>
-
     <div class="form-section">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
         <div class="form-section-title" style="margin-bottom:0">🗂️ Mapa de Cotas do Grupo (0001–${String(totalCotas).padStart(4,'0')})</div>
@@ -926,181 +875,156 @@ function renderDetail(){
         <div class="cota-map-stats">Total: ${totalCotas} cotas · Contempladas: ${allCont.size} · Sua cota: <strong>${String(suaCotaNum).padStart(4,'0')}</strong> (azul)</div>
       </div>
     </div>
-  `;
-
-  window._cotaMapData = {
-    total:totalCotas, suaCota:suaCotaNum,
-    contempladas:allCont, ultimoSorteado:ultimoSort,
-    cotaDetails:cotaDetailsMap, rendered:false
-  };
+  `
+  window._cotaMapData={total:totalCotas,suaCota:suaCotaNum,contempladas:allCont,ultimoSorteado:ultimoSort,cotaDetails:cotaDetailsMap,rendered:false}
 }
 
 // ══════════════════════════════════════════════════════
 // MAPA DE COTAS
 // ══════════════════════════════════════════════════════
 function toggleCotaMap(){
-  const container = document.getElementById('cotaMapContainer');
-  const btn       = document.getElementById('btnToggleMapa');
-  if(!container||!btn) return;
+  const container=document.getElementById('cotaMapContainer'),btn=document.getElementById('btnToggleMapa')
+  if(!container||!btn) return
   if(container.style.display==='none'){
-    container.style.display='block';
-    btn.textContent='Fechar mapa ▴';
-    if(!window._cotaMapData.rendered){ renderCotaGrid(); window._cotaMapData.rendered=true; }
-  } else {
-    container.style.display='none';
-    btn.textContent='Ver todas as cotas ▾';
-  }
+    container.style.display='block'; btn.textContent='Fechar mapa ▴'
+    if(!window._cotaMapData.rendered){ renderCotaGrid(); window._cotaMapData.rendered=true }
+  } else { container.style.display='none'; btn.textContent='Ver todas as cotas ▾' }
 }
 
 function buildCotaTooltip(i){
-  const {suaCota,contempladas,cotaDetails,ultimoSorteado} = window._cotaMapData;
-  const p4=n=>String(n).padStart(4,'0'), p3=n=>String(n).padStart(3,'0');
-  const lines=['Cota '+p4(i)];
-  if(i===suaCota){
-    lines.push('','⭐ SUA COTA');
-  } else if(contempladas.has(i)){
-    const d=cotaDetails.get(i);
-    lines.push('','✅ CONTEMPLADA');
+  const {suaCota,contempladas,cotaDetails,ultimoSorteado}=window._cotaMapData
+  const p4=n=>String(n).padStart(4,'0'),p3=n=>String(n).padStart(3,'0')
+  const lines=['Cota '+p4(i)]
+  if(i===suaCota){ lines.push('','⭐ SUA COTA') }
+  else if(contempladas.has(i)){
+    const d=cotaDetails.get(i); lines.push('','✅ CONTEMPLADA')
     if(d){
-      lines.push('─────────────────────');
-      lines.push('Assembleia nº '+d.assembleia+' ('+fmtDate(d.data)+')');
-      lines.push('Modalidade: '+(MOD_LABEL[d.modalidade]||d.modalidade));
-      if(d.percentual>0) lines.push('% Lance: '+d.percentual+'%');
-      if(d.valor>0)      lines.push('Valor Lance: '+fmtBRL2(d.valor));
-      lines.push('─────────────────────');
-      lines.push('Nº Sorteado: '+(d.sorteado!=null?p3(d.sorteado):'—'));
-      if(d.loteria) lines.push('Loteria 1º Prêmio: '+String(d.loteria).padStart(5,'0'));
+      lines.push('─────────────────────','Assembleia nº '+d.assembleia+' ('+fmtDate(d.data)+')')
+      lines.push('Modalidade: '+(MOD_LABEL[d.modalidade]||d.modalidade))
+      if(d.percentual>0) lines.push('% Lance: '+d.percentual+'%')
+      if(d.valor>0)      lines.push('Valor Lance: '+fmtBRL2(d.valor))
+      lines.push('─────────────────────','Nº Sorteado: '+(d.sorteado!=null?p3(d.sorteado):'—'))
+      if(d.loteria) lines.push('Loteria 1º Prêmio: '+String(d.loteria).padStart(5,'0'))
     }
-  } else {
-    lines.push('','Ativa — concorrendo');
-  }
-  if(ultimoSorteado&&i===ultimoSorteado&&i!==suaCota){ lines.push('','🟡 Último nº sorteado'); }
-  return lines.join('\n');
+  } else { lines.push('','Ativa — concorrendo') }
+  if(ultimoSorteado&&i===ultimoSorteado&&i!==suaCota) lines.push('','🟡 Último nº sorteado')
+  return lines.join('\n')
 }
 
 function renderCotaGrid(){
-  const grid=document.getElementById('cotaMapGrid');
-  if(!grid||!window._cotaMapData) return;
-  const {total,suaCota,contempladas,ultimoSorteado}=window._cotaMapData;
-  const frag=document.createDocumentFragment();
+  const grid=document.getElementById('cotaMapGrid')
+  if(!grid||!window._cotaMapData) return
+  const {total,suaCota,contempladas,ultimoSorteado}=window._cotaMapData
+  const frag=document.createDocumentFragment()
   for(let i=1;i<=total;i++){
-    const el=document.createElement('div');
-    el.className='cota-item';
-    el.textContent=String(i).padStart(4,'0');
-    if(i===suaCota)             el.classList.add('ci-sua');
-    else if(contempladas.has(i)) el.classList.add('ci-contemplada');
-    if(ultimoSorteado&&i===ultimoSorteado) el.classList.add('ci-sorteio');
-    el.title=buildCotaTooltip(i);
-    frag.appendChild(el);
+    const el=document.createElement('div')
+    el.className='cota-item'; el.textContent=String(i).padStart(4,'0')
+    if(i===suaCota) el.classList.add('ci-sua')
+    else if(contempladas.has(i)) el.classList.add('ci-contemplada')
+    if(ultimoSorteado&&i===ultimoSorteado) el.classList.add('ci-sorteio')
+    el.title=buildCotaTooltip(i); frag.appendChild(el)
   }
-  grid.appendChild(frag);
+  grid.appendChild(frag)
 }
 
 // ══════════════════════════════════════════════════════
-// FORMULÁRIO ADD/EDIT CONSÓRCIO
+// FORMULÁRIO ADD/EDIT
 // ══════════════════════════════════════════════════════
-function renderAddForm(){
+async function renderAddForm(){
   if(CEditId){
-    const c=DB.consorcios(CU.id).find(x=>x.id===CEditId);
+    const cs=await fetchConsorcios(); const c=cs.find(x=>x.id===CEditId)
     if(c){
-      document.getElementById('f-id').value=CEditId;
-      document.getElementById('f-admin').value=c.administradora||'';
-      document.getElementById('f-tipo').value=c.tipo||'';
-      document.getElementById('f-grupo').value=c.grupo||'';
-      document.getElementById('f-cota').value=c.cota||'';
-      document.getElementById('f-credito').value=c.creditoTotal||'';
-      document.getElementById('f-parcela').value=c.parcela||'';
-      document.getElementById('f-prazo').value=c.prazoTotal||'';
-      document.getElementById('f-parcela-atual').value=c.parcelaAtual||'';
-      document.getElementById('f-divisor').value=c.divisor||'';
-      document.getElementById('f-reajuste').value=c.reajuste||'';
-      document.getElementById('f-lance-fixo').value=c.lanceFixo||'';
-      document.getElementById('f-status').value=c.status||'ativa';
-      document.getElementById('f-obs').value=c.obs||'';
-      document.getElementById('saveCBtn').textContent='Salvar Alterações';
+      document.getElementById('f-id').value=CEditId
+      document.getElementById('f-admin').value=c.administradora||''
+      document.getElementById('f-tipo').value=c.tipo||''
+      document.getElementById('f-grupo').value=c.grupo||''
+      document.getElementById('f-cota').value=c.cota||''
+      document.getElementById('f-credito').value=c.creditoTotal||''
+      document.getElementById('f-parcela').value=c.parcela||''
+      document.getElementById('f-prazo').value=c.prazoTotal||''
+      document.getElementById('f-parcela-atual').value=c.parcelaAtual||''
+      document.getElementById('f-divisor').value=c.divisor||''
+      document.getElementById('f-reajuste').value=c.reajuste||''
+      document.getElementById('f-lance-fixo').value=c.lanceFixo||''
+      document.getElementById('f-status').value=c.status||'ativa'
+      document.getElementById('f-obs').value=c.obs||''
+      document.getElementById('saveCBtn').textContent='Salvar Alterações'
     }
   } else {
-    document.querySelector('#page-add-consorcio form').reset();
-    document.getElementById('f-id').value='';
-    document.getElementById('saveCBtn').textContent='Salvar Consórcio';
+    document.querySelector('#page-add-consorcio form').reset()
+    document.getElementById('f-id').value=''
+    document.getElementById('saveCBtn').textContent='Salvar Consórcio'
   }
 }
 
-function saveConsorcio(e){
-  e.preventDefault();
-  const editId=document.getElementById('f-id').value;
-  const cs=DB.consorcios(CU.id);
-  const data={
+async function saveConsorcio(e){
+  e.preventDefault()
+  const editId=document.getElementById('f-id').value
+  const payload={
     administradora:document.getElementById('f-admin').value,
     tipo:document.getElementById('f-tipo').value,
     grupo:document.getElementById('f-grupo').value.trim(),
     cota:document.getElementById('f-cota').value.trim(),
-    creditoTotal:parseFloat(document.getElementById('f-credito').value)||0,
+    credito_total:parseFloat(document.getElementById('f-credito').value)||0,
     parcela:parseFloat(document.getElementById('f-parcela').value)||0,
-    prazoTotal:parseInt(document.getElementById('f-prazo').value)||0,
-    parcelaAtual:parseInt(document.getElementById('f-parcela-atual').value)||0,
-    divisor:parseInt(document.getElementById('f-divisor').value)||0,
+    prazo_total:parseInt(document.getElementById('f-prazo').value)||0,
+    parcela_atual:parseInt(document.getElementById('f-parcela-atual').value)||0,
+    divisor:parseInt(document.getElementById('f-divisor').value)||900,
     reajuste:document.getElementById('f-reajuste').value,
-    lanceFixo:parseFloat(document.getElementById('f-lance-fixo').value)||0,
+    lance_fixo:parseFloat(document.getElementById('f-lance-fixo').value)||0,
     status:document.getElementById('f-status').value,
     obs:document.getElementById('f-obs').value.trim()
-  };
-  if(editId){
-    const i=cs.findIndex(x=>x.id===editId);
-    if(i!==-1){ cs[i]={...cs[i],...data}; DB.saveCons(CU.id,cs); CEditId=null; CConsId=editId; goTo('detail',editId); }
-  } else {
-    const nc={id:uid(),userId:CU.id,...data,assembleias:[],createdAt:new Date().toISOString().slice(0,10)};
-    cs.push(nc); DB.saveCons(CU.id,cs); CEditId=null; CConsId=nc.id; goTo('detail',nc.id);
   }
+  showLoading()
+  try{
+    if(editId){
+      const {error}=await _sb.from('consorcios').update(payload).eq('id',editId)
+      if(error) throw error
+      invalidate(); CEditId=null; CConsId=editId; await goTo('detail',editId)
+    } else {
+      const {data:created,error}=await _sb.from('consorcios').insert({...payload,user_id:CU.id}).select().single()
+      if(error) throw error
+      invalidate(); CEditId=null; CConsId=created.id; await goTo('detail',created.id)
+    }
+  }catch(e){ showToast('Erro ao salvar: '+e.message) }
+  finally{ hideLoading() }
 }
 
-function editCons(id){ CEditId=id; goTo('add-consorcio'); }
+function editCons(id){ CEditId=id; goTo('add-consorcio') }
+
 function delCons(id){
-  document.getElementById('delConfirmBtn').onclick=()=>{
-    DB.saveCons(CU.id, DB.consorcios(CU.id).filter(c=>c.id!==id));
-    closeModal('modalDel'); goTo('dashboard');
-  };
-  document.getElementById('modalDel').classList.add('show');
+  document.getElementById('delConfirmBtn').onclick=async()=>{
+    closeModal('modalDel'); showLoading()
+    try{
+      const {error}=await _sb.from('consorcios').delete().eq('id',id)
+      if(error) throw error
+      invalidate(); await goTo('dashboard')
+    }catch(e){ showToast('Erro ao excluir: '+e.message) }
+    finally{ hideLoading() }
+  }
+  document.getElementById('modalDel').classList.add('show')
 }
 
 // ══════════════════════════════════════════════════════
 // ASSEMBLEIAS
 // ══════════════════════════════════════════════════════
-function openAsm(consId){
-  CAsmId=consId;
-  const c=DB.consorcios(CU.id).find(x=>x.id===consId);
-  document.getElementById('asm-num').value   = c&&c.assembleias ? c.assembleias.length+1 : 1;
-  document.getElementById('asm-data').value  = '';
-  document.getElementById('asm-sorteado').value='';
-  document.getElementById('asm-loteria').value='';
-  document.getElementById('ctList').innerHTML='';
-  ctCnt=0; addCtRow();
-  document.getElementById('modalAsm').classList.add('show');
+async function openAsm(consId){
+  CAsmId=consId
+  const cs=await fetchConsorcios(); const c=cs.find(x=>x.id===consId)
+  document.getElementById('asm-num').value    =c&&c.assembleias?c.assembleias.length+1:1
+  document.getElementById('asm-data').value   =''
+  document.getElementById('asm-sorteado').value=''
+  document.getElementById('asm-loteria').value =''
+  document.getElementById('ctList').innerHTML  =''
+  ctCnt=0; addCtRow()
+  document.getElementById('modalAsm').classList.add('show')
 }
 
-let ctCnt=0;
-
+let ctCnt=0
 function addCtRow(){
-  ctCnt++;
-  const row = document.createElement('div');
-  row.id='ct-row-'+ctCnt;
-  row.className='ct-row';
-  row.innerHTML=
-    '<select class="form-input form-select ct-field" name="ct-cota-'+ctCnt+'" placeholder="Cota" style="flex:0 0 90px;"><option value="">Cota</option>'
-    +'<option value="sorteio">Sorteio</option>'
-    +'</select>'
-    +'<input type="number" class="form-input ct-field" name="ct-num-'+ctCnt+'" placeholder="Nº cota" style="flex:0 0 90px;"/>'
-    +'<select class="form-input form-select ct-field" name="ct-mod-'+ctCnt+'" style="flex:1;">'
-    +'<option value="sorteio">Sorteio Ativo</option>'
-    +'<option value="livre">Lance Livre</option>'
-    +'<option value="fixo">Lance Fixo</option>'
-    +'<option value="cancelado">Cancelado</option>'
-    +'</select>'
-    +'<input type="number" class="form-input ct-field" name="ct-pct-'+ctCnt+'" placeholder="% lance" step="0.001" style="flex:0 0 100px;"/>'
-    +'<input type="number" class="form-input ct-field" name="ct-val-'+ctCnt+'" placeholder="R$ valor" step="0.01" style="flex:0 0 120px;"/>'
-    +'<button type="button" class="btn btn-danger btn-sm" onclick="document.getElementById(\'ct-row-'+ctCnt+'\').remove()">✕</button>';
-  // Rebuild as proper inputs
-  const id=ctCnt;
+  ctCnt++; const id=ctCnt
+  const row=document.createElement('div')
+  row.id='ct-row-'+id; row.className='ct-row'
   row.innerHTML=`
     <input type="number" class="form-input ct-field" id="ct-num-${id}" placeholder="Nº cota" style="flex:0 0 90px;"/>
     <select class="form-input form-select ct-field" id="ct-mod-${id}" style="flex:1;">
@@ -1112,134 +1036,126 @@ function addCtRow(){
     <input type="number" class="form-input ct-field" id="ct-pct-${id}" placeholder="% lance" step="0.001" style="flex:0 0 100px;"/>
     <input type="number" class="form-input ct-field" id="ct-val-${id}" placeholder="R$ valor" step="0.01" style="flex:0 0 120px;"/>
     <button type="button" class="btn btn-danger btn-sm" onclick="document.getElementById('ct-row-${id}').remove()">✕</button>
-  `;
-  document.getElementById('ctList').appendChild(row);
+  `
+  document.getElementById('ctList').appendChild(row)
 }
 
 function autoCalcAsm(){
-  const prize = parseInt(document.getElementById('asm-loteria').value)||0;
-  const c = DB.consorcios(CU.id).find(x=>x.id===CAsmId);
-  const div = c ? (c.divisor||900) : 900;
-  if(prize>0 && div>0){
-    const r = prize % div;
-    document.getElementById('asm-sorteado').value = r===0 ? div : r;
-  }
+  const prize=parseInt(document.getElementById('asm-loteria').value)||0
+  const c=_cache?_cache.find(x=>x.id===CAsmId):null
+  const div=c?(c.divisor||900):900
+  if(prize>0&&div>0){ const r=prize%div; document.getElementById('asm-sorteado').value=r===0?div:r }
 }
 
-function saveAsm(){
-  const numVal  = parseInt(document.getElementById('asm-num').value)||0;
-  const dataVal = document.getElementById('asm-data').value;
-  const sorteado= parseInt(document.getElementById('asm-sorteado').value)||0;
-  const loteria = parseInt(document.getElementById('asm-loteria').value)||0;
-  if(!numVal||!dataVal){ alert('Preencha número e data da assembleia.'); return; }
-  const contemplacoes=[];
-  let r=1;
-  while(document.getElementById('ct-row-'+r)||r<=ctCnt){
-    const row=document.getElementById('ct-row-'+r);
-    if(row){
-      const cotaEl = document.getElementById('ct-num-'+r);
-      const modEl  = document.getElementById('ct-mod-'+r);
-      const pctEl  = document.getElementById('ct-pct-'+r);
-      const valEl  = document.getElementById('ct-val-'+r);
-      if(cotaEl&&cotaEl.value){
-        contemplacoes.push({
-          cota:cotaEl.value.trim(),
-          modalidade:modEl?modEl.value:'sorteio',
-          percentual:pctEl?parseFloat(pctEl.value)||0:0,
-          valor:valEl?parseFloat(valEl.value)||0:0
-        });
-      }
+async function saveAsm(){
+  const numVal  =parseInt(document.getElementById('asm-num').value)||0
+  const dataVal =document.getElementById('asm-data').value
+  const sorteado=parseInt(document.getElementById('asm-sorteado').value)||null
+  const loteria =parseInt(document.getElementById('asm-loteria').value)||null
+  if(!numVal||!dataVal){ alert('Preencha número e data da assembleia.'); return }
+  const contemplacoes=[]
+  for(let r=1;r<=ctCnt;r++){
+    const row=document.getElementById('ct-row-'+r)
+    if(!row) continue
+    const cotaEl=document.getElementById('ct-num-'+r)
+    if(cotaEl&&cotaEl.value){
+      contemplacoes.push({
+        cota:cotaEl.value.trim(),
+        modalidade:(document.getElementById('ct-mod-'+r)||{}).value||'sorteio',
+        percentual:parseFloat((document.getElementById('ct-pct-'+r)||{}).value)||0,
+        valor:parseFloat((document.getElementById('ct-val-'+r)||{}).value)||0
+      })
     }
-    r++;
-    if(r>ctCnt+1) break;
   }
-  const cs=DB.consorcios(CU.id);
-  const ci=cs.findIndex(x=>x.id===CAsmId);
-  if(ci===-1){closeModal('modalAsm');return;}
-  if(!cs[ci].assembleias) cs[ci].assembleias=[];
-  cs[ci].assembleias.push({id:uid(),numero:numVal,data:dataVal,numeroSorteado:sorteado,loteriaPrimeiroPremio:loteria,contemplacoes});
-  // Auto-update parcelaAtual to reflect assembleia count
-  cs[ci].parcelaAtual=cs[ci].assembleias.length;
-  DB.saveCons(CU.id,cs);
-  closeModal('modalAsm');
-  CConsId=CAsmId;
-  goTo('detail',CAsmId);
+  closeModal('modalAsm'); showLoading()
+  try{
+    const {data:asm,error:e1}=await _sb.from('assembleias').insert({
+      consorcio_id:CAsmId, numero:numVal, data:dataVal,
+      numero_sorteado:sorteado, loteria_primeiro_premio:loteria
+    }).select().single()
+    if(e1) throw e1
+    if(contemplacoes.length){
+      const {error:e2}=await _sb.from('contemplacoes').insert(
+        contemplacoes.map(ct=>({assembleia_id:asm.id,cota:ct.cota,modalidade:ct.modalidade,percentual:ct.percentual,valor:ct.valor}))
+      )
+      if(e2) throw e2
+    }
+    const c=_cache?_cache.find(x=>x.id===CAsmId):null
+    await _sb.from('consorcios').update({parcela_atual:(c?.parcelaAtual||0)+1}).eq('id',CAsmId)
+    invalidate(); CConsId=CAsmId; await goTo('detail',CAsmId)
+  }catch(e){ showToast('Erro ao salvar assembleia: '+e.message) }
+  finally{ hideLoading() }
 }
 
-function closeModal(id){
-  document.getElementById(id).classList.remove('show');
-}
+function closeModal(id){ document.getElementById(id).classList.remove('show') }
 
 // ══════════════════════════════════════════════════════
 // CALCULADORA
 // ══════════════════════════════════════════════════════
 function doCalc(){
-  const prize=parseInt(document.getElementById('calc-prize').value)||0;
-  const div  =parseInt(document.getElementById('calc-div').value)||900;
-  if(!prize){ document.getElementById('calcNum').textContent='—'; document.getElementById('calcSteps').innerHTML=''; return; }
-  const q=Math.floor(prize/div);
-  const r=prize%div;
-  const sorteado=r===0?div:r;
-  const lines=formatCalcLines(prize,div);
-  document.getElementById('calcNum').textContent=String(sorteado).padStart(3,'0');
-  document.getElementById('cPrize').textContent=String(prize).padStart(5,'0');
-  document.getElementById('cDiv').textContent=div;
-  document.getElementById('cQ').textContent=q;
-  document.getElementById('cResto').textContent=r===0?div+' (resto 0 → usa divisor)':r;
+  const prize=parseInt(document.getElementById('calc-prize').value)||0
+  const div  =parseInt(document.getElementById('calc-div').value)||900
+  if(!prize){ document.getElementById('calcNum').textContent='—'; document.getElementById('calcSteps').innerHTML=''; return }
+  const q=Math.floor(prize/div),r=prize%div,sorteado=r===0?div:r
+  const lines=formatCalcLines(prize,div)
+  document.getElementById('calcNum').textContent=String(sorteado).padStart(3,'0')
+  document.getElementById('cPrize').textContent=String(prize).padStart(5,'0')
+  document.getElementById('cDiv').textContent=div
+  document.getElementById('cQ').textContent=q
+  document.getElementById('cResto').textContent=r===0?div+' (resto 0 → usa divisor)':r
   document.getElementById('calcSteps').innerHTML=lines
-    ? `<div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:14px 16px;font-size:13px;">
+    ?`<div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:14px 16px;font-size:13px;">
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:10px;">Cálculo (resumo)</div>
         <div class="mono" style="font-size:15px;line-height:2;white-space:nowrap;">${lines[0]}<br>${lines[1]}</div>
-        <div style="margin-top:10px;font-size:12px;color:var(--muted);line-height:1.6;">
-          <strong>Interpretação:</strong><br>
-          Divide-se o 1º prêmio pelo divisor do grupo.<br>
-          O resultado de <strong>${lines[0]}</strong> tem parte decimal <strong>${lines[1].split(' × ')[0]}</strong>.<br>
-          Multiplicando pela quantidade de cotas: <strong>${lines[1]}</strong> → nº sorteado.
-          ${r===0?'<br>Quando o resto é 0, usa-se o próprio divisor como nº sorteado.':''}
-        </div>
+        <div style="margin-top:10px;font-size:12px;color:var(--muted);line-height:1.6;">${r===0?'Quando o resto é 0, usa-se o próprio divisor como nº sorteado.':''}</div>
       </div>`
-    : '';
+    :''
 }
 
 // ══════════════════════════════════════════════════════
 // PERFIL
 // ══════════════════════════════════════════════════════
 function renderProfile(){
-  if(!CU) return;
-  document.getElementById('p-name').value  = CU.name||'';
-  document.getElementById('p-email').value = CU.email||'';
-  document.getElementById('p-pw').value    = '';
-  document.getElementById('p-msg').style.display='none';
+  if(!CU) return
+  document.getElementById('p-name').value =CU.name||''
+  document.getElementById('p-email').value=CU.email||''
+  document.getElementById('p-pw').value   =''
+  document.getElementById('p-msg').style.display='none'
 }
 
-function saveProfile(){
-  const name=document.getElementById('p-name').value.trim();
-  const pw  =document.getElementById('p-pw').value;
-  if(!name){ alert('Nome não pode ficar vazio.'); return; }
-  const users=DB.users();
-  const i=users.findIndex(u=>u.id===CU.id);
-  if(i===-1) return;
-  users[i].name=name;
-  if(pw.length>=6) users[i].password=pw;
-  DB.saveUsers(users);
-  CU={...users[i]};
-  DB.setMe(CU);
-  document.getElementById('sbName').textContent   = CU.name;
-  document.getElementById('sbAvatar').textContent = initials(CU.name);
-  document.getElementById('p-msg').style.display='block';
+async function saveProfile(){
+  const name=document.getElementById('p-name').value.trim()
+  const pw  =document.getElementById('p-pw').value
+  if(!name){ alert('Nome não pode ficar vazio.'); return }
+  showLoading()
+  try{
+    const {error:e1}=await _sb.from('profiles').update({name}).eq('id',CU.id)
+    if(e1) throw e1
+    const upd={data:{name}}
+    if(pw.length>=6) upd.password=pw
+    const {error:e2}=await _sb.auth.updateUser(upd)
+    if(e2) throw e2
+    CU.name=name
+    document.getElementById('sbName').textContent  =CU.name
+    document.getElementById('sbAvatar').textContent=initials(CU.name)
+    document.getElementById('p-msg').style.display ='block'
+    showToast('Perfil atualizado!','success')
+  }catch(e){ showToast('Erro ao salvar perfil: '+e.message) }
+  finally{ hideLoading() }
 }
 
 // ══════════════════════════════════════════════════════
-// INIT
+// INIT — escuta mudanças de sessão do Supabase Auth
 // ══════════════════════════════════════════════════════
-(function init(){
-  seedDemo();
-  const me=DB.me();
-  if(me){
-    CU=me;
-    showApp();
+_sb.auth.onAuthStateChange((event, session) => {
+  if(session && session.user){
+    if(!CU || CU.id !== session.user.id){ invalidate(); showApp(session.user) }
+  } else {
+    CU=null; invalidate()
+    document.getElementById('app-shell').style.display='none'
+    document.getElementById('page-auth').style.display='flex'
   }
-})();
+})
 </script>
 </body>
 </html>
