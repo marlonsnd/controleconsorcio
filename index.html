@@ -207,7 +207,7 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
       </div>
       <div class="form-group">
         <label class="form-label">Senha</label>
-        <input type="password" id="login-password" class="form-input" placeholder="••••••••"/>
+        <input type="password" id="login-password" class="form-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
       </div>
       <div style="text-align:right;margin-top:-8px;margin-bottom:12px;">
         <button class="btn btn-ghost" style="font-size:12px;padding:2px 4px;" onclick="switchTab('forgot')">Esqueceu sua senha?</button>
