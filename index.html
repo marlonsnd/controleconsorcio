@@ -129,6 +129,7 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
 .data-table thead tr{background:var(--primary);color:#fff;}
 .data-table thead th{padding:10px 12px;text-align:left;font-weight:600;white-space:nowrap;}
 .data-table tbody td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+.data-table tbody td.no-border{padding:0;border:none!important;}
 .data-table tbody tr:nth-child(even){background:#F8FAFC;}
 .data-table tbody tr:hover{background:var(--primary-light);}
 .data-table .asm-sep td{border-top:2px solid #CBD5E1;}
@@ -765,11 +766,15 @@ async function renderDetail(){
     tblHtml='<div class="table-wrap"><table class="data-table"><thead><tr><th>Asm.</th><th>Data</th><th>Nº Sorteado</th><th>Loteria (1º prêmio)</th><th>Cota</th><th>Modalidade</th><th>% Lance</th><th>Valor Lance</th></tr></thead><tbody>'
     asms.forEach((a,ai)=>{
       const alt=ai%2!==0
+      const cid='cls-'+a.numero
+      const cSort=a.contemplacoes.filter(x=>x.modalidade==='sorteio').length
+      const cLivre=a.contemplacoes.filter(x=>x.modalidade==='livre').length
+      const cFixo=a.contemplacoes.filter(x=>x.modalidade==='fixo').length
+      const cTotal=a.contemplacoes.filter(x=>x.modalidade!=='cancelado').length
       a.contemplacoes.forEach((ct,ci)=>{
         const first=ci===0,rs=a.contemplacoes.length
         const rowClick='onclick="openAsm(\''+c.id+'\',\''+a.id+'\')" style="cursor:pointer;" title="Clique para editar esta assembleia"'
         tblHtml+='<tr '+rowClick+' class="'+(alt?'row-alt':'')+(first?' asm-sep':'')+'">'
-        const cid='cls-'+a.numero
         const classHtml=(a.classificacaoFixo||a.classificacaoSorteio)
           ?'<div style="margin-top:8px;padding-top:6px;border-top:1px dashed #E2E8F0;">'
             +'<button onclick="event.stopPropagation();var p=document.getElementById(\''+cid+'\');var i=document.getElementById(\''+cid+'-i\');if(p.style.display===\'none\'){p.style.display=\'flex\';i.textContent=\'▴\'}else{p.style.display=\'none\';i.textContent=\'▾\'}" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;padding:0;font-size:10px;color:var(--muted);font-weight:600;">'
@@ -779,9 +784,18 @@ async function renderDetail(){
             +(a.classificacaoSorteio?'<div style="text-align:center;"><strong style="color:var(--primary);font-size:16px;display:block;line-height:1.1;">'+a.classificacaoSorteio+'º</strong><span style="color:var(--muted);font-size:9px;white-space:nowrap;">Sorteio Ativo</span></div>':'')
             +'</div></div>'
           :''
-        if(first) tblHtml+='<td rowspan="'+rs+'" style="vertical-align:top;white-space:nowrap;"><strong>'+a.numero+'</strong>'+classHtml+'</td><td rowspan="'+rs+'">'+fmtDate(a.data)+'</td><td rowspan="'+rs+'"><strong>'+String(a.numeroSorteado||'—').padStart(3,'0')+'</strong></td><td rowspan="'+rs+'" class="mono">'+(a.loteriaPrimeiroPremio?String(a.loteriaPrimeiroPremio).padStart(5,'0'):'—')+'</td>'
+        if(first) tblHtml+='<td rowspan="'+(rs+1)+'" style="vertical-align:top;"><strong>'+a.numero+'</strong>'+classHtml+'</td><td rowspan="'+(rs+1)+'">'+fmtDate(a.data)+'</td><td rowspan="'+(rs+1)+'"><strong>'+String(a.numeroSorteado||'—').padStart(3,'0')+'</strong></td><td rowspan="'+(rs+1)+'" class="mono">'+(a.loteriaPrimeiroPremio?String(a.loteriaPrimeiroPremio).padStart(5,'0'):'—')+'</td>'
         tblHtml+='<td>'+ct.cota+'</td><td><span class="badge '+(ct.modalidade||'sorteio')+'">'+(MOD_LABEL[ct.modalidade]||ct.modalidade)+'</span></td><td>'+(ct.percentual?ct.percentual+'%':'0%')+'</td><td class="mono">'+(ct.valor>0?fmtBRL2(ct.valor):'—')+'</td></tr>'
       })
+      // linha de resumo — colspan cobre todas as colunas exceto Asm. (que tem rowspan+1)
+      tblHtml+='<tr class="'+(alt?'row-alt':'')+'">'
+        +'<td colspan="4" style="padding:5px 12px;border-top:1px dashed #CBD5E1;">'
+        +'<span style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-right:8px;">Resumo</span>'
+        +(cSort?'<span style="background:#D1FAE5;color:#065F46;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;margin-right:4px;">'+cSort+'× Sorteio</span>':'')
+        +(cLivre?'<span style="background:#DBEAFE;color:#1E40AF;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;margin-right:4px;">'+cLivre+'× Livre</span>':'')
+        +(cFixo?'<span style="background:#FEF9C3;color:#713F12;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;margin-right:4px;">'+cFixo+'× Fixo</span>':'')
+        +(cTotal?'<span style="margin-left:4px;padding-left:8px;border-left:1px solid #CBD5E1;display:inline-flex;align-items:center;gap:3px;"><span style="background:#2563EB;color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:3px;">✓ '+cTotal+' contemplada'+(cTotal!==1?'s':'')+'</span></span>':'')
+        +'</td></tr>'
     })
     tblHtml+='</tbody></table></div>'
   } else {
