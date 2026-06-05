@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Controle Consórcio – Sua plataforma de consórcios</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:14px;}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#F1F5F9;color:#1E293B;min-height:100vh;}
+:root{
+  --primary:#2563EB;--primary-dark:#1D4ED8;--primary-light:#EFF6FF;
+  --success:#16A34A;--success-light:#F0FDF4;
+  --warning:#D97706;--warning-light:#FFFBEB;
+  --danger:#DC2626;--danger-light:#FEF2F2;
+  --bg:#F1F5F9;--border:#E2E8F0;--text:#1E293B;--muted:#64748B;
+  --sidebar-w:240px;--header-h:60px;--radius:12px;
+  --shadow:0 2px 8px rgba(0,0,0,0.08);--shadow-md:0 4px 20px rgba(0,0,0,0.13);
+}
+
+/* ── AUTH ── */
+#page-auth{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1D4ED8 0%,#2563EB 55%,#0891B2 100%);padding:20px;}
+.auth-card{background:#fff;border-radius:20px;padding:40px;width:100%;max-width:440px;box-shadow:var(--shadow-md);}
+.auth-logo{text-align:center;margin-bottom:28px;}
+.auth-logo .logo-icon{font-size:40px;display:block;margin-bottom:8px;}
+.auth-logo .logo-name{font-size:20px;font-weight:900;color:var(--primary);letter-spacing:-0.3px;}
+.auth-logo .logo-tagline{font-size:12px;color:var(--muted);margin-top:3px;}
+.auth-tabs{display:flex;background:var(--bg);border-radius:10px;padding:4px;margin-bottom:24px;}
+.auth-tab{flex:1;padding:8px;text-align:center;font-size:13px;font-weight:600;border:none;background:none;cursor:pointer;border-radius:8px;color:var(--muted);transition:all .2s;}
+.auth-tab.active{background:#fff;color:var(--primary);box-shadow:var(--shadow);}
+
+/* ── FORMS ── */
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.form-input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--text);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;}
+.form-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-primary:hover{background:var(--primary-dark);}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text);}
+.btn-outline:hover{background:var(--bg);}
+.btn-danger{background:var(--danger);color:#fff;}
+.btn-danger:hover{background:#B91C1C;}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:8px;}
+.btn-lg{padding:13px 24px;font-size:15px;border-radius:12px;}
+.btn-full{width:100%;}
+.btn-ghost{background:none;border:none;color:var(--muted);}
+.btn-ghost:hover{color:var(--text);background:var(--bg);}
+.error-msg{color:var(--danger);font-size:12px;margin-top:8px;padding:8px 12px;background:var(--danger-light);border-radius:8px;display:none;}
+.error-msg.show{display:block;}
+
+/* ── APP SHELL ── */
+#app-shell{display:none;min-height:100vh;}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);background:#fff;border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:transform .3s;}
+.sidebar-logo{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.sidebar-logo .logo-mark{width:36px;height:36px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:900;flex-shrink:0;letter-spacing:-.5px;}
+.sidebar-logo .brand{font-size:15px;font-weight:900;color:var(--text);letter-spacing:-.3px;}
+.sidebar-logo .brand span{color:var(--primary);}
+.sidebar-nav{flex:1;padding:12px 10px;overflow-y:auto;}
+.nav-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);padding:8px 10px 4px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;border:none;background:none;width:100%;text-align:left;margin-bottom:2px;}
+.nav-item:hover{background:var(--bg);color:var(--text);}
+.nav-item.active{background:var(--primary-light);color:var(--primary);font-weight:700;}
+.nav-item .nav-icon{font-size:16px;width:20px;text-align:center;}
+.sidebar-user{padding:12px 14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.user-avatar{width:34px;height:34px;border-radius:10px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}
+.user-info .user-name{font-size:13px;font-weight:700;color:var(--text);}
+.user-info .user-email{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;}
+.logout-btn{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:4px;border-radius:6px;transition:all .15s;}
+.logout-btn:hover{color:var(--danger);background:var(--danger-light);}
+.main-content{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;}
+.top-bar{height:var(--header-h);background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:50;gap:16px;}
+.top-bar-title{font-size:17px;font-weight:700;color:var(--text);}
+.top-bar-actions{margin-left:auto;display:flex;gap:8px;}
+.page-content{padding:24px;flex:1;}
+
+/* ── DASHBOARD ── */
+.stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:24px;}
+.stat-card{background:#fff;border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);}
+.stat-card .stat-icon{font-size:22px;margin-bottom:10px;display:block;}
+.stat-card .stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.stat-card .stat-value{font-size:26px;font-weight:800;color:var(--text);}
+.stat-card .stat-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.consorcio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;}
+.consorcio-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:transform .15s,box-shadow .15s;}
+.consorcio-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+.consorcio-card-header{padding:16px 18px 12px;display:flex;align-items:flex-start;gap:12px;}
+.admin-badge{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.admin-badge.sicredi{background:#E8F5E9;}.admin-badge.bb{background:#FFF8E1;}.admin-badge.bradesco{background:#FCE4EC;}
+.admin-badge.porto{background:#E3F2FD;}.admin-badge.caixa{background:#E0F2F1;}.admin-badge.hs{background:#F3E5F5;}
+.admin-badge.default{background:var(--primary-light);}
+.consorcio-card-info{flex:1;min-width:0;}
+.consorcio-admin{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
+.consorcio-name{font-size:15px;font-weight:700;color:var(--text);}
+.consorcio-cota{font-size:12px;color:var(--muted);}
+.status-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+.status-pill.ativa{background:#D1FAE5;color:#065F46;}.status-pill.contemplada{background:#DBEAFE;color:#1E40AF;}.status-pill.cancelada{background:#FEE2E2;color:#991B1B;}
+.consorcio-card-body{padding:0 18px 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.card-metric .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.card-metric .v{font-size:16px;font-weight:700;color:var(--text);}
+.consorcio-card-footer{padding:10px 18px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.progress-wrap{flex:1;margin-right:12px;}
+.progress-label{font-size:10px;color:var(--muted);margin-bottom:4px;display:flex;justify-content:space-between;}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--primary);border-radius:3px;}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted);background:#fff;border-radius:var(--radius);border:2px dashed var(--border);}
+.empty-state .empty-icon{font-size:48px;margin-bottom:12px;}
+.empty-state h3{font-size:16px;color:var(--text);margin-bottom:6px;}
+.empty-state p{font-size:13px;margin-bottom:16px;}
+
+/* ── FORM SECTIONS ── */
+.form-section{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:20px;}
+.form-section-title{font-size:12px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+
+/* ── DETAIL ── */
+.detail-header-card{background:linear-gradient(135deg,var(--primary) 0%,#0891B2 100%);border-radius:var(--radius);padding:24px;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.detail-header-icon{font-size:48px;line-height:1;}
+.detail-header-info{flex:1;min-width:200px;}
+.detail-header-admin{font-size:12px;opacity:.8;text-transform:uppercase;letter-spacing:.5px;}
+.detail-header-title{font-size:22px;font-weight:800;margin:4px 0;}
+.detail-header-sub{font-size:13px;opacity:.85;}
+.detail-header-stats{display:flex;gap:24px;flex-wrap:wrap;}
+.dhs{text-align:center;}
+.dhs .dv{font-size:20px;font-weight:800;}
+.dhs .dl{font-size:10px;opacity:.75;text-transform:uppercase;letter-spacing:.4px;}
+.info-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.info-card{background:#fff;border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);}
+.info-card .ik{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.info-card .iv{font-size:20px;font-weight:800;color:var(--text);}
+.info-card .iv.blue{color:var(--primary);}.info-card .iv.green{color:var(--success);}.info-card .iv.orange{color:var(--warning);}
+.info-card .is{font-size:11px;color:var(--muted);margin-top:3px;}
+.chances-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.chance-card{border-radius:var(--radius);padding:18px;text-align:center;}
+.chance-card.green{background:#F0FDF4;}.chance-card.yellow{background:#FFFBEB;}.chance-card.purple{background:#FAF5FF;}.chance-card.blue{background:#EFF6FF;}
+.chance-card .cv{font-size:28px;font-weight:900;color:var(--text);}
+.chance-card .cd{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4;}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;}
+table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
+.data-table thead tr{background:var(--primary);color:#fff;}
+.data-table thead th{padding:10px 12px;text-align:left;font-weight:600;white-space:nowrap;}
+.data-table tbody td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+.data-table tbody tr:nth-child(even){background:#F8FAFC;}
+.data-table tbody tr:hover{background:var(--primary-light);}
+.data-table .asm-sep td{border-top:2px solid #CBD5E1;}
+.data-table .row-alt td{background:#F0FDF4!important;}
+.data-table .row-alt:hover td{background:var(--primary-light)!important;}
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
+.badge.sorteio{background:#D1FAE5;color:#065F46;}.badge.livre{background:#DBEAFE;color:#1E40AF;}
+.badge.fixo{background:#FEF9C3;color:#713F12;}.badge.cancelado{background:#FEE2E2;color:#991B1B;}
+
+/* ── CALCULATOR ── */
+.calc-wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.result-big{font-size:60px;font-weight:900;color:var(--primary);line-height:1;letter-spacing:-2px;}
+
+/* ── INFO BOXES ── */
+.info-box{background:#FFFBEB;border-left:4px solid #F59E0B;border-radius:8px;padding:12px 16px;font-size:12px;line-height:1.6;margin-bottom:16px;color:#78350F;}
+.tip-box{background:#F0FDF4;border-left:4px solid var(--success);border-radius:8px;padding:12px 16px;font-size:12px;line-height:1.6;margin-top:12px;color:#14532D;}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:600px;box-shadow:var(--shadow-md);max-height:90vh;overflow-y:auto;}
+.modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1;}
+.modal-title{font-size:16px;font-weight:700;}
+.modal-close{background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted);padding:2px 6px;border-radius:6px;}
+.modal-close:hover{background:var(--bg);}
+.modal-body{padding:20px 24px;}
+.modal-footer{padding:12px 24px 20px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border);}
+
+/* ── CONTEMPLACAO ROWS ── */
+.ct-row{display:grid;grid-template-columns:90px 1fr 100px 110px 32px;gap:8px;align-items:center;background:#F8FAFC;border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:6px;}
+.add-ct-btn{width:100%;padding:8px;border:1.5px dashed var(--border);border-radius:8px;background:none;color:var(--primary);font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;transition:all .15s;}
+.add-ct-btn:hover{background:var(--primary-light);border-color:var(--primary);}
+
+/* ── MAPA DE COTAS ── */
+.cota-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:14px;}
+.cota-legend-item{display:flex;align-items:center;gap:6px;}
+.cota-dot{width:13px;height:13px;border-radius:4px;display:inline-block;flex-shrink:0;}
+.cota-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(54px,1fr));gap:5px;margin-top:4px;}
+.cota-item{padding:5px 2px;text-align:center;border:1px solid var(--border);border-radius:6px;font-size:11px;font-family:ui-monospace,monospace;color:var(--muted);background:#fff;cursor:default;transition:transform .12s;}
+.cota-item:hover{transform:scale(1.1);z-index:1;position:relative;box-shadow:var(--shadow);}
+.cota-item.ci-contemplada{background:#FEE2E2;border-color:#FECACA;color:#991B1B;font-weight:700;}
+.cota-item.ci-sua{background:var(--primary);border-color:var(--primary-dark);color:#fff;font-weight:900;}
+.cota-item.ci-sorteio{outline:2px solid #F59E0B;outline-offset:1px;}
+.cota-map-stats{font-size:11px;color:var(--muted);margin-top:10px;}
+
+/* ── MISC ── */
+.mono{font-family:ui-monospace,'Courier New',monospace;font-size:11px;}
+.mobile-menu-btn{display:none;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text);padding:4px;}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:99;}
+.sidebar-overlay.show{display:block;}
+
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);box-shadow:4px 0 20px rgba(0,0,0,.15);}
+  .main-content{margin-left:0;}
+  .mobile-menu-btn{display:flex;}
+  .stat-grid{grid-template-columns:1fr 1fr 1fr;}
+  .info-grid-4,.chances-grid{grid-template-columns:1fr 1fr;}
+  .calc-wrap,.form-grid-2,.form-grid-3{grid-template-columns:1fr;}
+}
+@media(max-width:560px){
+  .stat-grid{grid-template-columns:1fr 1fr;}
+  .consorcio-grid{grid-template-columns:1fr;}
+  .page-content{padding:16px;}
+  .ct-row{grid-template-columns:1fr 1fr;gap:6px;}
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- ══ AUTH ══ -->
+<div id="page-auth">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <span class="logo-icon">🏦</span>
+      <div class="logo-name">Controle Consórcio</div>
+      <div class="logo-tagline">Gerencie todos os seus consórcios em um só lugar — grátis</div>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Entrar</button>
+      <button class="auth-tab" onclick="switchTab('register')">Criar conta</button>
+    </div>
+    <div id="form-login">
+      <div class="form-group">
+        <label class="form-label">E-mail</label>
+        <input type="email" id="login-email" class="form-input" placeholder="seu@email.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Senha</label>
+        <input type="password" id="login-password" class="form-input" placeholder="••••••••"/>
+      </div>
+      <div id="login-err" class="error-msg">E-mail ou senha incorretos.</div>
+      <button class="btn btn-primary btn-full btn-lg" style="margin-top:4px" onclick="doLogin()">Entrar</button>
+      <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted);">
+        💡 Conta demo: <strong>demo@controleconsorcio.com.br</strong> / <strong>123456</strong>
+      </div>
+    </div>
+    <div id="form-register" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Nome completo</label>
+        <input type="text" id="reg-name" class="form-input" placeholder="Seu nome"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">E-mail</label>
+        <input type="email" id="reg-email" class="form-input" placeholder="seu@email.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Senha (mín. 6 caracteres)</label>
+        <input type="password" id="reg-password" class="form-input" placeholder="••••••••"/>
+      </div>
+      <div id="reg-err" class="error-msg"></div>
+      <button class="btn btn-primary btn-full btn-lg" style="margin-top:4px" onclick="doRegister()">Criar conta grátis</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP SHELL ══ -->
+<div id="app-shell">
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">CC</div>
+      <div class="brand">Controle <span>Consórcio</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Principal</div>
+      <button class="nav-item active" id="nav-dashboard" onclick="goTo('dashboard')">
+        <span class="nav-icon">🏠</span> Dashboard
+      </button>
+      <button class="nav-item" id="nav-add" onclick="newConsorcio()">
+        <span class="nav-icon">➕</span> Adicionar Cota
+      </button>
+      <div class="nav-section-label" style="margin-top:8px">Ferramentas</div>
+      <button class="nav-item" id="nav-calculator" onclick="goTo('calculator')">
+        <span class="nav-icon">🧮</span> Calculadora Loteria
+      </button>
+      <div class="nav-section-label" style="margin-top:8px">Conta</div>
+      <button class="nav-item" id="nav-profile" onclick="goTo('profile')">
+        <span class="nav-icon">👤</span> Meu Perfil
+      </button>
+    </nav>
+    <div class="sidebar-user">
+      <div class="user-avatar" id="sbAvatar">M</div>
+      <div class="user-info">
+        <div class="user-name" id="sbName">Usuário</div>
+        <div class="user-email" id="sbEmail">email</div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()" title="Sair">⏏</button>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="top-bar">
+      <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+      <div class="top-bar-title" id="topTitle">Dashboard</div>
+      <div class="top-bar-actions" id="topActions"></div>
+    </header>
+    <div class="page-content">
+
+      <!-- DASHBOARD -->
+      <div id="page-dashboard">
+        <div class="stat-grid" id="statGrid"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <div style="font-size:15px;font-weight:700;">Meus Consórcios</div>
+        </div>
+        <div class="consorcio-grid" id="consorcioGrid"></div>
+      </div>
+
+      <!-- ADD/EDIT CONSÓRCIO -->
+      <div id="page-add-consorcio" style="display:none">
+        <form onsubmit="saveConsorcio(event)" autocomplete="off">
+          <input type="hidden" id="f-id"/>
+          <div class="form-section">
+            <div class="form-section-title">📋 Dados do Consórcio</div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Administradora *</label>
+                <select id="f-admin" class="form-input form-select" required>
+                  <option value="">Selecione...</option>
+                  <option>Sicredi</option><option>HS Consórcio</option>
+                  <option>Banco do Brasil</option><option>Porto Seguro</option>
+                  <option>Bradesco</option><option>Caixa Econômica</option>
+                  <option>Itaú</option><option>Santander</option>
+                  <option>Embracon</option><option>Magalu Consórcio</option>
+                  <option>Outra</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tipo de bem *</label>
+                <select id="f-tipo" class="form-input form-select" required>
+                  <option value="">Selecione...</option>
+                  <option value="Imóvel">🏠 Imóvel</option>
+                  <option value="Veículo">🚗 Veículo</option>
+                  <option value="Moto">🏍️ Moto</option>
+                  <option value="Caminhão">🚚 Caminhão</option>
+                  <option value="Serviços">💼 Serviços</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Número do Grupo *</label>
+                <input type="text" id="f-grupo" class="form-input" placeholder="Ex.: 070120" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Número da Cota *</label>
+                <input type="text" id="f-cota" class="form-input" placeholder="Ex.: 0033" required/>
+              </div>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="form-section-title">💰 Valores e Prazos</div>
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label class="form-label">Crédito Total (R$) *</label>
+                <input type="number" id="f-credito" class="form-input" placeholder="Ex.: 800000" step="0.01" required/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Parcela Atual (R$)</label>
+                <input type="number" id="f-parcela" class="form-input" placeholder="Ex.: 2747" step="0.01"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Prazo Total (meses)</label>
+                <input type="number" id="f-prazo" class="form-input" placeholder="Ex.: 180"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Parcela Atual (nº)</label>
+                <input type="number" id="f-parcela-atual" class="form-input" placeholder="Ex.: 7"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Divisor do Sorteio</label>
+                <input type="number" id="f-divisor" class="form-input" placeholder="Ex.: 900"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Índice de Reajuste</label>
+                <select id="f-reajuste" class="form-input form-select">
+                  <option value="">Não informado</option>
+                  <option>INCC</option><option>IPCA</option>
+                  <option>IGP-M</option><option>Selic</option><option>Fixo</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="form-section-title">📌 Status e Configurações</div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Status da Cota *</label>
+                <select id="f-status" class="form-input form-select" required>
+                  <option value="ativa">✅ Ativa</option>
+                  <option value="contemplada">🎉 Contemplada</option>
+                  <option value="cancelada">❌ Cancelada</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">% Lance Fixo</label>
+                <input type="number" id="f-lance-fixo" class="form-input" placeholder="Ex.: 20" min="0" max="100" step="0.1"/>
+              </div>
+              <div class="form-group" style="grid-column:1/-1">
+                <label class="form-label">Observações</label>
+                <input type="text" id="f-obs" class="form-input" placeholder="Anotações livres..."/>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;justify-content:flex-end;">
+            <button type="button" class="btn btn-outline" onclick="goTo('dashboard')">Cancelar</button>
+            <button type="submit" class="btn btn-primary btn-lg" id="saveCBtn">Salvar Consórcio</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- DETAIL -->
+      <div id="page-detail" style="display:none">
+        <div id="detailContent"></div>
+      </div>
+
+      <!-- CALCULATOR -->
+      <div id="page-calculator" style="display:none">
+        <div class="calc-wrap">
+          <div class="form-section">
+            <div class="form-section-title">🎰 Entrada</div>
+            <div class="form-group">
+              <label class="form-label">1º Prêmio da Loteria Federal</label>
+              <input type="number" id="calc-prize" class="form-input" placeholder="Ex.: 48545" style="font-size:20px;padding:14px;font-weight:700;"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Divisor do Grupo</label>
+              <input type="number" id="calc-div" class="form-input" value="900"/>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <button class="btn btn-primary btn-lg" onclick="doCalc()" style="flex:1">Calcular</button>
+              <button class="btn btn-outline" onclick="document.getElementById('calc-prize').value='48545';doCalc()">Exemplo</button>
+            </div>
+            <div style="margin-top:14px;background:#F8FAFC;border:1px solid var(--border);border-radius:10px;padding:12px;font-size:12px;color:var(--muted);line-height:1.6;">
+              <strong>Fórmula:</strong> Nº sorteado = 1º prêmio <strong>mod</strong> divisor.<br>
+              Se o resto for <span class="mono">0</span>, considera-se o próprio divisor.
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="form-section-title">📊 Resultado</div>
+            <div style="text-align:center;padding:16px 0 20px;">
+              <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Número Sorteado</div>
+              <div class="result-big" id="calcNum">—</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div class="info-card"><div class="ik">1º Prêmio</div><div class="iv" style="font-size:16px" id="cPrize">—</div></div>
+              <div class="info-card"><div class="ik">Divisor</div><div class="iv" style="font-size:16px" id="cDiv">—</div></div>
+              <div class="info-card"><div class="ik">Quociente</div><div class="iv" style="font-size:16px" id="cQ">—</div></div>
+              <div class="info-card"><div class="ik">Resto</div><div class="iv" style="font-size:16px" id="cResto">—</div></div>
+            </div>
+            <div id="calcSteps" style="margin-top:14px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div id="page-profile" style="display:none">
+        <div class="form-section" style="max-width:500px;">
+          <div class="form-section-title">👤 Meu Perfil</div>
+          <div class="form-group">
+            <label class="form-label">Nome completo</label>
+            <input type="text" id="p-name" class="form-input"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">E-mail</label>
+            <input type="email" id="p-email" class="form-input" disabled style="background:#F8FAFC;color:var(--muted);"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nova senha (deixe vazio para manter)</label>
+            <input type="password" id="p-pw" class="form-input" placeholder="Nova senha..."/>
+          </div>
+          <button class="btn btn-primary" onclick="saveProfile()">Salvar alterações</button>
+          <div id="p-msg" style="margin-top:10px;font-size:13px;color:var(--success);display:none;">✅ Perfil atualizado!</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: Assembleia ══ -->
+<div class="modal-overlay" id="modalAsm">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📋 Registrar Assembleia</div>
+      <button class="modal-close" onclick="closeModal('modalAsm')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid-2" style="margin-bottom:16px;">
+        <div class="form-group">
+          <label class="form-label">Nº Assembleia *</label>
+          <input type="number" id="asm-num" class="form-input" placeholder="Ex.: 8"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data *</label>
+          <input type="date" id="asm-data" class="form-input"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">1º Prêmio Loteria Federal</label>
+          <input type="number" id="asm-loteria" class="form-input" placeholder="Ex.: 48545" oninput="autoCalcAsm()"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nº Sorteado</label>
+          <input type="number" id="asm-sorteado" class="form-input" placeholder="Calculado automaticamente..."/>
+        </div>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Contemplações</div>
+      <div id="ctList"></div>
+      <button type="button" class="add-ct-btn" onclick="addCtRow()">+ Adicionar contemplação</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalAsm')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveAsm()">Salvar Assembleia</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: Confirmar Exclusão ══ -->
+<div class="modal-overlay" id="modalDel">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header">
+      <div class="modal-title">⚠️ Confirmar exclusão</div>
+      <button class="modal-close" onclick="closeModal('modalDel')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:14px;">Tem certeza que deseja excluir este consórcio? Todos os dados serão perdidos permanentemente.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalDel')">Cancelar</button>
+      <button class="btn btn-danger" id="delConfirmBtn">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LOADING OVERLAY ══ -->
+<div id="loadingOverlay" style="display:none;position:fixed;inset:0;background:rgba(255,255,255,.88);z-index:9999;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
+  <div style="font-size:36px;animation:spin .8s linear infinite;">⏳</div>
+  <div style="font-size:13px;color:var(--muted);font-weight:600;">Carregando...</div>
+</div>
+<div id="toast" style="display:none;position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;color:#fff;font-size:13px;font-weight:600;z-index:10000;box-shadow:0 4px 20px rgba(0,0,0,.2);max-width:320px;"></div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+<script>
+// ══════════════════════════════════════════════════════
+// SUPABASE CLIENT
+// ══════════════════════════════════════════════════════
+const _sb = supabase.createClient(
+  'https://amapukesrtqovytwixoq.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtYXB1a2VzcnRxb3Z5dHdpeG9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2MDk3MDIsImV4cCI6MjA5NjE4NTcwMn0.6-KLzLyytS5UghZVb0E9f8fOEqdnsyOIXIZsPUw9xAs'
+)
+
+// ══════════════════════════════════════════════════════
+// CONSTANTES
+// ══════════════════════════════════════════════════════
+const ADMIN_ICONS = {'Sicredi':'\u{1F7E2}','HS Cons\xf3rcio':'\u{1F7E3}','Banco do Brasil':'\u{1F7E1}','Porto Seguro':'\u{1F535}','Bradesco':'\u{1F534}','Caixa Econ\xf4mica':'\u{1F7E2}','Ita\xfa':'\u{1F7E0}','Santander':'\u{1F534}','Embracon':'\u{1F535}','Magalu Cons\xf3rcio':'\u{1F7E4}','Outra':'⚪'}
+const ADMIN_CLS   = {'Sicredi':'sicredi','Banco do Brasil':'bb','Bradesco':'bradesco','Porto Seguro':'porto','Caixa Econ\xf4mica':'caixa','HS Cons\xf3rcio':'hs'}
+const TYPE_ICONS  = {'Im\xf3vel':'\u{1F3E0}','Ve\xedculo':'\u{1F697}','Moto':'\u{1F3CD}️','Caminh\xe3o':'\u{1F69A}','Servi\xe7os':'\u{1F4BC}'}
+const MOD_LABEL   = {sorteio:'Sorteio Ativo',livre:'Lance Livre',fixo:'Lance Fixo',cancelado:'Cancelado'}
+
+// ══════════════════════════════════════════════════════
+// UTILITÁRIOS
+// ══════════════════════════════════════════════════════
+const fmtBRL  = v => (!v && v!==0) ? '—' : new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0}).format(v)
+const fmtBRL2 = v => (!v && v!==0) ? '—' : new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:2}).format(v)
+const fmtDate = s => { if(!s) return '—'; const [y,m,d]=s.split('-'); return d+'/'+m+'/'+y }
+const initials= n => n ? n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase() : '?'
+
+function formatCalcLines(prize,divisor){
+  if(!prize||!divisor) return null
+  const pt0=n=>n.toLocaleString('pt-BR',{maximumFractionDigits:0})
+  const pt3=n=>n.toLocaleString('pt-BR',{minimumFractionDigits:3,maximumFractionDigits:3})
+  const q=prize/divisor, qi=Math.floor(q), r=prize%divisor
+  const sorteado=r===0?divisor:r, frac=q-qi
+  return [pt0(prize)+' \xf7 '+pt0(divisor)+' = '+pt3(q), pt3(frac)+' \xd7 '+pt0(divisor)+' = '+sorteado]
+}
+
+// ══════════════════════════════════════════════════════
+// CACHE & MAPEAMENTO
+// ══════════════════════════════════════════════════════
+let _cache=null
+function invalidate(){ _cache=null }
+
+function mapCons(c){
+  return {
+    id:c.id, administradora:c.administradora||'', tipo:c.tipo||'',
+    grupo:c.grupo||'', cota:c.cota||'',
+    creditoTotal:parseFloat(c.credito_total)||0, parcela:parseFloat(c.parcela)||0,
+    prazoTotal:c.prazo_total||0, parcelaAtual:c.parcela_atual||0,
+    divisor:c.divisor||900, reajuste:c.reajuste||'',
+    lanceFixo:parseFloat(c.lance_fixo)||0, status:c.status||'ativa', obs:c.obs||'',
+    assembleias:(c.assembleias||[]).sort((a,b)=>a.numero-b.numero).map(a=>({
+      id:a.id, numero:a.numero, data:a.data,
+      numeroSorteado:a.numero_sorteado, loteriaPrimeiroPremio:a.loteria_primeiro_premio,
+      contemplacoes:(a.contemplacoes||[]).map(ct=>({
+        id:ct.id, cota:ct.cota, modalidade:ct.modalidade,
+        percentual:parseFloat(ct.percentual)||0, valor:parseFloat(ct.valor)||0
+      }))
+    }))
+  }
+}
+
+async function fetchConsorcios(){
+  if(_cache) return _cache
+  const {data,error}=await _sb.from('consorcios')
+    .select('*, assembleias(*, contemplacoes(*))')
+    .order('created_at',{ascending:true})
+  if(error) throw error
+  _cache=(data||[]).map(mapCons)
+  return _cache
+}
+
+// ══════════════════════════════════════════════════════
+// LOADING & TOAST
+// ══════════════════════════════════════════════════════
+function showLoading(){ document.getElementById('loadingOverlay').style.display='flex' }
+function hideLoading(){ document.getElementById('loadingOverlay').style.display='none' }
+function showToast(msg,type='error'){
+  const t=document.getElementById('toast')
+  t.textContent=msg; t.style.background=type==='success'?'var(--success)':'var(--danger)'
+  t.style.display='block'; setTimeout(()=>t.style.display='none',3500)
+}
+
+// ══════════════════════════════════════════════════════
+// ESTADO GLOBAL
+// ══════════════════════════════════════════════════════
+let CU=null,CPage='dashboard',CConsId=null,CEditId=null,CAsmId=null
+
+// ══════════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════════
+function switchTab(t){
+  document.querySelectorAll('.auth-tab').forEach((el,i)=>el.classList.toggle('active',(t==='login'&&i===0)||(t==='register'&&i===1)))
+  document.getElementById('form-login').style.display    =t==='login'?'block':'none'
+  document.getElementById('form-register').style.display =t==='register'?'block':'none'
+}
+
+async function doLogin(){
+  const email=document.getElementById('login-email').value.trim().toLowerCase()
+  const pw   =document.getElementById('login-password').value
+  const errEl=document.getElementById('login-err')
+  errEl.classList.remove('show')
+  if(!email||!pw){ errEl.textContent='Preencha e-mail e senha.'; errEl.classList.add('show'); return }
+  showLoading()
+  const {error}=await _sb.auth.signInWithPassword({email,password:pw})
+  hideLoading()
+  if(error){ errEl.textContent='E-mail ou senha incorretos.'; errEl.classList.add('show') }
+}
+
+async function doRegister(){
+  const name =document.getElementById('reg-name').value.trim()
+  const email=document.getElementById('reg-email').value.trim().toLowerCase()
+  const pw   =document.getElementById('reg-password').value
+  const err  =document.getElementById('reg-err')
+  err.classList.remove('show')
+  if(!name||!email||!pw){ err.textContent='Preencha todos os campos.'; err.classList.add('show'); return }
+  if(pw.length<6){ err.textContent='Senha deve ter pelo menos 6 caracteres.'; err.classList.add('show'); return }
+  showLoading()
+  const {error}=await _sb.auth.signUp({email,password:pw,options:{data:{name}}})
+  hideLoading()
+  if(error){ err.textContent=error.message; err.classList.add('show'); return }
+  showToast('Conta criada! Verifique seu e-mail se solicitado.','success')
+}
+
+async function doLogout(){
+  await _sb.auth.signOut(); CU=null; invalidate()
+  document.getElementById('app-shell').style.display='none'
+  document.getElementById('page-auth').style.display='flex'
+}
+
+function showApp(user){
+  CU={id:user.id,email:user.email,name:user.user_metadata?.name||user.email.split('@')[0]}
+  document.getElementById('page-auth').style.display ='none'
+  document.getElementById('app-shell').style.display ='block'
+  document.getElementById('sbName').textContent  =CU.name
+  document.getElementById('sbEmail').textContent =CU.email
+  document.getElementById('sbAvatar').textContent=initials(CU.name)
+  goTo('dashboard')
+}
+
+// ══════════════════════════════════════════════════════
+// ROUTER
+// ══════════════════════════════════════════════════════
+const PAGES=['dashboard','add-consorcio','detail','calculator','profile']
+
+async function goTo(page,id){
+  PAGES.forEach(p=>document.getElementById('page-'+p).style.display='none')
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'))
+  CPage=page; if(id) CConsId=id
+  document.getElementById('page-'+page).style.display=''
+  const titles={dashboard:'Dashboard','add-consorcio':(CEditId?'Editar':'Adicionar')+' Cons\xf3rcio',detail:'Detalhe do Cons\xf3rcio',calculator:'Calculadora Loteria Federal',profile:'Meu Perfil'}
+  document.getElementById('topTitle').textContent=titles[page]||page
+  const navMap={dashboard:'nav-dashboard','add-consorcio':'nav-add',calculator:'nav-calculator',profile:'nav-profile'}
+  if(navMap[page]) document.getElementById(navMap[page]).classList.add('active')
+  const ta=document.getElementById('topActions'); ta.innerHTML=''
+  if(page==='dashboard')
+    ta.innerHTML='<button class="btn btn-primary btn-sm" onclick="newConsorcio()">➕ Adicionar Cota</button>'
+  else if(page==='detail'&&CConsId)
+    ta.innerHTML='<button class="btn btn-outline btn-sm" onclick="editCons(\''+CConsId+'\')">✏️ Editar</button> <button class="btn btn-outline btn-sm" onclick="delCons(\''+CConsId+'\')">\u{1F5D1}️ Excluir</button> <button class="btn btn-primary btn-sm" onclick="openAsm(\''+CConsId+'\')">➕ Assembleia</button>'
+  else if(page==='add-consorcio')
+    ta.innerHTML='<button class="btn btn-outline btn-sm" onclick="goTo(\'dashboard\')">← Voltar</button>'
+  closeSidebar(); showLoading()
+  try{
+    if(page==='dashboard')          await renderDash()
+    else if(page==='detail')        await renderDetail()
+    else if(page==='add-consorcio') await renderAddForm()
+    else if(page==='profile')             renderProfile()
+  }catch(e){ showToast('Erro ao carregar: '+e.message) }
+  finally{ hideLoading() }
+  window.scrollTo(0,0)
+}
+
+function newConsorcio(){ CEditId=null; goTo('add-consorcio') }
+function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('show') }
+function closeSidebar()  { document.getElementById('sidebar').classList.remove('open');  document.getElementById('sidebarOverlay').classList.remove('show') }
+
+// ══════════════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════════════
+async function renderDash(){
+  const cs=await fetchConsorcios()
+  const total=cs.length,ativas=cs.filter(c=>c.status==='ativa').length,cont=cs.filter(c=>c.status==='contemplada').length
+  const totalCred=cs.reduce((s,c)=>s+(c.creditoTotal||0),0)
+  const totalPago=cs.reduce((s,c)=>s+((c.parcela||0)*(c.parcelaAtual||0)),0)
+  const pctInvest=totalCred>0?Math.round((totalPago/totalCred)*100):0
+  document.getElementById('statGrid').innerHTML=`
+    <div class="stat-card"><span class="stat-icon">📊</span><div class="stat-label">Total de Cotas</div><div class="stat-value">${total}</div><div class="stat-sub">${ativas} ativa${ativas!==1?'s':''} · ${cont} contemplada${cont!==1?'s':''}</div></div>
+    <div class="stat-card"><span class="stat-icon">✅</span><div class="stat-label">Ativas</div><div class="stat-value" style="color:var(--success)">${ativas}</div><div class="stat-sub">Participando de sorteios</div></div>
+    <div class="stat-card"><span class="stat-icon">🎉</span><div class="stat-label">Contempladas</div><div class="stat-value" style="color:var(--primary)">${cont}</div><div class="stat-sub">Crédito liberado</div></div>
+    <div class="stat-card"><span class="stat-icon">💰</span><div class="stat-label">Crédito Total</div><div class="stat-value" style="font-size:20px">${fmtBRL(totalCred)}</div><div class="stat-sub">Soma de todas as cotas</div></div>
+    <div class="stat-card"><span class="stat-icon">📤</span><div class="stat-label">Total Pago</div><div class="stat-value" style="font-size:20px;color:var(--warning)">${fmtBRL(totalPago)}</div><div class="stat-sub">${pctInvest}% do crédito total investido</div></div>
+  `
+  const grid=document.getElementById('consorcioGrid')
+  if(!cs.length){
+    grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🏦</div><h3>Nenhum consórcio cadastrado</h3><p>Adicione sua primeira cota para começar a acompanhar seu progresso.</p><button class="btn btn-primary btn-lg" onclick="newConsorcio()">➕ Adicionar minha primeira cota</button></div>'
+    return
+  }
+  grid.innerHTML=cs.map(c=>{
+    const acls=ADMIN_CLS[c.administradora]||'default',icon=ADMIN_ICONS[c.administradora]||'🏦'
+    const prazo=c.prazoTotal||1,atual=c.parcelaAtual||0,pct=Math.min(100,Math.round((atual/prazo)*100))
+    const stCls=c.status==='ativa'?'ativa':c.status==='contemplada'?'contemplada':'cancelada'
+    const stLbl=c.status==='ativa'?'✅ Ativa':c.status==='contemplada'?'🎉 Contemplada':'❌ Cancelada'
+    const last=c.assembleias&&c.assembleias.length?c.assembleias[c.assembleias.length-1]:null
+    return '<div class="consorcio-card" onclick="goTo(\'detail\',\''+c.id+'\')">'
+      +'<div class="consorcio-card-header"><div class="admin-badge '+acls+'">'+icon+'</div>'
+      +'<div class="consorcio-card-info"><div class="consorcio-admin">'+c.administradora+'</div>'
+      +'<div class="consorcio-name">'+(TYPE_ICONS[c.tipo]||'🏦')+' '+(c.tipo||'Consórcio')+' – Grupo '+c.grupo+'</div>'
+      +'<div class="consorcio-cota">Cota '+c.cota+'</div></div>'
+      +'<span class="status-pill '+stCls+'">'+stLbl+'</span></div>'
+      +'<div class="consorcio-card-body">'
+      +'<div class="card-metric"><div class="k">Crédito Total</div><div class="v">'+fmtBRL(c.creditoTotal)+'</div></div>'
+      +'<div class="card-metric"><div class="k">Parcela</div><div class="v">'+fmtBRL(c.parcela)+'/mês</div></div>'
+      +'<div class="card-metric"><div class="k">Assembleias</div><div class="v">'+((c.assembleias||[]).length)+'</div></div>'
+      +'<div class="card-metric"><div class="k">Último Sorteado</div><div class="v">'+(last?String(last.numeroSorteado||'—').padStart(3,'0'):'—')+'</div></div></div>'
+      +'<div class="consorcio-card-footer"><div class="progress-wrap">'
+      +'<div class="progress-label"><span>Progresso</span><span>'+atual+'/'+prazo+' meses ('+pct+'%)</span></div>'
+      +'<div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div></div>'
+      +'<div style="font-size:12px;color:var(--muted);">Ver →</div></div></div>'
+  }).join('')
+}
+
+// ══════════════════════════════════════════════════════
+// DETALHE DO CONSÓRCIO
+// ══════════════════════════════════════════════════════
+async function renderDetail(){
+  const cs=await fetchConsorcios()
+  const c=cs.find(x=>x.id===CConsId)
+  if(!c){ goTo('dashboard'); return }
+  const asms=c.assembleias||[]
+  const icon=ADMIN_ICONS[c.administradora]||'🏦'
+  const div=c.divisor||1
+  const credLiq=c.lanceFixo?c.creditoTotal*(1-c.lanceFixo/100):c.creditoTotal
+  const livres=asms.flatMap(a=>a.contemplacoes.filter(x=>x.modalidade==='livre'&&x.percentual>0).map(x=>x.percentual))
+  const lMin=livres.length?Math.min(...livres).toFixed(2)+'%':'—'
+  const lMax=livres.length?Math.max(...livres).toFixed(2)+'%':'—'
+  const lAvg=livres.length?(livres.reduce((s,v)=>s+v,0)/livres.length).toFixed(2)+'%':'—'
+  const prazo=c.prazoTotal||1,atual=c.parcelaAtual||0
+  const pctProg=Math.min(100,Math.round((atual/prazo)*100))
+  const totalPagoC=(c.parcela||0)*(c.parcelaAtual||0)
+  const pctPagoC=c.creditoTotal>0?((totalPagoC/c.creditoTotal)*100).toFixed(1):0
+  const allCont=new Set(asms.flatMap(a=>a.contemplacoes.filter(x=>x.modalidade!=='cancelado').map(x=>parseInt(x.cota))).filter(n=>!isNaN(n)))
+  const lastAsm=asms.length?asms[asms.length-1]:null
+  const activeCotas=Math.max(1,div-allCont.size)
+  const pctSorteio=(1/activeCotas*100),pctFixo=(1/activeCotas*100),pctReal=(2/activeCotas*100)
+  const pct12=Math.min(100,pctReal*12)
+  const qtLivresTotal=asms.reduce((s,a)=>s+a.contemplacoes.filter(x=>x.modalidade==='livre').length,0)
+  const avgLivresPerAsm=asms.length>0?(qtLivresTotal/asms.length):0
+  const fmt2=v=>v.toFixed(2),fmt1=v=>v.toFixed(1)
+  document.getElementById('topTitle').textContent=c.administradora+' – Cota '+c.cota
+  const cotaDetailsMap=new Map()
+  asms.forEach(a=>a.contemplacoes.forEach(ct=>{
+    const n=parseInt(ct.cota)
+    if(!isNaN(n)&&ct.modalidade!=='cancelado')
+      cotaDetailsMap.set(n,{assembleia:a.numero,data:a.data,modalidade:ct.modalidade,percentual:ct.percentual,valor:ct.valor,sorteado:a.numeroSorteado,loteria:a.loteriaPrimeiroPremio})
+  }))
+  let tblHtml=''
+  if(asms.length){
+    tblHtml='<div class="table-wrap"><table class="data-table"><thead><tr><th>Asm.</th><th>Data</th><th>Nº Sorteado</th><th>Loteria (1º prêmio)</th><th>Cálculo (resumo)</th><th>Cota</th><th>Modalidade</th><th>% Lance</th><th>Valor Lance</th></tr></thead><tbody>'
+    asms.forEach((a,ai)=>{
+      const alt=ai%2!==0
+      a.contemplacoes.forEach((ct,ci)=>{
+        const first=ci===0,rs=a.contemplacoes.length
+        const _cl=formatCalcLines(a.loteriaPrimeiroPremio,c.divisor)
+        const calcHtml=_cl?'<span style="line-height:1.7;white-space:nowrap;">'+_cl[0]+'<br>'+_cl[1]+'</span>':'—'
+        tblHtml+='<tr class="'+(alt?'row-alt':'')+(first?' asm-sep':'')+'\">'
+        if(first) tblHtml+='<td rowspan="'+rs+'"><strong>'+a.numero+'</strong></td><td rowspan="'+rs+'">'+fmtDate(a.data)+'</td><td rowspan="'+rs+'"><strong>'+String(a.numeroSorteado||'—').padStart(3,'0')+'</strong></td><td rowspan="'+rs+'" class="mono">'+(a.loteriaPrimeiroPremio?String(a.loteriaPrimeiroPremio).padStart(5,'0'):'—')+'</td><td rowspan="'+rs+'" class="mono" style="font-size:11px">'+calcHtml+'</td>'
+        tblHtml+='<td>'+ct.cota+'</td><td><span class="badge '+(ct.modalidade||'sorteio')+'">'+(MOD_LABEL[ct.modalidade]||ct.modalidade)+'</span></td><td>'+(ct.percentual?ct.percentual+'%':'0%')+'</td><td class="mono">'+(ct.valor>0?fmtBRL2(ct.valor):'—')+'</td></tr>'
+      })
+    })
+    tblHtml+='</tbody></table></div>'
+  } else {
+    tblHtml='<div style="text-align:center;padding:40px;color:var(--muted);"><div style="font-size:36px;margin-bottom:8px;">📋</div><p>Nenhuma assembleia registrada ainda.</p><button class="btn btn-primary" style="margin-top:12px;" onclick="openAsm(\''+c.id+'\')">Registrar primeira assembleia</button></div>'
+  }
+  const totalCotas=c.divisor||900,suaCotaNum=parseInt(c.cota),ultimoSort=lastAsm?lastAsm.numeroSorteado:null
+  const mapaLegenda='<div class="cota-legend">'
+    +'<div class="cota-legend-item"><div class="cota-dot" style="background:var(--primary);"></div> Sua cota ('+String(suaCotaNum).padStart(4,'0')+')</div>'
+    +'<div class="cota-legend-item"><div class="cota-dot" style="background:#FEE2E2;border:1px solid #FECACA;"></div> Contemplada ('+allCont.size+')</div>'
+    +(ultimoSort?'<div class="cota-legend-item"><div class="cota-dot" style="background:#fff;border:2px solid #F59E0B;"></div> Último sorteado ('+String(ultimoSort).padStart(3,'0')+')</div>':'')
+    +'<div class="cota-legend-item"><div class="cota-dot" style="background:#fff;border:1px solid var(--border);"></div> Ativa / Concorrendo</div>'
+    +'</div>'
+  document.getElementById('detailContent').innerHTML=`
+    <div class="detail-header-card">
+      <div class="detail-header-icon">${icon}</div>
+      <div class="detail-header-info">
+        <div class="detail-header-admin">${c.administradora} · ${c.tipo||'Consórcio'}</div>
+        <div class="detail-header-title">Grupo ${c.grupo} – Cota ${c.cota}</div>
+        <div class="detail-header-sub">${c.reajuste?'Reajuste: '+c.reajuste:''} ${c.obs?'· '+c.obs:''}</div>
+      </div>
+      <div class="detail-header-stats">
+        <div class="dhs"><div class="dv">${fmtBRL(c.creditoTotal)}</div><div class="dl">Crédito</div></div>
+        <div class="dhs"><div class="dv">${asms.length}</div><div class="dl">Assembleias</div></div>
+        <div class="dhs"><div class="dv">${pctProg}%</div><div class="dl">Progresso</div></div>
+      </div>
+    </div>
+    <div class="info-grid-4">
+      <div class="info-card"><div class="ik">Crédito Total</div><div class="iv green">${fmtBRL(c.creditoTotal)}</div><div class="is">Valor da carta</div></div>
+      <div class="info-card"><div class="ik">Crédito Líquido</div><div class="iv blue">${fmtBRL(credLiq)}</div><div class="is">${c.lanceFixo?'Após lance fixo de '+c.lanceFixo+'%':'Sem lance fixo'}</div></div>
+      <div class="info-card"><div class="ik">Parcela Mensal</div><div class="iv">${fmtBRL(c.parcela)}</div><div class="is">por mês</div></div>
+      <div class="info-card"><div class="ik">Prazo</div><div class="iv">${atual}<span style="font-size:13px;font-weight:400;color:var(--muted)"> / ${prazo} m</span></div><div class="is">${prazo-atual} meses restantes</div></div>
+      <div class="info-card" style="border-left:3px solid var(--warning)"><div class="ik">Total Pago</div><div class="iv orange">${fmtBRL(totalPagoC)}</div><div class="is">${pctPagoC}% do crédito · ${atual} parcela${atual!==1?'s':''} pagas</div></div>
+      <div class="info-card"><div class="ik">Divisor do Sorteio</div><div class="iv">${div}</div><div class="is">Cotas no grupo</div></div>
+      <div class="info-card"><div class="ik">Cotas Contempladas</div><div class="iv orange">${allCont.size}</div><div class="is">Neste histórico</div></div>
+      <div class="info-card"><div class="ik">Lances Livres (mín/máx)</div><div class="iv" style="font-size:14px">${lMin} / ${lMax}</div><div class="is">Média: ${lAvg}</div></div>
+      <div class="info-card"><div class="ik">Último Sorteado</div><div class="iv">${lastAsm?String(lastAsm.numeroSorteado||'—').padStart(3,'0'):'—'}</div><div class="is">${lastAsm?'Asm. '+lastAsm.numero:'—'}</div></div>
+    </div>
+    <div class="form-section" style="margin-bottom:20px;">
+      <div class="form-section-title">🎯 Probabilidades Estimadas</div>
+      <div class="info-box"><strong>Como funciona este grupo:</strong> a cada assembleia a Loteria Federal define <strong>2 contemplações por sorteio</strong>: a cota sorteada diretamente (<em>sorteio</em>) e a cota imediatamente adjacente (<em>lance fixo</em>). Ambas são determinadas pelo mesmo número — não há lance competitivo. Como você não participa de lances livres, sua chance real é <strong>2 cotas por assembleia</strong> num pool de <strong>${activeCotas}</strong> cotas ativas (${div} total − ${allCont.size} já contempladas).</div>
+      <div class="chances-grid">
+        <div class="chance-card green"><div class="cv">${fmt2(pctSorteio)}%</div><div class="cd">Sorteio (Loteria Federal)<br><small>1 ÷ ${activeCotas} cotas ativas</small></div></div>
+        <div class="chance-card yellow"><div class="cv">${fmt2(pctFixo)}%</div><div class="cd">Lance Fixo (cota adjacente)<br><small>tb. determinado pelo sorteio</small></div></div>
+        <div class="chance-card purple"><div class="cv">${fmt2(pctReal)}%</div><div class="cd">Sua chance real / mês<br><small>2 ÷ ${activeCotas} (sorteio + fixo)</small></div></div>
+        <div class="chance-card blue"><div class="cv">~${fmt1(pct12)}%</div><div class="cd">Estimativa 12 meses<br><small>12 × ${fmt2(pctReal)}%</small></div></div>
+      </div>
+      <div class="tip-box"><strong>Resumo:</strong> ${fmt2(pctSorteio)}% (sorteio) + ${fmt2(pctFixo)}% (fixo) = <strong>${fmt2(pctReal)}%/mês</strong>. Em 12 assembleias: <strong>~${fmt1(pct12)}%</strong>. ${avgLivresPerAsm>0?'Oportunidade: ~'+fmt1(avgLivresPerAsm)+' lances livres/asm. neste grupo ('+lMin+' a '+lMax+'). Participar aumentaria suas chances.':''}</div>
+    </div>
+    <div class="form-section">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div class="form-section-title" style="margin-bottom:0">📌 Histórico de Assembleias</div>
+        <button class="btn btn-primary btn-sm" onclick="openAsm('${c.id}')">➕ Registrar</button>
+      </div>
+      ${tblHtml}
+    </div>
+    <div class="form-section">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div class="form-section-title" style="margin-bottom:0">🗂️ Mapa de Cotas do Grupo (0001–${String(totalCotas).padStart(4,'0')})</div>
+        <button class="btn btn-outline btn-sm" id="btnToggleMapa" onclick="toggleCotaMap()">Ver todas as cotas ▾</button>
+      </div>
+      ${mapaLegenda}
+      <div id="cotaMapContainer" style="display:none;">
+        <div class="cota-grid" id="cotaMapGrid"></div>
+        <div class="cota-map-stats">Total: ${totalCotas} cotas · Contempladas: ${allCont.size} · Sua cota: <strong>${String(suaCotaNum).padStart(4,'0')}</strong> (azul)</div>
+      </div>
+    </div>
+  `
+  window._cotaMapData={total:totalCotas,suaCota:suaCotaNum,contempladas:allCont,ultimoSorteado:ultimoSort,cotaDetails:cotaDetailsMap,rendered:false}
+}
+
+// ══════════════════════════════════════════════════════
+// MAPA DE COTAS
+// ══════════════════════════════════════════════════════
+function toggleCotaMap(){
+  const container=document.getElementById('cotaMapContainer'),btn=document.getElementById('btnToggleMapa')
+  if(!container||!btn) return
+  if(container.style.display==='none'){
+    container.style.display='block'; btn.textContent='Fechar mapa ▴'
+    if(!window._cotaMapData.rendered){ renderCotaGrid(); window._cotaMapData.rendered=true }
+  } else { container.style.display='none'; btn.textContent='Ver todas as cotas ▾' }
+}
+
+function buildCotaTooltip(i){
+  const {suaCota,contempladas,cotaDetails,ultimoSorteado}=window._cotaMapData
+  const p4=n=>String(n).padStart(4,'0'),p3=n=>String(n).padStart(3,'0')
+  const lines=['Cota '+p4(i)]
+  if(i===suaCota){ lines.push('','⭐ SUA COTA') }
+  else if(contempladas.has(i)){
+    const d=cotaDetails.get(i); lines.push('','✅ CONTEMPLADA')
+    if(d){
+      lines.push('─────────────────────','Assembleia nº '+d.assembleia+' ('+fmtDate(d.data)+')')
+      lines.push('Modalidade: '+(MOD_LABEL[d.modalidade]||d.modalidade))
+      if(d.percentual>0) lines.push('% Lance: '+d.percentual+'%')
+      if(d.valor>0)      lines.push('Valor Lance: '+fmtBRL2(d.valor))
+      lines.push('─────────────────────','Nº Sorteado: '+(d.sorteado!=null?p3(d.sorteado):'—'))
+      if(d.loteria) lines.push('Loteria 1º Prêmio: '+String(d.loteria).padStart(5,'0'))
+    }
+  } else { lines.push('','Ativa — concorrendo') }
+  if(ultimoSorteado&&i===ultimoSorteado&&i!==suaCota) lines.push('','🟡 Último nº sorteado')
+  return lines.join('\n')
+}
+
+function renderCotaGrid(){
+  const grid=document.getElementById('cotaMapGrid')
+  if(!grid||!window._cotaMapData) return
+  const {total,suaCota,contempladas,ultimoSorteado}=window._cotaMapData
+  const frag=document.createDocumentFragment()
+  for(let i=1;i<=total;i++){
+    const el=document.createElement('div')
+    el.className='cota-item'; el.textContent=String(i).padStart(4,'0')
+    if(i===suaCota) el.classList.add('ci-sua')
+    else if(contempladas.has(i)) el.classList.add('ci-contemplada')
+    if(ultimoSorteado&&i===ultimoSorteado) el.classList.add('ci-sorteio')
+    el.title=buildCotaTooltip(i); frag.appendChild(el)
+  }
+  grid.appendChild(frag)
+}
+
+// ══════════════════════════════════════════════════════
+// FORMULÁRIO ADD/EDIT
+// ══════════════════════════════════════════════════════
+async function renderAddForm(){
+  if(CEditId){
+    const cs=await fetchConsorcios(); const c=cs.find(x=>x.id===CEditId)
+    if(c){
+      document.getElementById('f-id').value=CEditId
+      document.getElementById('f-admin').value=c.administradora||''
+      document.getElementById('f-tipo').value=c.tipo||''
+      document.getElementById('f-grupo').value=c.grupo||''
+      document.getElementById('f-cota').value=c.cota||''
+      document.getElementById('f-credito').value=c.creditoTotal||''
+      document.getElementById('f-parcela').value=c.parcela||''
+      document.getElementById('f-prazo').value=c.prazoTotal||''
+      document.getElementById('f-parcela-atual').value=c.parcelaAtual||''
+      document.getElementById('f-divisor').value=c.divisor||''
+      document.getElementById('f-reajuste').value=c.reajuste||''
+      document.getElementById('f-lance-fixo').value=c.lanceFixo||''
+      document.getElementById('f-status').value=c.status||'ativa'
+      document.getElementById('f-obs').value=c.obs||''
+      document.getElementById('saveCBtn').textContent='Salvar Alterações'
+    }
+  } else {
+    document.querySelector('#page-add-consorcio form').reset()
+    document.getElementById('f-id').value=''
+    document.getElementById('saveCBtn').textContent='Salvar Consórcio'
+  }
+}
+
+async function saveConsorcio(e){
+  e.preventDefault()
+  const editId=document.getElementById('f-id').value
+  const payload={
+    administradora:document.getElementById('f-admin').value,
+    tipo:document.getElementById('f-tipo').value,
+    grupo:document.getElementById('f-grupo').value.trim(),
+    cota:document.getElementById('f-cota').value.trim(),
+    credito_total:parseFloat(document.getElementById('f-credito').value)||0,
+    parcela:parseFloat(document.getElementById('f-parcela').value)||0,
+    prazo_total:parseInt(document.getElementById('f-prazo').value)||0,
+    parcela_atual:parseInt(document.getElementById('f-parcela-atual').value)||0,
+    divisor:parseInt(document.getElementById('f-divisor').value)||900,
+    reajuste:document.getElementById('f-reajuste').value,
+    lance_fixo:parseFloat(document.getElementById('f-lance-fixo').value)||0,
+    status:document.getElementById('f-status').value,
+    obs:document.getElementById('f-obs').value.trim()
+  }
+  showLoading()
+  try{
+    if(editId){
+      const {error}=await _sb.from('consorcios').update(payload).eq('id',editId)
+      if(error) throw error
+      invalidate(); CEditId=null; CConsId=editId; await goTo('detail',editId)
+    } else {
+      const {data:created,error}=await _sb.from('consorcios').insert({...payload,user_id:CU.id}).select().single()
+      if(error) throw error
+      invalidate(); CEditId=null; CConsId=created.id; await goTo('detail',created.id)
+    }
+  }catch(e){ showToast('Erro ao salvar: '+e.message) }
+  finally{ hideLoading() }
+}
+
+function editCons(id){ CEditId=id; goTo('add-consorcio') }
+
+function delCons(id){
+  document.getElementById('delConfirmBtn').onclick=async()=>{
+    closeModal('modalDel'); showLoading()
+    try{
+      const {error}=await _sb.from('consorcios').delete().eq('id',id)
+      if(error) throw error
+      invalidate(); await goTo('dashboard')
+    }catch(e){ showToast('Erro ao excluir: '+e.message) }
+    finally{ hideLoading() }
+  }
+  document.getElementById('modalDel').classList.add('show')
+}
+
+// ══════════════════════════════════════════════════════
+// ASSEMBLEIAS
+// ══════════════════════════════════════════════════════
+async function openAsm(consId){
+  CAsmId=consId
+  const cs=await fetchConsorcios(); const c=cs.find(x=>x.id===consId)
+  document.getElementById('asm-num').value    =c&&c.assembleias?c.assembleias.length+1:1
+  document.getElementById('asm-data').value   =''
+  document.getElementById('asm-sorteado').value=''
+  document.getElementById('asm-loteria').value =''
+  document.getElementById('ctList').innerHTML  =''
+  ctCnt=0; addCtRow()
+  document.getElementById('modalAsm').classList.add('show')
+}
+
+let ctCnt=0
+function addCtRow(){
+  ctCnt++; const id=ctCnt
+  const row=document.createElement('div')
+  row.id='ct-row-'+id; row.className='ct-row'
+  row.innerHTML=`
+    <input type="number" class="form-input ct-field" id="ct-num-${id}" placeholder="Nº cota" style="flex:0 0 90px;"/>
+    <select class="form-input form-select ct-field" id="ct-mod-${id}" style="flex:1;">
+      <option value="sorteio">Sorteio Ativo</option>
+      <option value="livre">Lance Livre</option>
+      <option value="fixo">Lance Fixo</option>
+      <option value="cancelado">Cancelado</option>
+    </select>
+    <input type="number" class="form-input ct-field" id="ct-pct-${id}" placeholder="% lance" step="0.001" style="flex:0 0 100px;"/>
+    <input type="number" class="form-input ct-field" id="ct-val-${id}" placeholder="R$ valor" step="0.01" style="flex:0 0 120px;"/>
+    <button type="button" class="btn btn-danger btn-sm" onclick="document.getElementById('ct-row-${id}').remove()">✕</button>
+  `
+  document.getElementById('ctList').appendChild(row)
+}
+
+function autoCalcAsm(){
+  const prize=parseInt(document.getElementById('asm-loteria').value)||0
+  const c=_cache?_cache.find(x=>x.id===CAsmId):null
+  const div=c?(c.divisor||900):900
+  if(prize>0&&div>0){ const r=prize%div; document.getElementById('asm-sorteado').value=r===0?div:r }
+}
+
+async function saveAsm(){
+  const numVal  =parseInt(document.getElementById('asm-num').value)||0
+  const dataVal =document.getElementById('asm-data').value
+  const sorteado=parseInt(document.getElementById('asm-sorteado').value)||null
+  const loteria =parseInt(document.getElementById('asm-loteria').value)||null
+  if(!numVal||!dataVal){ alert('Preencha número e data da assembleia.'); return }
+  const contemplacoes=[]
+  for(let r=1;r<=ctCnt;r++){
+    const row=document.getElementById('ct-row-'+r)
+    if(!row) continue
+    const cotaEl=document.getElementById('ct-num-'+r)
+    if(cotaEl&&cotaEl.value){
+      contemplacoes.push({
+        cota:cotaEl.value.trim(),
+        modalidade:(document.getElementById('ct-mod-'+r)||{}).value||'sorteio',
+        percentual:parseFloat((document.getElementById('ct-pct-'+r)||{}).value)||0,
+        valor:parseFloat((document.getElementById('ct-val-'+r)||{}).value)||0
+      })
+    }
+  }
+  closeModal('modalAsm'); showLoading()
+  try{
+    const {data:asm,error:e1}=await _sb.from('assembleias').insert({
+      consorcio_id:CAsmId, numero:numVal, data:dataVal,
+      numero_sorteado:sorteado, loteria_primeiro_premio:loteria
+    }).select().single()
+    if(e1) throw e1
+    if(contemplacoes.length){
+      const {error:e2}=await _sb.from('contemplacoes').insert(
+        contemplacoes.map(ct=>({assembleia_id:asm.id,cota:ct.cota,modalidade:ct.modalidade,percentual:ct.percentual,valor:ct.valor}))
+      )
+      if(e2) throw e2
+    }
+    const c=_cache?_cache.find(x=>x.id===CAsmId):null
+    await _sb.from('consorcios').update({parcela_atual:(c?.parcelaAtual||0)+1}).eq('id',CAsmId)
+    invalidate(); CConsId=CAsmId; await goTo('detail',CAsmId)
+  }catch(e){ showToast('Erro ao salvar assembleia: '+e.message) }
+  finally{ hideLoading() }
+}
+
+function closeModal(id){ document.getElementById(id).classList.remove('show') }
+
+// ══════════════════════════════════════════════════════
+// CALCULADORA
+// ══════════════════════════════════════════════════════
+function doCalc(){
+  const prize=parseInt(document.getElementById('calc-prize').value)||0
+  const div  =parseInt(document.getElementById('calc-div').value)||900
+  if(!prize){ document.getElementById('calcNum').textContent='—'; document.getElementById('calcSteps').innerHTML=''; return }
+  const q=Math.floor(prize/div),r=prize%div,sorteado=r===0?div:r
+  const lines=formatCalcLines(prize,div)
+  document.getElementById('calcNum').textContent=String(sorteado).padStart(3,'0')
+  document.getElementById('cPrize').textContent=String(prize).padStart(5,'0')
+  document.getElementById('cDiv').textContent=div
+  document.getElementById('cQ').textContent=q
+  document.getElementById('cResto').textContent=r===0?div+' (resto 0 → usa divisor)':r
+  document.getElementById('calcSteps').innerHTML=lines
+    ?`<div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:14px 16px;font-size:13px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:10px;">Cálculo (resumo)</div>
+        <div class="mono" style="font-size:15px;line-height:2;white-space:nowrap;">${lines[0]}<br>${lines[1]}</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--muted);line-height:1.6;">${r===0?'Quando o resto é 0, usa-se o próprio divisor como nº sorteado.':''}</div>
+      </div>`
+    :''
+}
+
+// ══════════════════════════════════════════════════════
+// PERFIL
+// ══════════════════════════════════════════════════════
+function renderProfile(){
+  if(!CU) return
+  document.getElementById('p-name').value =CU.name||''
+  document.getElementById('p-email').value=CU.email||''
+  document.getElementById('p-pw').value   =''
+  document.getElementById('p-msg').style.display='none'
+}
+
+async function saveProfile(){
+  const name=document.getElementById('p-name').value.trim()
+  const pw  =document.getElementById('p-pw').value
+  if(!name){ alert('Nome não pode ficar vazio.'); return }
+  showLoading()
+  try{
+    const {error:e1}=await _sb.from('profiles').update({name}).eq('id',CU.id)
+    if(e1) throw e1
+    const upd={data:{name}}
+    if(pw.length>=6) upd.password=pw
+    const {error:e2}=await _sb.auth.updateUser(upd)
+    if(e2) throw e2
+    CU.name=name
+    document.getElementById('sbName').textContent  =CU.name
+    document.getElementById('sbAvatar').textContent=initials(CU.name)
+    document.getElementById('p-msg').style.display ='block'
+    showToast('Perfil atualizado!','success')
+  }catch(e){ showToast('Erro ao salvar perfil: '+e.message) }
+  finally{ hideLoading() }
+}
+
+// ══════════════════════════════════════════════════════
+// INIT — escuta mudanças de sessão do Supabase Auth
+// ══════════════════════════════════════════════════════
+_sb.auth.onAuthStateChange((event, session) => {
+  if(session && session.user){
+    if(!CU || CU.id !== session.user.id){ invalidate(); showApp(session.user) }
+  } else {
+    CU=null; invalidate()
+    document.getElementById('app-shell').style.display='none'
+    document.getElementById('page-auth').style.display='flex'
+  }
+})
+</script>
+</body>
+</html>
