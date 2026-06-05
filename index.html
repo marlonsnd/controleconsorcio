@@ -418,6 +418,10 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
                 <input type="number" id="f-prazo" class="form-input" placeholder="Ex.: 180"/>
               </div>
               <div class="form-group">
+                <label class="form-label">Parcela Cheia (R$) <span style="font-size:10px;color:var(--muted)">preencha se for Meia Parcela</span></label>
+                <input type="number" id="f-parcela-cheia" class="form-input" placeholder="Ex.: 5494 (deixe 0 se não for meia parcela)" step="0.01"/>
+              </div>
+              <div class="form-group">
                 <label class="form-label">Parcela Atual (nº)</label>
                 <input type="number" id="f-parcela-atual" class="form-input" placeholder="Ex.: 7"/>
               </div>
@@ -445,6 +449,13 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
                   <option value="contemplada">🎉 Contemplada</option>
                   <option value="cancelada">❌ Cancelada</option>
                 </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Meia Parcela</label>
+                <label style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;">
+                  <input type="checkbox" id="f-meia-parcela" style="width:16px;height:16px;cursor:pointer;"/>
+                  <span style="font-size:13px;color:var(--text);">Este consórcio é de meia parcela</span>
+                </label>
               </div>
               <div class="form-group">
                 <label class="form-label">% Lance Fixo</label>
@@ -641,6 +652,7 @@ function mapCons(c){
     prazoTotal:c.prazo_total||0, parcelaAtual:c.parcela_atual||0,
     divisor:c.divisor||900, reajuste:c.reajuste||'',
     lanceFixo:parseFloat(c.lance_fixo)||0, status:c.status||'ativa', obs:c.obs||'',
+    meiaParcela:c.meia_parcela||false, parcelaCheia:parseFloat(c.parcela_cheia)||0,
     assembleias:(c.assembleias||[]).sort((a,b)=>a.numero-b.numero).map(a=>({
       id:a.id, numero:a.numero, data:a.data,
       numeroSorteado:a.numero_sorteado, loteriaPrimeiroPremio:a.loteria_primeiro_premio,
@@ -878,7 +890,8 @@ async function renderDetail(){
   const primeiraAsm   = asms.length?asms[0]:null
   const data1aAsm     = primeiraAsm ? fmtDate(primeiraAsm.data) : '—'
   const parcelasRest  = Math.max(0,(c.prazoTotal||0)-(c.parcelaAtual||0))
-  const saldoDevedor  = (c.parcela||0)*parcelasRest
+  const parcelaCalc   = (c.meiaParcela && c.parcelaCheia>0) ? c.parcelaCheia : (c.parcela||0)
+  const saldoDevedor  = parcelaCalc * parcelasRest
   let previsaoEnc = '—'
   if(primeiraAsm&&primeiraAsm.data&&c.prazoTotal){
     const [py,pm,pd]=primeiraAsm.data.split('-').map(Number)
@@ -949,7 +962,7 @@ async function renderDetail(){
       <div class="info-card"><div class="ik">Lances Livres (mín/máx)</div><div class="iv" style="font-size:14px">${lMin} / ${lMax}</div><div class="is">Média: ${lAvg}</div></div>
       <div class="info-card"><div class="ik">Último Sorteado</div><div class="iv">${lastAsm?String(lastAsm.numeroSorteado||'—').padStart(3,'0'):'—'}</div><div class="is">${lastAsm?'Asm. '+lastAsm.numero:'—'}</div></div>
       <div class="info-card"><div class="ik">Data 1ª Assembleia</div><div class="iv" style="font-size:16px">${data1aAsm}</div><div class="is">${primeiraAsm?'Asm. nº '+primeiraAsm.numero:'Nenhuma registrada'}</div></div>
-      <div class="info-card" style="border-left:3px solid var(--danger)"><div class="ik">Saldo Devedor</div><div class="iv" style="color:var(--danger);font-size:18px">${fmtBRL(saldoDevedor)}</div><div class="is">${parcelasRest} parcela${parcelasRest!==1?'s':''} restante${parcelasRest!==1?'s':''}</div></div>
+      <div class="info-card" style="border-left:3px solid var(--danger)"><div class="ik">Saldo Devedor${c.meiaParcela?'<span style="font-size:9px;margin-left:4px;color:var(--warning)">MEIA PARCELA</span>':''}</div><div class="iv" style="color:var(--danger);font-size:18px">${fmtBRL(saldoDevedor)}</div><div class="is">${parcelasRest} parcelas · ${c.meiaParcela&&c.parcelaCheia>0?'parcela cheia '+fmtBRL(c.parcelaCheia):'aprox. sem reajuste'}</div></div>
       <div class="info-card" style="border-left:3px solid var(--success)"><div class="ik">Previsão de Encerramento</div><div class="iv" style="color:var(--success);font-size:18px">${previsaoEnc}</div><div class="is">${parcelasRest} meses restantes</div></div>
     </div>
     <div class="form-section" style="margin-bottom:20px;">
@@ -1054,6 +1067,8 @@ async function renderAddForm(){
       document.getElementById('f-lance-fixo').value=c.lanceFixo||''
       document.getElementById('f-status').value=c.status||'ativa'
       document.getElementById('f-obs').value=c.obs||''
+      document.getElementById('f-meia-parcela').checked=c.meiaParcela||false
+      document.getElementById('f-parcela-cheia').value=c.parcelaCheia||''
       document.getElementById('saveCBtn').textContent='Salvar Alterações'
     }
   } else {
@@ -1079,7 +1094,9 @@ async function saveConsorcio(e){
     reajuste:document.getElementById('f-reajuste').value,
     lance_fixo:parseFloat(document.getElementById('f-lance-fixo').value)||0,
     status:document.getElementById('f-status').value,
-    obs:document.getElementById('f-obs').value.trim()
+    obs:document.getElementById('f-obs').value.trim(),
+    meia_parcela:document.getElementById('f-meia-parcela').checked,
+    parcela_cheia:parseFloat(document.getElementById('f-parcela-cheia').value)||0
   }
   showLoading()
   try{
