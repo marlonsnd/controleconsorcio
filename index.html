@@ -289,7 +289,7 @@ table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
       <button class="nav-item active" id="nav-dashboard" onclick="goTo('dashboard')"><span class="nav-icon">🏠</span> Dashboard</button>
       <button class="nav-item" id="nav-add" onclick="newConsorcio()"><span class="nav-icon">➕</span> Adicionar Cota</button>
       <div class="nav-section-label" style="margin-top:8px">Ferramentas</div>
-      <button class="nav-item" id="nav-calculator" onclick="goTo('calculator')"><span class="nav-icon">🧮</span> Calculadora Loteria</button>
+      <button class="nav-item" id="nav-calculator" onclick="goTo('calculator')"><span class="nav-icon">🧮</span> Nº Sorteado Sicredi</button>
       <div class="nav-section-label" style="margin-top:8px">Conta</div>
       <button class="nav-item" id="nav-profile" onclick="goTo('profile')"><span class="nav-icon">👤</span> Meu Perfil</button>
     </nav>
@@ -668,7 +668,7 @@ async function goTo(page,id){
   document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'))
   CPage=page;if(id)CConsId=id
   document.getElementById('page-'+page).style.display=''
-  const titles={dashboard:'Dashboard','add-consorcio':(CEditId?'Editar':'Adicionar')+' Consórcio',detail:'Detalhe do Consórcio',calculator:'Calculadora Loteria Federal',profile:'Meu Perfil'}
+  const titles={dashboard:'Dashboard','add-consorcio':(CEditId?'Editar':'Adicionar')+' Consórcio',detail:'Detalhe do Consórcio',calculator:'Nº Sorteado Sicredi – Calculadora',profile:'Meu Perfil'}
   document.getElementById('topTitle').textContent=titles[page]||page
   const navMap={dashboard:'nav-dashboard','add-consorcio':'nav-add',calculator:'nav-calculator',profile:'nav-profile'}
   if(navMap[page])document.getElementById(navMap[page]).classList.add('active')
